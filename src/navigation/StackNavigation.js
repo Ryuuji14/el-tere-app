@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
+import BottomNavigation from "./BottomNavigation";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,18 +16,22 @@ const stackRoutes = [
     component: Register,
     requireAuth: true,
   },
+  {
+    name: "Home",
+    component: BottomNavigation,
+  },
 ];
 
 const StackNavigation = () => {
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[0].name}
+      initialRouteName={stackRoutes[2].name}
       screenOptions={{
         headerShown: false,
       }}
     >
       {stackRoutes.map(({ name, component }) => (
-        <Stack.Screen name={name} component={component} />
+        <Stack.Screen key={name} name={name} component={component} />
       ))}
     </Stack.Navigator>
   );
