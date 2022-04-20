@@ -26,6 +26,9 @@ import {
 } from "../../../utils/formValidations/registerFormValidation";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useCustomToast from "../../../hooks/useCustomToast";
+import useLoading from "../../../hooks/useLoading";
+import { authAPI } from "../../../api/authAPI";
 
 const ICONS_PROPS = {
   size: 5,
@@ -42,11 +45,15 @@ const INPUT_PROPS = {
 };
 
 const RegisterForm = () => {
+  const { showErrorToast, showSuccesToast } = useCustomToast();
+  const { isLoading, startLoading, stopLoading } = useLoading();
+
   const {
     control,
     handleSubmit,
     setValue,
     formState: { isValid },
+    reset,
   } = useForm({
     mode: "onChange",
 
@@ -62,12 +69,18 @@ const RegisterForm = () => {
     setValue("birthday", currentDate);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (values) => {
+    startLoading();
     try {
-      console.log("submit", data);
+      console.log("submit", values);
+      const data = await authAPI.register(values);
+      showSuccesToast("Registro exitoso");
+      reset(registerDefaultValues);
     } catch (error) {
-      console.log("error");
+      console.log(error?.response?.data);
+      showErrorToast("Error al registrar");
     }
+    stopLoading();
   };
 
   return (
@@ -337,12 +350,13 @@ const RegisterForm = () => {
       />
 
       <Button
+        isLoading={isLoading}
         rounded="full"
         _text={{
           fontSize: 14,
           fontWeight: "bold",
         }}
-        disabled={!isValid}
+        disabled={!isValid || isLoading}
         backgroundColor={isValid ? "#DB7F50" : "#D8D8D8"}
         onPress={handleSubmit(onSubmit)}
       >
