@@ -2,15 +2,16 @@ import { useState } from "react";
 import {
   Badge,
   Button,
-  KeyboardAvoidingView,
-  Stack,
-  Input,
-  HStack,
-  Select,
-  Text,
-  View,
   Checkbox,
   FlatList,
+  FormControl,
+  HStack,
+  Input,
+  KeyboardAvoidingView,
+  Select,
+  Stack,
+  Text,
+  View,
 } from "native-base";
 import { Icon } from "native-base";
 import {
@@ -30,14 +31,15 @@ import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
 
-const ICONS_PROPS = {
+const ICONS_PROPS = (isInvalidField = true) => ({
   size: 5,
-  color: "black",
+  color: isInvalidField ? "red.500" : "black",
   ml: 3,
-};
+});
 
 const INPUT_PROPS = {
   borderColor: "#F96332",
+  borderWidth: 2,
   bgColor: "#fff",
   placeholderTextColor: "#9393AA",
   fontSize: "md",
@@ -55,7 +57,7 @@ const RegisterForm = () => {
     formState: { isValid },
     reset,
   } = useForm({
-    mode: "onChange",
+    mode: "onBlur",
 
     resolver: yupResolver(registerSchema),
     defaultValues: registerDefaultValues,
@@ -90,34 +92,60 @@ const RegisterForm = () => {
           <Controller
             name="first_name"
             control={control}
-            render={({ field: { onChange, ...field } }) => (
-              <Input
-                {...field}
-                onChangeText={onChange}
-                placeholder="Nombre"
-                w="45%"
-                {...INPUT_PROPS}
-                InputLeftElement={
-                  <Icon as={FontAwesome} name="user-circle" {...ICONS_PROPS} />
-                }
-              />
+            render={({
+              field: { onChange, ...field },
+              fieldState: { error },
+            }) => (
+              <Stack w="45%">
+                <FormControl isInvalid={Boolean(error?.message)}>
+                  <Input
+                    {...field}
+                    onChangeText={onChange}
+                    placeholder="Nombre"
+                    {...INPUT_PROPS}
+                    InputLeftElement={
+                      <Icon
+                        as={FontAwesome}
+                        name="user-circle"
+                        {...ICONS_PROPS(Boolean(error?.message))}
+                      />
+                    }
+                  />
+                  <FormControl.ErrorMessage>
+                    {error?.message}
+                  </FormControl.ErrorMessage>
+                </FormControl>
+              </Stack>
             )}
           />
 
           <Controller
             name="last_name"
             control={control}
-            render={({ field: { onChange, ...field } }) => (
-              <Input
-                {...field}
-                onChangeText={onChange}
-                placeholder="Apellido"
-                w="45%"
-                {...INPUT_PROPS}
-                InputLeftElement={
-                  <Icon as={FontAwesome} name="user-circle" {...ICONS_PROPS} />
-                }
-              />
+            render={({
+              field: { onChange, ...field },
+              fieldState: { error },
+            }) => (
+              <Stack w="45%">
+                <FormControl isInvalid={Boolean(error?.message)}>
+                  <Input
+                    {...field}
+                    onChangeText={onChange}
+                    placeholder="Apellido"
+                    {...INPUT_PROPS}
+                    InputLeftElement={
+                      <Icon
+                        as={FontAwesome}
+                        name="user-circle"
+                        {...ICONS_PROPS(Boolean(error?.message))}
+                      />
+                    }
+                  />
+                  <FormControl.ErrorMessage>
+                    {error?.message}
+                  </FormControl.ErrorMessage>
+                </FormControl>
+              </Stack>
             )}
           />
         </HStack>
@@ -125,71 +153,125 @@ const RegisterForm = () => {
         <Controller
           name="email"
           control={control}
-          render={({ field: { onChange, ...field } }) => (
-            <Input
-              {...field}
-              onChangeText={onChange}
-              placeholder="Correo Electrónico"
-              {...INPUT_PROPS}
-              InputLeftElement={
-                <Icon as={MaterialIcons} name="email" {...ICONS_PROPS} />
-              }
-            />
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
+            <FormControl isInvalid={Boolean(error?.message)}>
+              <Input
+                {...field}
+                onChangeText={onChange}
+                placeholder="Correo Electrónico"
+                {...INPUT_PROPS}
+                InputLeftElement={
+                  <Icon
+                    as={MaterialIcons}
+                    name="email"
+                    {...ICONS_PROPS(Boolean(error?.message))}
+                  />
+                }
+              />
+              <FormControl.ErrorMessage>
+                {error?.message}
+              </FormControl.ErrorMessage>
+            </FormControl>
           )}
         />
 
         <Controller
           name="password"
           control={control}
-          render={({ field: { onChange, ...field } }) => (
-            <Input
-              {...field}
-              onChangeText={onChange}
-              placeholder="Contraseña"
-              {...INPUT_PROPS}
-              InputLeftElement={
-                <Icon as={MaterialIcons} name="lock" {...ICONS_PROPS} />
-              }
-            />
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
+            <FormControl isInvalid={Boolean(error?.message)}>
+              <Input
+                secureTextEntry
+                {...field}
+                onChangeText={onChange}
+                placeholder="Contraseña"
+                {...INPUT_PROPS}
+                InputLeftElement={
+                  <Icon
+                    as={MaterialIcons}
+                    name="lock"
+                    {...ICONS_PROPS(Boolean(error?.message))}
+                  />
+                }
+              />
+              <FormControl.HelperText>
+                La contraseña debe contener: mayuscula, miniscula, minimo 8
+                digitos, numeros y un simbolo especial
+              </FormControl.HelperText>
+              <FormControl.ErrorMessage>
+                {error?.message}
+              </FormControl.ErrorMessage>
+            </FormControl>
           )}
         />
 
         <Controller
           name="password_confirmation"
           control={control}
-          render={({ field: { onChange, ...field } }) => (
-            <Input
-              {...field}
-              onChangeText={onChange}
-              placeholder="Repite tu contraseña"
-              {...INPUT_PROPS}
-              InputLeftElement={
-                <Icon as={MaterialIcons} name="lock" {...ICONS_PROPS} />
-              }
-            />
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
+            <FormControl isInvalid={Boolean(error?.message)}>
+              <Input
+                secureTextEntry
+                {...field}
+                onChangeText={onChange}
+                placeholder="Repite tu contraseña"
+                {...INPUT_PROPS}
+                InputLeftElement={
+                  <Icon
+                    as={MaterialIcons}
+                    name="lock"
+                    {...ICONS_PROPS(Boolean(error?.message))}
+                  />
+                }
+              />
+              <FormControl.ErrorMessage>
+                {error?.message}
+              </FormControl.ErrorMessage>
+            </FormControl>
           )}
         />
 
         <Controller
           name="cellphone"
           control={control}
-          render={({ field: { onChange, ...field } }) => (
-            <Input
-              {...field}
-              onChangeText={onChange}
-              placeholder="Teléfono ( Ej: 0426-5555555)"
-              {...INPUT_PROPS}
-              InputLeftElement={
-                <Icon as={FontAwesome} name="user-circle" {...ICONS_PROPS} />
-              }
-            />
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
+            <FormControl isInvalid={Boolean(error?.message)}>
+              <Input
+                {...field}
+                onChangeText={onChange}
+                placeholder="Teléfono ( Ej: 0426-5555555)"
+                {...INPUT_PROPS}
+                InputLeftElement={
+                  <Icon
+                    as={FontAwesome}
+                    name="user-circle"
+                    {...ICONS_PROPS(Boolean(error?.message))}
+                  />
+                }
+              />
+              <FormControl.ErrorMessage>
+                {error?.message}
+              </FormControl.ErrorMessage>
+            </FormControl>
           )}
         />
 
         <Controller
           name="birthday"
           control={control}
-          render={({ field: { value } }) => (
+          render={({ field: { value }, fieldState: { error } }) => (
             <>
               <TouchableOpacity
                 activeOpacity={1}
@@ -204,7 +286,7 @@ const RegisterForm = () => {
                     <Icon
                       as={MaterialCommunityIcons}
                       name="calendar"
-                      {...ICONS_PROPS}
+                      {...ICONS_PROPS(Boolean(error?.message))}
                     />
                   }
                 />
@@ -224,7 +306,7 @@ const RegisterForm = () => {
         <Controller
           name="gender"
           control={control}
-          render={({ field: { value, onChange } }) => (
+          render={({ field: { value, onChange }, fieldState: { error } }) => (
             <>
               <View
                 w="100%"
@@ -239,7 +321,7 @@ const RegisterForm = () => {
                 <Icon
                   as={MaterialCommunityIcons}
                   name="human-handsdown"
-                  {...ICONS_PROPS}
+                  {...ICONS_PROPS(Boolean(error?.message))}
                 />
                 <View width="90%">
                   <Select
@@ -267,7 +349,7 @@ const RegisterForm = () => {
           placeholder="Dirección de habitación"
           {...INPUT_PROPS}
           InputLeftElement={
-            <Icon as={MaterialIcons} name="location-on" {...ICONS_PROPS} />
+            <Icon as={MaterialIcons} name="location-on" {...ICONS_PROPS()} />
           }
         />
       </Stack>
