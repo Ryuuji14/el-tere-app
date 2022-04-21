@@ -54,7 +54,7 @@ const RegisterForm = () => {
     control,
     handleSubmit,
     setValue,
-    formState: { isValid },
+    formState: { isValid, errors },
     reset,
   } = useForm({
     mode: "onBlur",
@@ -74,8 +74,7 @@ const RegisterForm = () => {
   const onSubmit = async (values) => {
     startLoading();
     try {
-      console.log("submit", values);
-      const data = await authAPI.register(values);
+      await authAPI.register(values);
       showSuccesToast("Registro exitoso");
       reset(registerDefaultValues);
     } catch (error) {
