@@ -13,6 +13,7 @@ export const registerSchema = object({
   gender: string().required("requerido"),
   interests: array().min(1).required("requerido"),
   acceptTermsAndConditions: bool().oneOf([true], "").required(),
+  address: string().required("requerido"),
 }).required();
 
 export const registerDefaultValues = {
@@ -26,4 +27,5 @@ export const registerDefaultValues = {
   gender: "F",
   interests: [],
   acceptTermsAndConditions: false,
+  address: "",
 };

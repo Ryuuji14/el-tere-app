@@ -30,6 +30,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
+import { addressAPI } from "../../../api/addressAPI";
 
 const ICONS_PROPS = (isInvalidField = true) => ({
   size: 5,
@@ -54,11 +55,11 @@ const RegisterForm = () => {
     control,
     handleSubmit,
     setValue,
+
     formState: { isValid, errors },
     reset,
   } = useForm({
     mode: "onBlur",
-
     resolver: yupResolver(registerSchema),
     defaultValues: registerDefaultValues,
   });
@@ -74,9 +75,17 @@ const RegisterForm = () => {
   const onSubmit = async (values) => {
     startLoading();
     try {
-      await authAPI.register(values);
+      const { data } = await authAPI.register(values);
+
+      await addressAPI.registerUserAddress({
+        user_id: data.id,
+        address: values.address,
+      });
+
       showSuccesToast("Registro exitoso");
       reset(registerDefaultValues);
+      setValue("acceptTermsAndConditions", false);
+      setValue("interests", []);
     } catch (error) {
       console.log(error?.response?.data);
       showErrorToast("Error al registrar");
@@ -343,13 +352,32 @@ const RegisterForm = () => {
           )}
         />
 
-        <Input
-          variant="rounded"
-          placeholder="Dirección de habitación"
-          {...INPUT_PROPS}
-          InputLeftElement={
-            <Icon as={MaterialIcons} name="location-on" {...ICONS_PROPS()} />
-          }
+        <Controller
+          name="address"
+          control={control}
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
+            <FormControl isInvalid={Boolean(error?.message)}>
+              <Input
+                {...field}
+                onChangeText={onChange}
+                placeholder="Dirección de habitación"
+                {...INPUT_PROPS}
+                InputLeftElement={
+                  <Icon
+                    as={MaterialIcons}
+                    name="location-on"
+                    {...ICONS_PROPS(Boolean(error?.message))}
+                  />
+                }
+              />
+              <FormControl.ErrorMessage>
+                {error?.message}
+              </FormControl.ErrorMessage>
+            </FormControl>
+          )}
         />
       </Stack>
 
@@ -363,7 +391,7 @@ const RegisterForm = () => {
       <Controller
         name="interests"
         control={control}
-        render={({ field: { value, onChange } }) => (
+        render={({ field: { value, onChange, onBlur } }) => (
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -381,6 +409,7 @@ const RegisterForm = () => {
                     newValue.push(item);
                   }
                   onChange(newValue);
+                  onBlur();
                 }}
               >
                 <Badge
@@ -405,13 +434,16 @@ const RegisterForm = () => {
       <Controller
         name="acceptTermsAndConditions"
         control={control}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { onChange, value, onBlur } }) => (
           <HStack space={2} alignItems="center" my={4}>
             <Checkbox
               accessibilityLabel="check"
               defaultIsChecked={value}
               isChecked={value}
-              onChange={(val) => onChange(val)}
+              onChange={(val) => {
+                onChange(val);
+                onBlur();
+              }}
             />
             <HStack>
               <Text>Acepto los </Text>
