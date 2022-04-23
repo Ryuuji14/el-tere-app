@@ -1,7 +1,6 @@
 import { Heading, ScrollView, Text, View, Button } from "native-base";
 import { ImageBackground, Dimensions } from "react-native";
 import RegisterForm from "../components/screens/register/RegisterForm";
-import useCustomToast from "../hooks/useCustomToast";
 
 const { width, height } = Dimensions.get("screen");
 
