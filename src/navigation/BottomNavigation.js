@@ -2,13 +2,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Notifications from "../screens/Notifications";
 import { AntDesign } from "@expo/vector-icons";
+import Dashboard from "../screens/Dashboard";
 
 const Tab = createBottomTabNavigator();
 
 const bottomRoutes = [
   {
     name: "HomeTab",
-    component: Home,
+    component: Dashboard,
     requireAuth: true,
     Icon: <AntDesign name="home" color="black" size={24} />,
   },

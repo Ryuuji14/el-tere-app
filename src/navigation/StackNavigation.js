@@ -22,7 +22,7 @@ const stackRoutes = [
     component: BottomNavigation,
   },
   {
-    name:"Dashboard",
+    name: "Dashboard",
     component: Dashboard,
   },
 ];
@@ -30,7 +30,7 @@ const stackRoutes = [
 const StackNavigation = () => {
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[3].name}
+      initialRouteName={stackRoutes[2].name}
       screenOptions={{
         headerShown: false,
       }}
