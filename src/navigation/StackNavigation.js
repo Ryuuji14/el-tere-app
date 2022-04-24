@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import BottomNavigation from "./BottomNavigation";
+import Dashboard from "../screens/Dashboard";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,12 +21,16 @@ const stackRoutes = [
     name: "Home",
     component: BottomNavigation,
   },
+  {
+    name:"Dashboard",
+    component: Dashboard,
+  },
 ];
 
 const StackNavigation = () => {
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[1].name}
+      initialRouteName={stackRoutes[3].name}
       screenOptions={{
         headerShown: false,
       }}
