@@ -1,11 +1,18 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Onboarding from "../screens/Onboarding";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
+import RecoverPassword from "../screens/RecoverPassword";
 import BottomNavigation from "./BottomNavigation";
 
 const Stack = createNativeStackNavigator();
 
 const stackRoutes = [
+  {
+    name: "Onboarding",
+    component: Onboarding,
+    requireAuth: false,
+  },
   {
     name: "Login",
     component: Login,
@@ -17,6 +24,11 @@ const stackRoutes = [
     requireAuth: true,
   },
   {
+    name: "RecoverPassword",
+    component: RecoverPassword,
+    requireAuth: false,
+  },
+  {
     name: "Home",
     component: BottomNavigation,
   },
@@ -25,7 +37,7 @@ const stackRoutes = [
 const StackNavigation = () => {
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[1].name}
+      initialRouteName={stackRoutes[2].name}
       screenOptions={{
         headerShown: false,
       }}
