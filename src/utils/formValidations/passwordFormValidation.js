@@ -1,9 +1,9 @@
-import { bool, object, string, array } from "yup";
+import { object, string } from "yup";
 
 export const passwordSchema = object({
-  password: string().required(),
+  email: string().required(),
 }).required();
 
 export const passwordDefaultValues = {
-  password: "",
+  email: "",
 };

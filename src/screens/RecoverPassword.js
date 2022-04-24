@@ -26,13 +26,26 @@ const RecoverPassword = ({ navigation }) => {
         borderBottomRadius={20}
       >
         <ScrollView>
-          <Text color="#5A7E64" fontWeight="bold" fontSize={16} mb={4} alignSelf="center">
+          <Text
+            color="#5A7E64"
+            fontWeight="bold"
+            fontSize={16}
+            mb={4}
+            alignSelf="center"
+          >
             ¡No te preocupes!
           </Text>
-          <Text color="#8898AA" fontSize={16} mb={4} alignSelf="center" textAlign="center">
-          Recupera el acceso a tu cuenta ingresando tu dirección de correo electrónico y te enviaremos un correo de recuperación:
+          <Text
+            color="#8898AA"
+            fontSize={16}
+            mb={4}
+            alignSelf="center"
+            textAlign="center"
+          >
+            Recupera el acceso a tu cuenta ingresando tu dirección de correo
+            electrónico y te enviaremos un correo de recuperación:
           </Text>
-          <RecoverPasswordForm />
+          <RecoverPasswordForm navigation={navigation} />
         </ScrollView>
       </View>
     </ImageBackground>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Button,
   KeyboardAvoidingView,
@@ -10,13 +9,8 @@ import {
   Text,
 } from "native-base";
 import { Icon } from "native-base";
-import {
-  FontAwesome,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { TouchableOpacity } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+
 import {
   loginDefaultValues,
   loginSchema,
@@ -41,14 +35,13 @@ const INPUT_PROPS = {
   variant: "rounded",
 };
 
-const LoginForm = () => {
-  const { showErrorToast, showSuccesToast } = useCustomToast();
+const LoginForm = ({ navigation }) => {
+  const { showErrorToast } = useCustomToast();
   const { isLoading, startLoading, stopLoading } = useLoading();
 
   const {
     control,
     handleSubmit,
-    setValue,
     formState: { isValid },
     reset,
   } = useForm({
@@ -61,9 +54,11 @@ const LoginForm = () => {
   const onSubmit = async (values) => {
     startLoading();
     try {
-      console.log("submit", values);
+      // console.log("submit", values);
       const data = await authAPI.login(values);
-      showSuccesToast("Registro exitoso");
+
+      // showSuccesToast("Registro exitoso");
+      navigation?.navigate("Home");
       reset(loginDefaultValues);
     } catch (error) {
       console.log(error?.response?.data);
@@ -97,6 +92,7 @@ const LoginForm = () => {
           render={({ field: { onChange, ...field } }) => (
             <Input
               {...field}
+              secureTextEntry
               onChangeText={onChange}
               placeholder="Contraseña"
               {...INPUT_PROPS}
@@ -109,6 +105,9 @@ const LoginForm = () => {
       </Stack>
       <VStack alignItems="center" space={4} mt={4}>
         <Button
+          disabled={!isValid || isLoading}
+          isLoading={isLoading}
+          onPress={handleSubmit(onSubmit)}
           width={240}
           rounded="full"
           padding={2}
@@ -132,8 +131,17 @@ const LoginForm = () => {
         >
           UNETE AL TERE
         </Button>
-        
-      <Link>¿Olvidaste tu contraseña?</Link>
+
+        <Link
+          onPress={() => navigation?.navigate("RecoverPassword")}
+          _text={{
+            textDecoration: "none",
+            color: "#DB7F50",
+          }}
+        >
+          ¿Olvidaste tu contraseña?
+        </Link>
+
         <Divider backgroundColor="rgba(219,127,80,0.5)" />
         <Text color="#8898AA" fontSize={16} alignSelf="center">
           ¿Primera vez usando la App?

@@ -45,15 +45,15 @@ const INPUT_PROPS = {
   variant: "rounded",
 };
 
-const RecoverPasswordForm = () => {
+const RecoverPasswordForm = ({ navigation }) => {
   const { showErrorToast, showSuccesToast } = useCustomToast();
   const { isLoading, startLoading, stopLoading } = useLoading();
 
   const {
     control,
     handleSubmit,
-    setValue,
-    formState: { isValid },
+
+    formState: { isValid, errors },
     reset,
   } = useForm({
     mode: "onChange",
@@ -62,32 +62,24 @@ const RecoverPasswordForm = () => {
     defaultValues: passwordDefaultValues,
   });
 
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const onChange = (_, selectedDate) => {
-    setShowDatePicker(false);
-    const currentDate = selectedDate || new Date();
-    setValue("birthday", currentDate);
-  };
-
   const onSubmit = async (values) => {
     startLoading();
     try {
-      console.log("submit", values);
-      const data = await authAPI.password(values);
-      showSuccesToast("Registro exitoso");
+      const data = await authAPI.requestPasswordReset(values);
       reset(passwordDefaultValues);
+      showSuccesToast("Se envió un correo para recuperar su contraseña");
+      navigation?.goBack();
     } catch (error) {
       console.log(error?.response?.data);
       showErrorToast("Error al registrar");
     }
     stopLoading();
   };
+  console.log(errors);
 
   return (
-    <KeyboardAvoidingView behavior="padding" enabled>
+    <KeyboardAvoidingView enabled>
       <Stack space={4}>
-    
         <Controller
           name="email"
           control={control}
@@ -103,10 +95,12 @@ const RecoverPasswordForm = () => {
             />
           )}
         />
-
       </Stack>
       <VStack alignItems="center" space={4} mt={4}>
         <Button
+          onPress={handleSubmit(onSubmit)}
+          disabled={!isValid || isLoading}
+          isLoading={isLoading}
           width={240}
           rounded="full"
           padding={2}

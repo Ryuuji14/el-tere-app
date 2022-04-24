@@ -37,7 +37,7 @@ const stackRoutes = [
 const StackNavigation = () => {
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[2].name}
+      initialRouteName={stackRoutes[1].name}
       screenOptions={{
         headerShown: false,
       }}
