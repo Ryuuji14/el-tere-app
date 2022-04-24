@@ -48,31 +48,34 @@ const INPUT_PROPS = {
 const categorias =
   [
     {
-      id: 1,
+      id: 0,
       name: "Todos"
     },
     {
-      id: 2,
+      id: 1,
       name: "Populares"
     },
     {
-      id: 3,
+      id: 2,
       name: "Recientes"
     },
     {
-      id: 4,
+      id: 3,
       name: "Recomendados"
     },
     {
-      id: 5,
+      id: 4,
       name: "Orgia llanera"
     },
   ]
 
 const Dashboard = () => {
 
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0)
+
   return (
-      <View 
+    <ScrollView>
+      <View
         bgColor='white'
         px={7}
         pb={5}
@@ -100,33 +103,33 @@ const Dashboard = () => {
               <Input
 
                 {...INPUT_PROPS}
-                placeholder="Buscar"
-                w="85%"
+                placeholder="Buscar..."
+                w="100%"
                 InputRightElement={
                   <Icon as={FontAwesome} name="search" {...ICONS_PROPS} />
                 }
               />
-              <Button ml='2'> </Button>
             </HStack>
           </Stack>
-          <ScrollView horizontal>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <Stack>
               <HStack mt='2' space={2}>
                 {
                   categorias.map((elemento) => (
-                    <Badge
+                    <Button
+                      size='sm'
                       key={elemento.id}
                       my='2'
-                      colorScheme="success"
-                      style={{
-                        borderRadius: 30,
-                        borderWidth: 1,
-                        borderColor: "#F96332",
-                        backgroundColor: 'white',
-                      }}
+                      bgColor={categoriaSeleccionada === elemento.id ? '#41634A' : 'white'}
+                      borderColor={categoriaSeleccionada === elemento.id ? '#41634A' : '#F96332'}
+                      borderWidth={1}
+                      borderRadius={50}
+                      onPress={() => setCategoriaSeleccionada(elemento.id)}
                     >
-                      <Text> {elemento.name} </Text>
-                    </Badge>
+                      <Text
+                        color={categoriaSeleccionada === elemento.id ? 'white' : 'grey'}
+                      > {elemento.name} </Text>
+                    </Button>
                   ))
                 }
               </HStack>
@@ -138,8 +141,8 @@ const Dashboard = () => {
               <Text pt={2} pb={2} bold color='grey'>
                 Promociones y Eventos
               </Text>
-              <ScrollView horizontal>
-                <HStack space={5}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <HStack space={2}>
                   {
                     promociones.map((element) => (
                       <PromocionCard
@@ -160,7 +163,7 @@ const Dashboard = () => {
 
           <View>
             <FlatList
-              columnWrapperStyle={{justifyContent: 'space-between'}}      
+              columnWrapperStyle={{ justifyContent: 'space-between' }}
               numColumns={2}
               data={comercios}
               renderItem={({ item }) =>
@@ -173,12 +176,12 @@ const Dashboard = () => {
                   rating={item.rating}
                 />
               }
-              keyExtractor={item=> item.name}
+              keyExtractor={item => item.name}
             />
           </View>
         </KeyboardAvoidingView>
       </View>
-
+    </ScrollView>
   )
 
 }

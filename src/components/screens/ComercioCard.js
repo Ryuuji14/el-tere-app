@@ -19,7 +19,7 @@ const ComercioCard = ({ image, name, type, rating }) => {
 
   return (
     <Box
-      width={150}
+      width={175}
       maxW="80"
       rounded="lg"
       overflow="hidden"
@@ -37,6 +37,7 @@ const ComercioCard = ({ image, name, type, rating }) => {
       _light={{
         backgroundColor: "gray.50"
       }}
+      my='2'
     >
       <VStack space="2" >
         <Box>
@@ -51,18 +52,22 @@ const ComercioCard = ({ image, name, type, rating }) => {
         </Box>
         <Box px="2">
           <Text bold>
-            {name}
+            {name.length > 22 ? name.substring(0, 22 - 3)
+              + '...' : name
+            }
           </Text>
         </Box>
         <HStack justifyContent='space-between'>
           <Box px="2">
             <Text color='grey'>
-              {type}
+              {type.length > 16 ? type.substring(0, 16 - 3)
+                + '...' : type
+              }
             </Text>
           </Box>
           <Box px="2" pb="2" mr='2'>
             <HStack alignItems='center' space={2}>
-              <Icon as={FontAwesome} name="star" color='yellow.500'/>
+              <Icon as={FontAwesome} name="star" color='yellow.500' />
               <Text>
                 {rating}
               </Text>
