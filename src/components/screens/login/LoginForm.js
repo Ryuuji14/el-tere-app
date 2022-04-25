@@ -10,6 +10,7 @@ import {
 } from "native-base";
 import { Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   loginDefaultValues,
@@ -20,6 +21,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
+import useAuthContext from "../../../hooks/useAuthContext";
 
 const ICONS_PROPS = {
   size: 5,
@@ -36,6 +38,7 @@ const INPUT_PROPS = {
 };
 
 const LoginForm = ({ navigation }) => {
+  const { dispatch } = useAuthContext();
   const { showErrorToast } = useCustomToast();
   const { isLoading, startLoading, stopLoading } = useLoading();
 
@@ -54,11 +57,22 @@ const LoginForm = ({ navigation }) => {
   const onSubmit = async (values) => {
     startLoading();
     try {
-      // console.log("submit", values);
       const data = await authAPI.login(values);
 
-      // showSuccesToast("Registro exitoso");
-      navigation?.navigate("Home");
+      const token = data?.data?.token;
+
+      if (token) {
+        await AsyncStorage.setItem("@token", token);
+        dispatch({
+          type: "LOGIN",
+          payload: {
+            user: {
+              email: values.email,
+            },
+          },
+        });
+      }
+
       reset(loginDefaultValues);
     } catch (error) {
       console.log(error?.response?.data);

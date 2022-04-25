@@ -10,13 +10,17 @@ const bottomRoutes = [
     name: "HomeTab",
     component: Home,
     requireAuth: true,
-    Icon: <AntDesign name="home" color="black" size={24} />,
+    Icon: ({ focused }) => (
+      <AntDesign name="home" color={focused ? "green" : "black"} size={24} />
+    ),
   },
   {
     name: "Notifications",
     component: Notifications,
     requireAuth: true,
-    Icon: <AntDesign name="home" color="black" size={24} />,
+    Icon: ({ focused }) => (
+      <AntDesign name="home" color={focused ? "green" : "black"} size={24} />
+    ),
   },
 ];
 
@@ -34,7 +38,7 @@ const BottomNavigation = () => {
           component={component}
           options={{
             tabBarShowLabel: false,
-            tabBarIcon: () => Icon,
+            tabBarIcon: ({ focused }) => <Icon focused={focused} />,
           }}
         />
       ))}
