@@ -3,6 +3,7 @@ import Onboarding from "../screens/Onboarding";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import RecoverPassword from "../screens/RecoverPassword";
+import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
 
 const Stack = createNativeStackNavigator();
@@ -29,6 +30,11 @@ const stackRoutes = [
     requireAuth: false,
   },
   {
+    name: "NewPassword",
+    component: NewPassword,
+    requireAuth: false,
+  },
+  {
     name: "Home",
     component: BottomNavigation,
   },
@@ -37,7 +43,7 @@ const stackRoutes = [
 const StackNavigation = () => {
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[1].name}
+      initialRouteName={stackRoutes[4].name}
       screenOptions={{
         headerShown: false,
       }}

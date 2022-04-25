@@ -31,21 +31,8 @@ import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
 import { addressAPI } from "../../../api/addressAPI";
-
-const ICONS_PROPS = (isInvalidField = true) => ({
-  size: 5,
-  color: isInvalidField ? "red.500" : "black",
-  ml: 3,
-});
-
-const INPUT_PROPS = {
-  borderColor: "#F96332",
-  borderWidth: 2,
-  bgColor: "#fff",
-  placeholderTextColor: "#9393AA",
-  fontSize: "md",
-  variant: "rounded",
-};
+import ICONS_PROPS from "../../../themes/iconStyles"
+import INPUT_PROPS from "../../../themes/inputStyles"
 
 const RegisterForm = () => {
   const { showErrorToast, showSuccesToast } = useCustomToast();
