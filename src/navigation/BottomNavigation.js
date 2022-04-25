@@ -1,23 +1,23 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Notifications from "../screens/Notifications";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Dashboard from "../screens/Dashboard";
 
 const Tab = createBottomTabNavigator();
 
-const bottomRoutes = [
+const bottomRoutes =  [
   {
     name: "HomeTab",
     component: Dashboard,
     requireAuth: true,
-    Icon: <AntDesign name="home" color="black" size={24} />,
+    Icon: <Ionicons name="home" color="white" size={24} />,
   },
   {
     name: "Notifications",
     component: Notifications,
     requireAuth: true,
-    Icon: <AntDesign name="home" color="black" size={24} />,
+    Icon: <Ionicons name="notifications" color="white" size={24} />,
   },
 ];
 
@@ -26,6 +26,10 @@ const BottomNavigation = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#F96332'
+        },
+        tabBarActiveTintColor: '#41634A'
       }}
     >
       {bottomRoutes.map(({ name, component, Icon }) => (
