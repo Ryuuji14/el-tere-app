@@ -6,18 +6,26 @@ import Dashboard from "../screens/Dashboard";
 
 const Tab = createBottomTabNavigator();
 
-const bottomRoutes =  [
+const bottomRoutes = [
   {
     name: "HomeTab",
     component: Dashboard,
     requireAuth: true,
-    Icon: <Ionicons name="home" color="white" size={24} />,
+    Icon: ({ focused }) => (
+      <Ionicons name="home" color={focused ? "green" : "white"} size={24} />
+    ),
   },
   {
     name: "Notifications",
     component: Notifications,
     requireAuth: true,
-    Icon: <Ionicons name="notifications" color="white" size={24} />,
+    Icon: ({ focused }) => (
+      <Ionicons
+        name="notifications"
+        color={focused ? "green" : "white"}
+        size={24}
+      />
+    ),
   },
 ];
 
@@ -27,9 +35,9 @@ const BottomNavigation = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#F96332'
+          backgroundColor: "#F96332",
         },
-        tabBarActiveTintColor: '#41634A'
+        tabBarActiveTintColor: "#41634A",
       }}
     >
       {bottomRoutes.map(({ name, component, Icon }) => (
@@ -39,7 +47,7 @@ const BottomNavigation = () => {
           component={component}
           options={{
             tabBarShowLabel: false,
-            tabBarIcon: () => Icon,
+            tabBarIcon: Icon,
           }}
         />
       ))}
