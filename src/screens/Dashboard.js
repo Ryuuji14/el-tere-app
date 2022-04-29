@@ -25,10 +25,11 @@ import {
 import ComercioCard from "../components/screens/ComercioCard";
 import PromocionCard from "../components/screens/PromocionCard";
 import BottomNavigation from "../navigation/BottomNavigation";
-
 import promociones from "../../assets/promociones.json";
 
 var { height } = Dimensions.get("window");
+
+
 
 const ICONS_PROPS = {
   size: 5,

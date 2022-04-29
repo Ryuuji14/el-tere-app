@@ -3,6 +3,7 @@ import Login from "../screens/Login";
 import Register from "../screens/Register";
 import BottomNavigation from "./BottomNavigation";
 import Dashboard from "../screens/Dashboard";
+import Comercio from "../screens/Comercio";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,10 @@ const stackRoutes = [
   {
     name: "Dashboard",
     component: Dashboard,
+  },
+  {
+    name: "Comercio",
+    component: Comercio,
   },
 ];
 

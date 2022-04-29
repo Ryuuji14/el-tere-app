@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   VStack,
@@ -6,32 +5,14 @@ import {
   HStack,
   Icon,
   Image,
-  AspectRatio
+  AspectRatio,
+  Center
 } from "native-base";
-import { TouchableOpacity } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
-import {
-  FontAwesome,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
 
-const ComercioCard = (props) => {
-
-  const Navigation = useNavigation();
+const PromocionCard = (props) => {
 
   return (
-    <TouchableOpacity 
-      onPress={() =>
-        Navigation.navigate("Comercio", { 
-          image: props.image,
-          name: props.name,
-          type: props.type,
-          rating: props.rating
-        })
-      }
-    >
-      <Box
+<Box
         width={175}
         maxW="80"
         rounded="lg"
@@ -73,25 +54,16 @@ const ComercioCard = (props) => {
           <HStack justifyContent='space-between'>
             <Box px="2">
               <Text color='grey'>
-                {props.type.length > 16 ? props.type.substring(0, 16 - 3)
-                  + '...' : props.type
+                {props.price.length > 16 ? props.price.substring(0, 16 - 3)
+                  + '...' : props.price
                 }
               </Text>
-            </Box>
-            <Box px="2" pb="2" mr='2'>
-              <HStack alignItems='center' space={2}>
-                <Icon as={FontAwesome} name="star" color='yellow.500' />
-                <Text>
-                  {props.rating}
-                </Text>
-              </HStack>
             </Box>
           </HStack>
         </VStack>
       </Box>
-    </TouchableOpacity>
   )
 }
 
 
-export default ComercioCard;
+export default PromocionCard;
