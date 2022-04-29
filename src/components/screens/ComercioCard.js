@@ -21,13 +21,16 @@ const ComercioCard = (props) => {
   const Navigation = useNavigation();
 
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       onPress={() =>
-        Navigation.navigate("Comercio", { 
+        Navigation.navigate("Comercio", {
           image: props.image,
           name: props.name,
           type: props.type,
-          rating: props.rating
+          rating: props.rating,
+          horaApertura: props.horaApertura,
+          horaCierre: props.horaCierre,
+          delivery: props.delivery
         })
       }
     >

@@ -63,10 +63,6 @@ const categorias = [
     id: 3,
     name: "Recomendados",
   },
-  {
-    id: 4,
-    name: "Orgia llanera",
-  },
 ];
 
 const Dashboard = () => {
@@ -198,6 +194,9 @@ const Dashboard = () => {
                   name={item.name}
                   type={item.type}
                   rating={item.rating}
+                  horaApertura={item.horaApertura}
+                  horaCierre={item.horaCierre}
+                  delivery={item.delivery}
                 />
               )}
               keyExtractor={(item) => item.name}

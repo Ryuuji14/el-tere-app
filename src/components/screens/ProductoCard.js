@@ -1,3 +1,4 @@
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 import {
   Box,
   VStack,
@@ -5,14 +6,18 @@ import {
   HStack,
   Icon,
   Image,
+  Button,
   AspectRatio,
-  Center
+  Center,
+  IconButton
 } from "native-base";
+import { TouchableOpacity } from "react-native";
 
 const PromocionCard = (props) => {
 
   return (
-<Box
+    <TouchableOpacity>
+      <Box
         width={175}
         maxW="80"
         rounded="lg"
@@ -51,17 +56,33 @@ const PromocionCard = (props) => {
               }
             </Text>
           </Box>
-          <HStack justifyContent='space-between'>
-            <Box px="2">
+          <HStack justifyContent='space-between' alignItems='center'>
+            <Box px="2" pl='3'>
               <Text color='grey'>
                 {props.price.length > 16 ? props.price.substring(0, 16 - 3)
                   + '...' : props.price
                 }
               </Text>
             </Box>
+            <Box pr='2' pb='2'>
+              <IconButton
+                icon={
+                  <Icon
+                    as={Entypo}
+                    name='shopping-basket'
+                    color='white'
+                  />
+                }
+                size='sm'
+                borderRadius='full'
+                bgColor='#DB7F50'
+                onPress={() => console.log(`Hola, soy el producto ${props.name}`)}
+              />
+            </Box>
           </HStack>
         </VStack>
       </Box>
+    </TouchableOpacity>
   )
 }
 
