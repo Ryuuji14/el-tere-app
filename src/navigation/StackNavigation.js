@@ -5,6 +5,7 @@ import Register from "../screens/Register";
 import RecoverPassword from "../screens/RecoverPassword";
 import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
+import useAuthContext from "../hooks/useAuthContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +23,7 @@ const stackRoutes = [
   {
     name: "Register",
     component: Register,
-    requireAuth: true,
+    requireAuth: false,
   },
   {
     name: "RecoverPassword",
@@ -37,10 +38,15 @@ const stackRoutes = [
   {
     name: "Home",
     component: BottomNavigation,
+    requireAuth: true,
   },
 ];
 
 const StackNavigation = () => {
+  const {
+    state: { isAuthenticated },
+  } = useAuthContext();
+
   return (
     <Stack.Navigator
       initialRouteName={stackRoutes[4].name}
@@ -48,9 +54,11 @@ const StackNavigation = () => {
         headerShown: false,
       }}
     >
-      {stackRoutes.map(({ name, component }) => (
-        <Stack.Screen key={name} name={name} component={component} />
-      ))}
+      {stackRoutes
+        .filter(({ requireAuth }) => requireAuth === isAuthenticated)
+        .map(({ name, component }) => (
+          <Stack.Screen key={name} name={name} component={component} />
+        ))}
     </Stack.Navigator>
   );
 };
