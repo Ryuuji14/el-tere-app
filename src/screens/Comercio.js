@@ -14,36 +14,36 @@ import {
   Icon,
   ScrollView,
 } from "native-base";
-import { ImageBackground } from "react-native";
-import ProductoCard from "../components/screens/ProductoCard"
+import { Dimensions } from "react-native";
+import ProductoCard from "../components/screens/ProductoCard";
 import { useState } from "react";
 import PromocionCard from "../components/screens/PromocionCard";
-const productos = require("../../assets/productos.json")
-const promociones = require("../../assets/promociones.json")
+const productos = require("../../assets/productos.json");
+const promociones = require("../../assets/promociones.json");
 
+const { width } = Dimensions.get("window");
 
 const Comercio = ({ route }) => {
-
   const [market, setMarket] = useState({
     name: route.params.name,
     image: route.params.image,
     type: route.params.type,
-    rating: route.params.rating
-  })
+    rating: route.params.rating,
+  });
 
   return (
     <ScrollView>
       <View bgColor="white" px={7} pb={5}>
-
-        <View width='100%'>
+        <View>
           <Image
+            width="100%"
+            height={60}
             source={{
-              uri: "https://www.barquisimeto.com/wp-content/uploads/2016/08/12-1.jpg"
+              uri: "https://www.barquisimeto.com/wp-content/uploads/2016/08/12-1.jpg",
             }}
             alt={market.name}
           />
         </View>
-
 
         <KeyboardAvoidingView>
           <Stack>
@@ -89,7 +89,7 @@ const Comercio = ({ route }) => {
         </KeyboardAvoidingView>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
-export default Comercio
+export default Comercio;
