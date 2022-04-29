@@ -6,6 +6,8 @@ import RecoverPassword from "../screens/RecoverPassword";
 import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
 import useAuthContext from "../hooks/useAuthContext";
+import Dashboard from "../screens/Dashboard";
+import Comercio from "../screens/Comercio";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +42,14 @@ const stackRoutes = [
     component: BottomNavigation,
     requireAuth: true,
   },
+  {
+    name: "Dashboard",
+    component: Dashboard,
+  },
+  {
+    name: "Comercio",
+    component: Comercio,
+  },
 ];
 
 const StackNavigation = () => {
@@ -49,7 +59,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[4].name}
+      initialRouteName={stackRoutes[2].name}
       screenOptions={{
         headerShown: false,
       }}
