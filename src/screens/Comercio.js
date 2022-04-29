@@ -35,7 +35,7 @@ const Comercio = ({ route }) => {
     <ScrollView>
       <View bgColor="white" px={7} pb={5}>
 
-        <View width='100%'>
+        <View width>
           <Image
             source={{
               uri: "https://www.barquisimeto.com/wp-content/uploads/2016/08/12-1.jpg"
