@@ -11,7 +11,7 @@ const NewPassword = ({ navigation }) => {
       style={{ width, height, zIndex: 1, paddingHorizontal: 30, flex: 1 }}
     >
       <Heading color="white" fontSize={45} fontWeight="bold" mt={5}>
-        Nueva{"\n"}contraseña
+        Nueva{"\n"}contraseñaa
       </Heading>
 
       <View

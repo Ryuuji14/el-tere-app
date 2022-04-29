@@ -31,8 +31,8 @@ import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
 import { addressAPI } from "../../../api/addressAPI";
-import ICONS_PROPS from "../../../themes/iconStyles"
-import INPUT_PROPS from "../../../themes/inputStyles"
+import { ICONS_PROPS } from "../../../themes/iconStyles"
+import { INPUT_PROPS } from "../../../themes/inputStyles"
 
 const RegisterForm = () => {
   const { showErrorToast, showSuccesToast } = useCustomToast();

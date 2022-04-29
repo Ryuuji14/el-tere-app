@@ -20,8 +20,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
-import ICONS_PROPS from "../../../themes/iconStyles"
-import INPUT_PROPS from "../../../themes/inputStyles"
+import { ICONS_PROPS } from "../../../themes/iconStyles"
+import { INPUT_PROPS } from "../../../themes/inputStyles"
 
 const LoginForm = ({ navigation }) => {
   const { showErrorToast } = useCustomToast();
