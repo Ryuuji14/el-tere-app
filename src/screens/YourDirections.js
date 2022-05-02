@@ -25,7 +25,6 @@ export const YourDirections = () => {
   const {
     state: { user },
   } = useAuthContext();
-  const { showErrorToast, showSuccesToast } = useCustomToast();
   const { isLoading, startLoading, stopLoading } = useLoading();
   const [directions, setDirections] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -34,12 +33,15 @@ export const YourDirections = () => {
   useEffect(() => {
     if (user?.id) {
       const getUserDirections = async () => {
+        startLoading();
         try {
-          const { data } = await userAddressAPI.getUserAddress();
-          console.log(data);
+          const { data } = await userAddressAPI.getUserAddress(user.id);
+          setDirections(data);
         } catch (error) {
+          console.log(error);
           // showErrorToast(error);
         }
+        stopLoading();
       };
       getUserDirections();
     }
@@ -53,6 +55,10 @@ export const YourDirections = () => {
   const handleSelectAddress = (address) => {
     setSelectedAddress(address);
     setIsOpenModal(true);
+  };
+
+  const afterSubmit = (newAddress) => {
+    setDirections([...directions, newAddress]);
   };
 
   return (
@@ -93,11 +99,11 @@ export const YourDirections = () => {
             Tus Direcciones:
           </Text>
           <Stack space={5} mb={7}>
-            {[1, 2].map((dir) => (
-              <HStack justifyContent="space-between">
+            {directions.map((dir, index) => (
+              <HStack justifyContent="space-between" key={index.toString()}>
                 <TouchableOpacity
                   activeOpacity={0.9}
-                  onPressIn={() => setIsOpenModal(true)}
+                  onPressIn={() => handleSelectAddress(dir)}
                   style={{
                     width: "80%",
                   }}
@@ -107,6 +113,7 @@ export const YourDirections = () => {
                     borderColor="#DB7F50"
                     bgColor="#fff"
                     isReadOnly
+                    value={dir?.address}
                   />
                 </TouchableOpacity>
                 <IconButton
@@ -122,6 +129,7 @@ export const YourDirections = () => {
             ))}
           </Stack>
           <Button
+            isLoading={isLoading}
             onPress={() => setIsOpenModal(true)}
             py={1}
             variant="outline"
@@ -142,6 +150,7 @@ export const YourDirections = () => {
         isOpen={isOpenModal}
         onClose={handleClose}
         addressInfo={selectedAddress}
+        afterSubmit={afterSubmit}
       />
     </ImageBackground>
   );

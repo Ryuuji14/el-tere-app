@@ -1,29 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input, Modal } from "native-base";
 import useLoading from "../../../hooks/useLoading";
+import { userAddressAPI } from "../../../api/userAddress";
+import userAuthContext from "../../../hooks/useAuthContext";
+import useCustomToast from "../../../hooks/useCustomToast";
 
-export const ModalDirectionForm = ({ isOpen, onClose, addressInfo }) => {
+export const ModalDirectionForm = ({
+  isOpen,
+  onClose,
+  addressInfo,
+  afterSubmit,
+}) => {
+  const {
+    state: { user },
+  } = userAuthContext();
   const [address, setAddress] = useState("");
   const { isLoading, startLoading, stopLoading } = useLoading();
+  const { showErrorToast, showSuccesToast } = useCustomToast();
 
   const title = addressInfo ? "Editar dirección" : "Agregar dirección";
   const buttonText = addressInfo ? "Editar" : "Agregar";
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     startLoading();
     try {
-      console.log(address);
       if (addressInfo) {
         // update address
       } else {
         // add address
+        const { data } = await userAddressAPI.addUserAddress(user?.id, address);
+        afterSubmit?.(data);
+        showSuccesToast("¡Dirección agregada con exito!");
       }
       onClose();
     } catch (error) {
-      console.log(error);
+      showErrorToast("Error");
     }
     stopLoading();
   };
+
+  useEffect(() => {
+    if (addressInfo?.id) {
+      setAddress(addressInfo.address);
+    }
+  }, [addressInfo]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
