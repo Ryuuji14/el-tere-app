@@ -10,6 +10,7 @@ import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
 import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
+import { OrderDetail } from "../screens/OrderDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,11 @@ const stackRoutes = [
     component: YourDirections,
     requireAuth: true,
   },
+  {
+    name: "OrderDetail",
+    component: OrderDetail,
+    requireAuth: true,
+  },
 ];
 
 const StackNavigation = () => {
@@ -71,7 +77,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="YourDirections"
+      initialRouteName="OrderDetail"
       screenOptions={{
         headerShown: false,
       }}
