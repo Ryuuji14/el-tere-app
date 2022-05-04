@@ -196,8 +196,8 @@ const RegisterForm = () => {
                 }
               />
               <FormControl.HelperText>
-                La contraseña debe contener: mayuscula, miniscula, minimo 8
-                digitos, numeros y un simbolo especial
+                La contraseña debe contener: mayúscula, minúscula, mínimo 8
+                dígitos, números y un símbolo especial.
               </FormControl.HelperText>
               <FormControl.ErrorMessage>
                 {error?.message}

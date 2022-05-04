@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Notifications from "../screens/Notifications";
+import Perfil from "../screens/Perfil";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Dashboard from "../screens/Dashboard";
 
@@ -22,6 +23,18 @@ const bottomRoutes = [
     Icon: ({ focused }) => (
       <Ionicons
         name="notifications"
+        color={focused ? "green" : "white"}
+        size={24}
+      />
+    ),
+  },
+  {
+    name: "Perfil",
+    component: Perfil,
+    requireAuth: true,
+    Icon: ({ focused }) => (
+      <Ionicons
+        name="person"
         color={focused ? "green" : "white"}
         size={24}
       />

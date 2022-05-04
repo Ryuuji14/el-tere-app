@@ -1,13 +1,9 @@
 import { object, string } from "yup";
 
-export const newpasswordSchema = object({
-  password: string().required("requerido"),
-  password_confirmation: string()
-    .oneOf([ref("password")], "Las contraseñas no coinciden")
-    .required("requerido"),
+export const passwordSchema = object({
+  email: string().required(),
 }).required();
 
-export const newpasswordDefaultValues = {
-  password: "",
-  password_confirmation: "",
+export const passwordDefaultValues = {
+  email: "",
 };

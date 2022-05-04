@@ -8,6 +8,7 @@ import BottomNavigation from "./BottomNavigation";
 import useAuthContext from "../hooks/useAuthContext";
 import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
+import Perfil from "../screens/Perfil";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,12 @@ const stackRoutes = [
   {
     name: "Comercio",
     component: Comercio,
+    requireAuth: true,
+  },
+  {
+    name: "Perfil",
+    component: Perfil,
+    requireAuth: true,
   },
 ];
 
@@ -59,7 +66,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[2].name}
+      initialRouteName={stackRoutes[1].name}
       screenOptions={{
         headerShown: false,
       }}

@@ -22,10 +22,10 @@ import {
 } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TouchableOpacity } from "react-native";
-import {
+/*import {
   newpasswordDefaultValues,
   newpasswordSchema,
-} from "../../../utils/formValidations/newpasswordFormValidation";
+} from "../../../utils/formValidations/newpasswordFormValidation";*/
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useCustomToast from "../../../hooks/useCustomToast";
@@ -38,7 +38,7 @@ const NewPasswordForm = ({ navigation }) => {
   const { showErrorToast, showSuccesToast } = useCustomToast();
   const { isLoading, startLoading, stopLoading } = useLoading();
 
-  const {
+ const {
     control,
     handleSubmit,
 
@@ -47,8 +47,8 @@ const NewPasswordForm = ({ navigation }) => {
   } = useForm({
     mode: "onChange",
 
-    resolver: yupResolver(newpasswordSchema),
-    defaultValues: newpasswordDefaultValues,
+   // resolver: yupResolver(newpasswordSchema),
+  //  defaultValues: newpasswordDefaultValues,
   });
 
   const onSubmit = async (values) => {
