@@ -31,7 +31,11 @@ export const authAPI = {
     return data;
   },
   login: async (form = {}) => {
-    const { data } = await http.post(BASE_URL, form);
+    const { data } = await http.post("auth/login", form);
+    return data;
+  },
+  requestPasswordReset: async (form) => {
+    const { data } = await http.post("passwordreset", form);
     return data;
   },
 };

@@ -12,7 +12,7 @@ const bottomRoutes = [
     component: Dashboard,
     requireAuth: true,
     Icon: ({ focused }) => (
-      <Ionicons name="home" color={focused ? "green" : "white"} size={24} />
+      <AntDesign name="home" color={focused ? "green" : "black"} size={24} />
     ),
   },
   {
@@ -20,11 +20,7 @@ const bottomRoutes = [
     component: Notifications,
     requireAuth: true,
     Icon: ({ focused }) => (
-      <Ionicons
-        name="notifications"
-        color={focused ? "green" : "white"}
-        size={24}
-      />
+      <AntDesign name="home" color={focused ? "green" : "black"} size={24} />
     ),
   },
 ];
@@ -47,7 +43,7 @@ const BottomNavigation = () => {
           component={component}
           options={{
             tabBarShowLabel: false,
-            tabBarIcon: Icon,
+            tabBarIcon: ({ focused }) => <Icon focused={focused} />,
           }}
         />
       ))}
