@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useReducer } from "react";
 import { setSession } from "../api/jwt";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwt_decode from "jwt-decode";
 
 export const AuthContext = createContext({});
 
@@ -68,20 +69,17 @@ export const AuthProvider = ({ children }) => {
 
         await setSession(accessToken);
 
-        // const {
-        //   username,
-        //   unique_id,
-        //   first_name,
-        //   last_name,
-        //   is_staff,
-        //   stores_owned,
-        // } = await authService.getProfile();
+        const token = jwt_decode(accessToken);
+
+        const { id } = token;
 
         dispatch({
           type: "INITIALIZE",
           payload: {
             isAuthenticated: true,
-            user: {},
+            user: {
+              id,
+            },
           },
         });
       } catch (error) {

@@ -21,10 +21,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
-import { ICONS_PROPS } from "../../../themes/iconStyles"
-import { INPUT_PROPS } from "../../../themes/inputStyles"
+import { ICONS_PROPS } from "../../../themes/iconStyles";
+import { INPUT_PROPS } from "../../../themes/inputStyles";
 import useAuthContext from "../../../hooks/useAuthContext";
-
 
 const LoginForm = ({ navigation }) => {
   const { dispatch } = useAuthContext();
@@ -57,6 +56,7 @@ const LoginForm = ({ navigation }) => {
           payload: {
             user: {
               email: values.email,
+              id: values.id,
             },
           },
         });

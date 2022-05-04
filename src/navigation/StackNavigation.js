@@ -8,7 +8,13 @@ import BottomNavigation from "./BottomNavigation";
 import useAuthContext from "../hooks/useAuthContext";
 import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
+<<<<<<< HEAD
 import Perfil from "../screens/Perfil";
+=======
+import { EditPerfil } from "../screens/EditPerfil";
+import { YourDirections } from "../screens/YourDirections";
+import { OrderDetail } from "../screens/OrderDetail";
+>>>>>>> origin/ruben
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +63,21 @@ const stackRoutes = [
     component: Perfil,
     requireAuth: true,
   },
+  {
+    name: "EditPerfil",
+    component: EditPerfil,
+    requireAuth: true,
+  },
+  {
+    name: "YourDirections",
+    component: YourDirections,
+    requireAuth: true,
+  },
+  {
+    name: "OrderDetail",
+    component: OrderDetail,
+    requireAuth: true,
+  },
 ];
 
 const StackNavigation = () => {
@@ -66,7 +87,11 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
+<<<<<<< HEAD
       initialRouteName={stackRoutes[1].name}
+=======
+      initialRouteName="OrderDetail"
+>>>>>>> origin/ruben
       screenOptions={{
         headerShown: false,
       }}
