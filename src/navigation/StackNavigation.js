@@ -43,6 +43,7 @@ const stackRoutes = [
   {
     name: "Comercio",
     component: Comercio,
+    requireAuth: true,
   },
 ];
 
