@@ -6,18 +6,24 @@ import {
   TouchableHighlight,
   View,
   Dimensions,
-  Image
+  Image, 
+  Button
 } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 import { connect } from 'react-redux';
+import * as actions from "../../Redux/Actions/cartActions";
 
 var { height, width } = Dimensions.get("window")
 
 const Cart = (props) => {
 
+  var total=0;
+  props.cartItems.forEach(cart => {
+    return (total += cart.product.price)
+  });
   // const [listData, setListData] = useState(
   //    Array(20)
   //        .fill('')
@@ -30,17 +36,25 @@ const Cart = (props) => {
     <>
       {props.cartItems.length ? (
         <Container backgroundColor='white'>
-          <Text style={{ alignSelf: "center"}}>Carrito</Text>
-            {props.cartItems.map(data => {
-             return (
-               <ListItem
-                 key={data.product.id}
-                 leftAvatar={{source: {uri: data.product.image}}}
-                 tittle={data.product.name}
-                 bottomDivider
-               />
-             )
-            })}
+          <Text style={{ alignSelf: "center" }}>Carrito</Text>
+          {props.cartItems.map(data => {
+            return (
+              <ListItem
+                key={data.product.id}
+                leftAvatar={{ source: { uri: data.product.image } }}
+                tittle={data.product.name}
+                bottomDivider
+              />
+            )
+          })}
+          <View style={styles.bottomContainer}>
+              <Text style={styles.price}>${total}</Text>
+              <Button title="Limpiar" onPress={() => props.clearCart()} /> 
+              <Button
+                title="Comprar"
+               // onPress={() => props.navigation.navigate("Checkout")}
+              />
+          </View>
         </Container>
       ) : (
         <Container style={styles.emptyContainer}>
@@ -72,6 +86,12 @@ const mapStateToProps = (state) => {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    clearCart: () => dispatch(actions.clearCart())
+  }
+}
+
 const styles = StyleSheet.create({
   emptyContainer: {
     height: height,
@@ -79,6 +99,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
+  },
+  price: {
+    fontSize: 18,
+    margin: 15,
+    color: "red",
+  },
+  bottomContainer: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    backgroundColor: "white",
+    elevation: 20,
   },
   container: {
     height: height,
@@ -90,7 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     justifyContent: 'center'
-}
+  }
 });
 
-export default connect(mapStateToProps, null) (Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
