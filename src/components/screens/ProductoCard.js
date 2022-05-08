@@ -12,9 +12,12 @@ import {
   IconButton
 } from "native-base";
 import { TouchableOpacity } from "react-native";
+import { connect } from "react-redux";
+import  * as actions from '../../Redux/Actions/cartActions'
 
-const PromocionCard = (props) => {
-
+const ProductoCard= (props) => {
+const{name, image, price} = props;
+   
   return (
     <TouchableOpacity>
       <Box
@@ -76,7 +79,9 @@ const PromocionCard = (props) => {
                 size='sm'
                 borderRadius='full'
                 bgColor='#DB7F50'
-                onPress={() => console.log(`Hola, soy el producto ${props.name}`)}
+                onPress={() => {
+                  props.addItemToCart(props)
+                }}
               />
             </Box>
           </HStack>
@@ -86,5 +91,11 @@ const PromocionCard = (props) => {
   )
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addItemToCart: (product) =>
+     dispatch(actions.addToCart({quantity: 1, product}))
+  }
+}
 
-export default PromocionCard;
+export default connect (null, mapDispatchToProps) (ProductoCard);

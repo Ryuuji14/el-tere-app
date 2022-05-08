@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Badge,
   Button,
-  Checkbox,
   FlatList,
   FormControl,
   HStack,
+  Icon,
   Input,
   KeyboardAvoidingView,
   Select,
@@ -13,28 +13,33 @@ import {
   Text,
   View,
 } from "native-base";
-import { Icon } from "native-base";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import useCustomToast from "../../../hooks/useCustomToast";
+import useLoading from "../../../hooks/useLoading";
+import { ICONS_PROPS } from "../../../themes/iconStyles";
+import { INPUT_PROPS } from "../../../themes/inputStyles";
+import {
+  editPerfilDefaultValues,
+  editPerfilSchema,
+} from "../../../utils/formValidations/editPerfilValidation";
 import {
   FontAwesome,
   MaterialIcons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { TouchableOpacity } from "react-native";
-import {
-  registerDefaultValues,
-  registerSchema,
-} from "../../../utils/formValidations/registerFormValidation";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import useCustomToast from "../../../hooks/useCustomToast";
-import useLoading from "../../../hooks/useLoading";
-import { authAPI } from "../../../api/authAPI";
-import { addressAPI } from "../../../api/addressAPI";
-import { ICONS_PROPS } from "../../../themes/iconStyles"
-import { INPUT_PROPS } from "../../../themes/inputStyles"
+import useAuthContext from "../../../hooks/useAuthContext";
+import { userAPI } from "../../../api/userAPI";
+import { userInterestAPI } from "../../../api/userInterest";
+import { interestAPI } from "../../../api/interestAPI";
 
-const RegisterForm = () => {
+export const EditPerfilForm = () => {
+  // hooks
+  const {
+    state: { user },
+  } = useAuthContext();
   const { showErrorToast, showSuccesToast } = useCustomToast();
   const { isLoading, startLoading, stopLoading } = useLoading();
 
@@ -44,14 +49,65 @@ const RegisterForm = () => {
     setValue,
 
     formState: { isValid, errors },
-    reset,
   } = useForm({
-    mode: "onBlur",
-    resolver: yupResolver(registerSchema),
-    defaultValues: registerDefaultValues,
+    mode: "onChange",
+    resolver: yupResolver(editPerfilSchema),
+    defaultValues: editPerfilDefaultValues,
   });
 
+  // state
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [interests, setInterests] = useState([]);
+  const [userInterests, setUserInterests] = useState([]);
+
+  useEffect(() => {
+    if (user?.id) {
+      const getUser = async () => {
+        startLoading();
+        try {
+          const [userInfo, userInterest, interests] = await Promise.all([
+            userAPI
+              .getUser(user.id)
+              .catch((err) => console.log(err?.response?.data)),
+            userInterestAPI
+              .getUserInterest(user.id)
+              .catch((err) => console.log(err?.response?.data)),
+            interestAPI.getInterest(),
+          ]);
+
+          if (userInfo?.data) {
+            const {
+              first_name,
+              last_name,
+              email,
+              birthday,
+              cellphone,
+              gender,
+            } = userInfo?.data;
+
+            setValue("first_name", first_name);
+            setValue("last_name", last_name);
+            setValue("email", email);
+            setValue("birthday", new Date(birthday));
+            setValue("cellphone", cellphone);
+            setValue("gender", gender.toUpperCase());
+          }
+
+          if (userInterest?.data) {
+            setUserInterests(userInterest?.data);
+          }
+
+          if (interests?.data) {
+            setInterests(interests?.data);
+          }
+        } catch (error) {
+          showErrorToast(error);
+        }
+        stopLoading();
+      };
+      getUser();
+    }
+  }, [user?.id]);
 
   const onChange = (_, selectedDate) => {
     setShowDatePicker(false);
@@ -62,22 +118,61 @@ const RegisterForm = () => {
   const onSubmit = async (values) => {
     startLoading();
     try {
-      const { data } = await authAPI.register(values);
+      await userAPI.updateUser(user?.id, values);
 
-      await addressAPI.registerUserAddress({
-        user_id: data.id,
-        address: values.address,
-      });
-
-      showSuccesToast("Registro exitoso");
-      reset(registerDefaultValues);
-      setValue("acceptTermsAndConditions", false);
-      setValue("interests", []);
+      showSuccesToast("Edicion exitosa");
     } catch (error) {
       console.log(error?.response?.data);
-      showErrorToast("Error al registrar");
+      showErrorToast("Error al actualizar");
     }
     stopLoading();
+  };
+
+  const isInterestSelected = (interestId) => {
+    return userInterests.some(
+      (interest) =>
+        interest.interest_id === interestId && interest.active === true
+    );
+  };
+
+  const selectInterest = async (interestId) => {
+    const findInterestIndex = userInterests.findIndex(
+      (int) => int.interest_id === interestId
+    );
+    if (findInterestIndex > -1) {
+      try {
+        const interest = userInterests[findInterestIndex];
+
+        console.log("interest", interest);
+
+        await userInterestAPI.updateUserInterestStatus(
+          interest.interest_id,
+          !interest?.active
+        );
+
+        setUserInterests((prevState) =>
+          prevState.map((int) =>
+            int?.interest_id === interestId
+              ? { ...int, active: !int.active }
+              : int
+          )
+        );
+      } catch (error) {
+        console.log(error?.response?.data);
+        showErrorToast(error);
+      }
+    } else {
+      try {
+        const { data } = await userInterestAPI.addUserInterest(
+          user?.id,
+          interestId
+        );
+        const newUserInterests = [...userInterests, data];
+        setUserInterests(newUserInterests);
+      } catch (error) {
+        showErrorToast(error);
+      }
+    }
   };
 
   return (
@@ -172,69 +267,6 @@ const RegisterForm = () => {
             </FormControl>
           )}
         />
-
-        <Controller
-          name="password"
-          control={control}
-          render={({
-            field: { onChange, ...field },
-            fieldState: { error },
-          }) => (
-            <FormControl isInvalid={Boolean(error?.message)}>
-              <Input
-                secureTextEntry
-                {...field}
-                onChangeText={onChange}
-                placeholder="Contraseña"
-                {...INPUT_PROPS}
-                InputLeftElement={
-                  <Icon
-                    as={MaterialIcons}
-                    name="lock"
-                    {...ICONS_PROPS(Boolean(error?.message))}
-                  />
-                }
-              />
-              <FormControl.HelperText>
-                La contraseña debe contener: mayúscula, minúscula, mínimo 8
-                dígitos, números y un símbolo especial.
-              </FormControl.HelperText>
-              <FormControl.ErrorMessage>
-                {error?.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-          )}
-        />
-
-        <Controller
-          name="password_confirmation"
-          control={control}
-          render={({
-            field: { onChange, ...field },
-            fieldState: { error },
-          }) => (
-            <FormControl isInvalid={Boolean(error?.message)}>
-              <Input
-                secureTextEntry
-                {...field}
-                onChangeText={onChange}
-                placeholder="Repite tu contraseña"
-                {...INPUT_PROPS}
-                InputLeftElement={
-                  <Icon
-                    as={MaterialIcons}
-                    name="lock"
-                    {...ICONS_PROPS(Boolean(error?.message))}
-                  />
-                }
-              />
-              <FormControl.ErrorMessage>
-                {error?.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-          )}
-        />
-
         <Controller
           name="cellphone"
           control={control}
@@ -339,35 +371,22 @@ const RegisterForm = () => {
           )}
         />
 
-        <Controller
-          name="address"
-          control={control}
-          render={({
-            field: { onChange, ...field },
-            fieldState: { error },
-          }) => (
-            <FormControl isInvalid={Boolean(error?.message)}>
-              <Input
-                {...field}
-                onChangeText={onChange}
-                placeholder="Dirección de habitación"
-                {...INPUT_PROPS}
-                InputLeftElement={
-                  <Icon
-                    as={MaterialIcons}
-                    name="location-on"
-                    {...ICONS_PROPS(Boolean(error?.message))}
-                  />
-                }
-              />
-              <FormControl.ErrorMessage>
-                {error?.message}
-              </FormControl.ErrorMessage>
-            </FormControl>
-          )}
-        />
+        <Button
+          onPress={() => console.log}
+          py={2}
+          variant="outline"
+          rounded="full"
+          borderColor="#DB7F50"
+          bgColor="#fff"
+          shadow="2"
+          _text={{
+            color: "#DB7F50",
+            fontSize: 20,
+          }}
+        >
+          TUS DIRECCIONES
+        </Button>
       </Stack>
-
       <Text color="#5A7E64" fontWeight="bold" mt={4} mb={2}>
         Intereses
       </Text>
@@ -375,95 +394,68 @@ const RegisterForm = () => {
         Elige las áreas que sean de tu interés:
       </Text>
 
-      <Controller
-        name="interests"
-        control={control}
-        render={({ field: { value, onChange, onBlur } }) => (
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={["Deportes", "Salud y Bienestar", "Viajes", "Parrilladas"]}
-            keyExtractor={(item) => item}
-            ItemSeparatorComponent={() => <View w={2} />}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  const newValue = [...value];
-                  if (newValue.includes(item)) {
-                    newValue.splice(newValue.indexOf(item), 1);
-                  } else {
-                    newValue.push(item);
-                  }
-                  onChange(newValue);
-                  onBlur();
-                }}
-              >
-                <Badge
-                  colorScheme="success"
-                  style={{
-                    borderRadius: 30,
-                    borderWidth: 1,
-                    borderColor: "#F96332",
-                    backgroundColor: value.includes(item) ? "#F96332" : "#fff",
-                  }}
-                >
-                  <Text color={value.includes(item) ? "#fff" : "#9393AA"}>
-                    {item}
-                  </Text>
-                </Badge>
-              </TouchableOpacity>
-            )}
-          />
-        )}
-      />
-
-      <Controller
-        name="acceptTermsAndConditions"
-        control={control}
-        render={({ field: { onChange, value, onBlur } }) => (
-          <HStack space={2} alignItems="center" my={4}>
-            <Checkbox
-              accessibilityLabel="check"
-              defaultIsChecked={value}
-              isChecked={value}
-              onChange={(val) => {
-                onChange(val);
-                onBlur();
+      <FlatList
+        mb={3}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={interests}
+        keyExtractor={(item) => item?.id}
+        ItemSeparatorComponent={() => <View w={2} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => selectInterest(item?.id)}
+          >
+            <Badge
+              colorScheme="success"
+              style={{
+                borderRadius: 30,
+                borderWidth: 1,
+                borderColor: "#F96332",
+                backgroundColor: isInterestSelected(item?.id)
+                  ? "#F96332"
+                  : "#fff",
               }}
-            />
-            <HStack>
-              <Text>Acepto los </Text>
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => {
-                  // TODO: open privacy policy
-                }}
-              >
-                <Text color="#5A7E64" fontWeight="bold">
-                  términos y condiciones
-                </Text>
-              </TouchableOpacity>
-            </HStack>
-          </HStack>
+            >
+              <Text color={isInterestSelected(item?.id) ? "#fff" : "#9393AA"}>
+                {item?.name}
+              </Text>
+            </Badge>
+          </TouchableOpacity>
         )}
       />
 
       <Button
-        isLoading={isLoading}
-        rounded="full"
-        _text={{
-          fontSize: 14,
-          fontWeight: "bold",
-        }}
-        disabled={!isValid || isLoading}
-        backgroundColor={isValid ? "#DB7F50" : "#D8D8D8"}
+        isDisabled={isLoading || !isValid}
         onPress={handleSubmit(onSubmit)}
+        isLoading={isLoading}
+        py={1}
+        mb={4}
+        rounded="full"
+        bgColor="#DB7F50"
+        shadow="2"
+        _text={{
+          color: "#FFF",
+          fontSize: 20,
+        }}
       >
-        QUIERO UNIRME
+        EDITAR DATOS
+      </Button>
+      <Button
+        onPress={() => console.log}
+        py={1}
+        variant="outline"
+        rounded="full"
+        borderColor="#DB7F50"
+        bgColor="#fff"
+        shadow="2"
+        _text={{
+          color: "#DB7F50",
+          fontSize: 20,
+        }}
+      >
+        CAMBIAR CONTRASEÑA
       </Button>
     </KeyboardAvoidingView>
   );
 };
-
-export default RegisterForm;

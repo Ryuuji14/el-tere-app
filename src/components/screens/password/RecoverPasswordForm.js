@@ -30,20 +30,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
-
-const ICONS_PROPS = {
-  size: 5,
-  color: "black",
-  ml: 3,
-};
-
-const INPUT_PROPS = {
-  borderColor: "#F96332",
-  bgColor: "#fff",
-  placeholderTextColor: "#9393AA",
-  fontSize: "md",
-  variant: "rounded",
-};
+import { ICONS_PROPS } from "../../../themes/iconStyles"
+import { INPUT_PROPS } from "../../../themes/inputStyles"
 
 const RecoverPasswordForm = ({ navigation }) => {
   const { showErrorToast, showSuccesToast } = useCustomToast();

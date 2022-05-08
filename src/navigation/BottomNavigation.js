@@ -1,8 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
 import Notifications from "../screens/Notifications";
+import Perfil from "../screens/Perfil";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Dashboard from "../screens/Dashboard";
+import Cart from "../screens/Cart/Cart";
 
 const Tab = createBottomTabNavigator();
 
@@ -12,7 +14,7 @@ const bottomRoutes = [
     component: Dashboard,
     requireAuth: true,
     Icon: ({ focused }) => (
-      <AntDesign name="home" color={focused ? "green" : "black"} size={24} />
+      <Ionicons name="home" color={focused ? "green" : "white"} size={24} />
     ),
   },
   {
@@ -20,7 +22,35 @@ const bottomRoutes = [
     component: Notifications,
     requireAuth: true,
     Icon: ({ focused }) => (
-      <AntDesign name="home" color={focused ? "green" : "black"} size={24} />
+      <Ionicons
+        name="notifications"
+        color={focused ? "green" : "white"}
+        size={24}
+      />
+    ),
+  },
+  {
+    name: "Cart",
+    component: Cart,
+    requireAuth: true,
+    Icon: ({ focused }) => (
+      <Ionicons
+        name="cart"
+        color={focused ? "green" : "white"}
+        size={24}
+      />
+    ),
+  },
+  {
+    name: "Perfil",
+    component: Perfil,
+    requireAuth: true,
+    Icon: ({ focused }) => (
+      <Ionicons
+        name="person"
+        color={focused ? "green" : "white"}
+        size={24}
+      />
     ),
   },
 ];
@@ -43,7 +73,7 @@ const BottomNavigation = () => {
           component={component}
           options={{
             tabBarShowLabel: false,
-            tabBarIcon: ({ focused }) => <Icon focused={focused} />,
+            tabBarIcon: Icon,
           }}
         />
       ))}

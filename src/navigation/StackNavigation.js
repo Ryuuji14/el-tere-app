@@ -3,10 +3,20 @@ import Onboarding from "../screens/Onboarding";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import RecoverPassword from "../screens/RecoverPassword";
+import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
+
 import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
+
 import useAuthContext from "../hooks/useAuthContext";
+
+import Perfil from "../screens/Perfil";
+
+import { EditPerfil } from "../screens/EditPerfil";
+import { YourDirections } from "../screens/YourDirections";
+import { OrderDetail } from "../screens/OrderDetail";
+1
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +42,11 @@ const stackRoutes = [
     requireAuth: false,
   },
   {
+    name: "NewPassword",
+    component: NewPassword,
+    requireAuth: false,
+  },
+  {
     name: "Home",
     component: BottomNavigation,
     requireAuth: true,
@@ -45,6 +60,26 @@ const stackRoutes = [
     component: Comercio,
     requireAuth: true,
   },
+  {
+    name: "Perfil",
+    component: Perfil,
+    requireAuth: true,
+  },
+  {
+    name: "EditPerfil",
+    component: EditPerfil,
+    requireAuth: true,
+  },
+  {
+    name: "YourDirections",
+    component: YourDirections,
+    requireAuth: true,
+  },
+  {
+    name: "OrderDetail",
+    component: OrderDetail,
+    requireAuth: true,
+  },
 ];
 
 const StackNavigation = () => {
@@ -54,7 +89,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[5].name}
+      initialRouteName={stackRoutes[1].name}
       screenOptions={{
         headerShown: false,
       }}
