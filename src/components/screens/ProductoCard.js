@@ -62,7 +62,7 @@ const{name, image, price} = props;
           <HStack justifyContent='space-between' alignItems='center'>
             <Box px="2" pl='3'>
               <Text color='grey'>
-                {props.price.length > 16 ? props.price.substring(0, 16 - 3)
+                ${props.price.length > 16 ? props.price.substring(0, 16 - 3)
                   + '...' : props.price
                 }
               </Text>
