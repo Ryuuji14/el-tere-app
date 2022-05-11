@@ -26,12 +26,13 @@ import { Entypo } from "@expo/vector-icons";
 import ProductoCard from "../components/screens/ProductoCard";
 import { useState } from "react";
 import PromocionCard from "../components/screens/PromocionCard";
+import { connect } from "react-redux";
 const productos = require("../../assets/productos.json");
 const promociones = require("../../assets/promociones.json");
 
 const { width } = Dimensions.get("window");
 
-const Comercio = ({ route }) => {
+const Comercio = ({ route, cartItems }) => {
   const [market, setMarket] = useState({
     name: route.params.name,
     image: route.params.image,
@@ -39,8 +40,14 @@ const Comercio = ({ route }) => {
     rating: route.params.rating,
     horaApertura: route.params.horaApertura,
     horaCierre: route.params.horaCierre,
-    delivery: route.params.delivery
+    delivery: route.params.delivery,
   });
+
+  // console.log(cartItems.map(({ product: { image, ...prod } }) => prod));
+
+  // const findProductIsInCart = (productId, cartItems) => {
+  //   return cartItems.find((item) => item.product.id === productId);
+  // };
 
   return (
     <ScrollView>
@@ -55,102 +62,83 @@ const Comercio = ({ route }) => {
         />
       </View>
       <View bgColor="white" px={7} pb={5}>
-
         <Stack>
-          <HStack justifyContent='space-between' alignItems='center'>
+          <HStack justifyContent="space-between" alignItems="center">
             <VStack>
-              <Text style={styles.title}>
-                {market.name}
-              </Text>
-              <Text style={styles.subtitle}>
-                {market.type}
-              </Text>
+              <Text style={styles.title}>{market.name}</Text>
+              <Text style={styles.subtitle}>{market.type}</Text>
             </VStack>
             <HStack space={2}>
               <IconButton
-                icon={
-                  <Icon
-                    as={Entypo}
-                    name="message"
-                  />
-                }
-                height='70%'
-                borderRadius='full'
-                variant='solid'
-                bgColor='#DB7F50'
+                icon={<Icon as={Entypo} name="message" />}
+                height="70%"
+                borderRadius="full"
+                variant="solid"
+                bgColor="#DB7F50"
               />
               <IconButton
-                icon={
-                  <Icon
-                    as={Entypo}
-                    name="location-pin"
-                  />
-                }
-                height='70%'
-                borderRadius='full'
-                variant='solid'
-                bgColor='#DB7F50'
+                icon={<Icon as={Entypo} name="location-pin" />}
+                height="70%"
+                borderRadius="full"
+                variant="solid"
+                bgColor="#DB7F50"
               />
             </HStack>
           </HStack>
         </Stack>
 
         <Stack>
-          <HStack alignItems='center' space={2}>
-            <Icon as={FontAwesome} name="star" color='yellow.500' />
-            <Text fontSize='11' >
-              {market.rating}
-            </Text>
+          <HStack alignItems="center" space={2}>
+            <Icon as={FontAwesome} name="star" color="yellow.500" />
+            <Text fontSize="11">{market.rating}</Text>
 
-            <Icon as={Entypo} name="clock" ml='2' color='gray.500' />
-            <Text fontSize='11'>
+            <Icon as={Entypo} name="clock" ml="2" color="gray.500" />
+            <Text fontSize="11">
               {market.horaApertura} - {market.horaCierre}
             </Text>
-            <Icon as={MaterialCommunityIcons} size='6' name="motorbike" />
-            <Text fontSize='11'>
-              delivery
-            </Text>
+            <Icon as={MaterialCommunityIcons} size="6" name="motorbike" />
+            <Text fontSize="11">delivery</Text>
           </HStack>
         </Stack>
       </View>
 
-      <Stack bgColor='white'>
-        <HStack justifyContent='center'>
+      <Stack bgColor="white">
+        <HStack justifyContent="center">
           <Button
             variant="outline"
-            borderRadius='0'
-            width='50%'
-            height='50'
+            borderRadius="0"
+            width="50%"
+            height="50"
             leftIcon={
-              <Icon as={FontAwesome} name="shopping-basket" color='gray.400' />
+              <Icon as={FontAwesome} name="shopping-basket" color="gray.400" />
             }
           >
-            {<Text color='#41634A' fontSize='18' fontWeight='bold'>Productos</Text>}
+            {
+              <Text color="#41634A" fontSize="18" fontWeight="bold">
+                Productos
+              </Text>
+            }
           </Button>
 
           <Button
             variant="outline"
-            borderRadius='0'
-            width='50%'
-            height='50'
+            borderRadius="0"
+            width="50%"
+            height="50"
             leftIcon={
-              <Icon
-              size='6'
-                   color='gray.400'
-                    as={Entypo}
-                    name="message"
-                  />
+              <Icon size="6" color="gray.400" as={Entypo} name="message" />
             }
-
           >
-
-            {<Text color='#41634A' fontSize='18' fontWeight='bold'>Comentarios</Text>}
+            {
+              <Text color="#41634A" fontSize="18" fontWeight="bold">
+                Comentarios
+              </Text>
+            }
           </Button>
         </HStack>
       </Stack>
 
       <View bgColor="white" px={7} pb={5}>
-
         <KeyboardAvoidingView>
           <Stack>
             <VStack>
@@ -187,6 +175,9 @@ const Comercio = ({ route }) => {
                   image={item.image}
                   name={item.name}
                   price={item.price}
+                  // productInCart={
+                  //   findProductIsInCart(item.id, cartItems)?.product
+                  // }
                 />
               )}
               keyExtractor={(item) => item.name}
@@ -201,14 +192,21 @@ const Comercio = ({ route }) => {
 const styles = StyleSheet.create({
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#41634A',
+    fontWeight: "bold",
+    color: "#41634A",
     paddingTop: 15,
   },
   subtitle: {
     fontSize: 18,
-    color: '#9393AA',
-  }
-})
+    color: "#9393AA",
+  },
+});
 
-export default Comercio;
+const mapStateToProps = (state) => {
+  const { cartItems } = state;
+  return {
+    cartItems: cartItems,
+  };
+};
+
+export default connect(mapStateToProps)(Comercio);

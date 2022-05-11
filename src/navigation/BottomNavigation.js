@@ -4,6 +4,7 @@ import Notifications from "../screens/Notifications";
 import Perfil from "../screens/Perfil";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Dashboard from "../screens/Dashboard";
+import Cart from "../screens/Cart/Cart";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +24,18 @@ const bottomRoutes = [
     Icon: ({ focused }) => (
       <Ionicons
         name="notifications"
+        color={focused ? "green" : "white"}
+        size={24}
+      />
+    ),
+  },
+  {
+    name: "Cart",
+    component: Cart,
+    requireAuth: true,
+    Icon: ({ focused }) => (
+      <Ionicons
+        name="cart"
         color={focused ? "green" : "white"}
         size={24}
       />
