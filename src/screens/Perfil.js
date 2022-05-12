@@ -14,10 +14,12 @@ import {
   View,
   Text,
 } from "native-base";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("screen");
+import useAuthContext from "../hooks/useAuthContext";
 
 const Perfil = () => {
+  const { dispatch } = useAuthContext();
   return (
     <ImageBackground
       source={require("../../assets/register-bg.png")}
@@ -70,7 +72,24 @@ const Perfil = () => {
         >
           {/* User Info */}
           <Stack w="80%" alignSelf="center" mb={2}>
-            <HStack justifyContent="flex-end">
+            <HStack justifyContent="space-between">
+              <TouchableOpacity
+                onPress={() => dispatch({ type: "LOGOUT" })}
+                activeOpacity={0.8}
+              >
+                <View
+                  w="10"
+                  h="10"
+                  bgColor="#DD8457"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  rounded="full"
+                >
+                  <Icon as={Entypo} name="log-out" size="md" color="#fff" />
+                </View>
+              </TouchableOpacity>
+
               <TouchableOpacity
                 onPress={() => console.log("go to edit")}
                 activeOpacity={0.8}
