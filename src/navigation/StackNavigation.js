@@ -17,7 +17,7 @@ import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
 import { OrderDetail } from "../screens/OrderDetail";
 import SingleProduct from "../screens/ConsultarProducto";
-1
+1;
 
 const Stack = createNativeStackNavigator();
 
@@ -82,10 +82,10 @@ const stackRoutes = [
     requireAuth: true,
   },
   {
-    name:"SingleProduct",
+    name: "SingleProduct",
     component: SingleProduct,
     requireAuth: true,
-  }
+  },
 ];
 
 const StackNavigation = () => {
@@ -95,7 +95,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName={stackRoutes[1].name}
+      initialRouteName="Dashboard"
       screenOptions={{
         headerShown: false,
       }}
