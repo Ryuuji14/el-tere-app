@@ -51,43 +51,43 @@ const Cart = (props) => {
             borderRadius='20'
           >
             <VStack
-            space={2}
-            mb={4}
-            divider={<Divider />}
+              space={2}
+              mb={4}
+              divider={<Divider />}
             >
-            <Text
-              style={{ alignSelf: "center" }}
-              mb='2'
-              color='#9393AA'
-              fontSize='20'
-              textAlign='center'
-            >
-              ¡Estos son los productos que tienes en tu carrito!
-            </Text>
-            <HStack justifyContent='center' alignItems="center">
-              <Icon mt="6" as={FontAwesome} name="shopping-cart" size={30} color="#41634A"/>
-              <VStack alignItems="center" space={1} mt="1">
-                <Text style={styles.price}> Subtotal:</Text>
-                <Text mb="2" fontSize="20" color="#6E6E7A">${total}</Text>
-              </VStack>
-              <IconButton
-                ml="16"
-                bgColor="#41634A"
-                variant={"solid"}
-                icon={<Icon as={FontAwesome} name="trash" size={30} color="white" />}
-                onPress={() => props.clearCart()} />
-            </HStack>
-
-            <HStack justifyContent='center'>
-              <Button
-              width="80%"
-              bgColor="#DB7F50"
-              borderRadius="20"
-              // onPress={() => props.navigation.navigate("Checkout")}
+              <Text
+                style={{ alignSelf: "center" }}
+                mb='2'
+                color='#9393AA'
+                fontSize='20'
+                textAlign='center'
               >
-               <Text color="white" fontSize="18" >Procesar</Text> 
+                ¡Estos son los productos que tienes en tu carrito!
+              </Text>
+              <HStack justifyContent='center' alignItems="center">
+                <Icon mt="6" as={FontAwesome} name="shopping-cart" size={30} color="#41634A" />
+                <VStack alignItems="center" space={1} mt="1">
+                  <Text style={styles.price}> Subtotal:</Text>
+                  <Text mb="2" fontSize="20" color="#6E6E7A">${total}</Text>
+                </VStack>
+                <IconButton
+                  ml="16"
+                  bgColor="#41634A"
+                  variant={"solid"}
+                  icon={<Icon as={FontAwesome} name="trash" size={30} color="white" />}
+                  onPress={() => props.clearCart()} />
+              </HStack>
+
+              <HStack justifyContent='center'>
+                <Button
+                  width="80%"
+                  bgColor="#DB7F50"
+                  borderRadius="20"
+                // onPress={() => props.navigation.navigate("Checkout")}
+                >
+                  <Text color="white" fontSize="18" >Procesar</Text>
                 </Button>
-            </HStack>
+              </HStack>
             </VStack>
             <SwipeListView
               data={props.cartItems || []}
@@ -101,7 +101,13 @@ const Cart = (props) => {
                       }}
                     />
                     <Text ml="4" fontSize="16" mt="4">{data?.item?.product?.name}</Text>
-                    <Text style={{ position: 'absolute', right:10}} bold mt="4" fontSize="16" >${data?.item?.product?.price}</Text>
+                    <Text
+                      style={{ position: 'absolute', right: 10 }}
+                      bold mt="4"
+                      fontSize="16"
+                    >
+                      ${data?.item?.product?.price}
+                    </Text>
                   </HStack>
                 </Pressable>
               )}

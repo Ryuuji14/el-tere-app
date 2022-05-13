@@ -24,7 +24,7 @@ var {  width } = Dimensions.get("window");
 import { connect } from "react-redux";
 import * as actions from "../Redux/Actions/cartActions"
 
-const SingleProduct = ({ route }) => {
+const Promotion = ({ route }) => {
   const [item, setItem] = useState({
     id: route.params.id,
     name: route.params.name,
@@ -146,4 +146,4 @@ const mapDispatchToProps = (dispatch) => {
         }))
   }
 }
-export default connect (null, mapDispatchToProps)(SingleProduct);
+export default connect (null, mapDispatchToProps)(Promotion);

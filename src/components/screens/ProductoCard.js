@@ -1,4 +1,5 @@
 import { Entypo, FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import {
   Box,
   VStack,
@@ -16,13 +17,28 @@ import { TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import * as actions from "../../Redux/Actions/cartActions";
 
+
 const ProductoCard = (props) => {
   const { name, image, price, id, cartItems, modifyProductQuantity } = props;
 
   const productInCart = cartItems.find((item) => item.product.id === id);
 
+  const Navigation = useNavigation();
+  
+
   return (
-    <TouchableOpacity>
+    <TouchableOpacity 
+    style={{ width: '50%'}}
+    activeOpacity="0"
+    onPress={ () =>
+      Navigation.navigate("SingleProduct", {
+     name: props.name,
+     image: props.image,
+     price: props.price,
+     id: props.id,
+      })
+    }
+    >
       <Box
         width={175}
         maxW="80"
