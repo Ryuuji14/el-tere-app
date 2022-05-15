@@ -3,21 +3,29 @@ import {
   VStack,
   Text,
   HStack,
-  Icon,
   Image,
   AspectRatio,
-  Center
+  TouchableOpacity,
 } from "native-base";
+import { useNavigation } from "@react-navigation/native";
 
-import {
-  FontAwesome,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-web";
 
 const PromocionCard = ({ image, name, description }) => {
 
+  const Navigation = useNavigation();
+
   return (
+    <TouchableOpacity
+    onPress={ () =>
+      Navigation.navigate("ConsultarPromocion", {
+     name: props.name,
+     image: props.image,
+     price: props.price,
+     id: props.id,
+      })
+    }
+    >
     <Box
       width={200}
       maxW="80"
@@ -61,6 +69,7 @@ const PromocionCard = ({ image, name, description }) => {
 
       </HStack>
     </Box>
+    </TouchableOpacity>
   )
 }
 
