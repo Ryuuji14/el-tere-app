@@ -5,14 +5,19 @@ import Register from "../screens/Register";
 import RecoverPassword from "../screens/RecoverPassword";
 import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
-import useAuthContext from "../hooks/useAuthContext";
+
 import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
+
+import useAuthContext from "../hooks/useAuthContext";
+
 import Perfil from "../screens/Perfil";
+
 import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
 import { OrderDetail } from "../screens/OrderDetail";
-import { YourSales } from "../screens/YourSales";
+import SingleProduct from "../screens/ConsultarProducto";
+1;
 
 const Stack = createNativeStackNavigator();
 
@@ -77,8 +82,8 @@ const stackRoutes = [
     requireAuth: true,
   },
   {
-    name: "YourOrders",
-    component: YourSales,
+    name: "SingleProduct",
+    component: SingleProduct,
     requireAuth: true,
   },
 ];
@@ -90,7 +95,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="YourOrders"
+      initialRouteName="Dashboard"
       screenOptions={{
         headerShown: false,
       }}
