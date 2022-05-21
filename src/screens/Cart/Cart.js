@@ -34,7 +34,7 @@ const Cart = (props) => {
 
   var total = 0;
   props.cartItems.forEach(cart => {
-    return (total += cart.product.price)
+    return (total += cart.product.price * cart.product.quantity)
   });
 
 
@@ -93,20 +93,23 @@ const Cart = (props) => {
               data={props.cartItems || []}
               renderItem={(data) => (
                 <Pressable h="20" bgColor="white" key={data.item.product?.id}>
-                  <HStack >
+                  <HStack>
                     <Avatar
                       size="lg"
                       source={{
                         uri: data.item.product?.image,
                       }}
                     />
-                    <Text ml="4" fontSize="16" mt="4">{data?.item?.product?.name}</Text>
+                    <Text ml="4" fontSize="18" mt="4">
+                      <Text fontSize="16" color='gray.400' >{data?.item?.product?.quantity}x </Text>
+                      {data?.item?.product?.name}</Text>
+        
                     <Text
                       style={{ position: 'absolute', right: 10 }}
                       bold mt="4"
                       fontSize="16"
                     >
-                      ${data?.item?.product?.price}
+                      ${data?.item?.product?.price * data?.item?.product?.quantity}
                     </Text>
                   </HStack>
                 </Pressable>

@@ -5,11 +5,10 @@ import {
   HStack,
   Image,
   AspectRatio,
-  TouchableOpacity,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
-import { TouchableOpacity } from "react-native-web";
+import { TouchableOpacity } from "react-native";
 
 const PromocionCard = ({ image, name, description }) => {
 

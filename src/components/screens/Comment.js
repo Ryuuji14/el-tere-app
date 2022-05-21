@@ -17,8 +17,8 @@ import { FontAwesome } from "@expo/vector-icons";
 
 const Comment = () => {
   return (
-    <Box alignItems="center" mt="2">
-      <Box maxW="80" height="75%" rounded="lg" overflow="hidden" borderColor="#DB7F50" borderWidth="1" _dark={{
+    <Box alignItems="center" mt="2" width="100%">
+      <Box height="75%" rounded="lg" overflow="hidden" borderColor="#DB7F50" borderWidth="1" _dark={{
         borderColor: "#DB7F50",
         backgroundColor: "white"
       }} _web={{

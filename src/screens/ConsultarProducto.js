@@ -17,6 +17,7 @@ import {
   Icon,
   IconButton,
   Input,
+  Hidden,
 } from "native-base";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 
@@ -107,6 +108,7 @@ const SingleProduct = ({
                 mt="16"
                 onPress={() => {
                   addItemToCart(item);
+                  
                 }}
               >
                 <Text color="white" fontSize="lg">
