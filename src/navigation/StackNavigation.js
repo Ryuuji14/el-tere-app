@@ -12,12 +12,13 @@ import Comercio from "../screens/Comercio";
 import useAuthContext from "../hooks/useAuthContext";
 
 import Perfil from "../screens/Perfil";
+import SingleProduct from "../screens/ConsultarProducto";
+
 
 import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
 import { OrderDetail } from "../screens/OrderDetail";
-import SingleProduct from "../screens/ConsultarProducto";
-1;
+import { YourSales } from "../screens/YourSales";
 
 const Stack = createNativeStackNavigator();
 
@@ -84,6 +85,10 @@ const stackRoutes = [
   {
     name: "SingleProduct",
     component: SingleProduct,
+  },
+  {
+    name: "YourOrders",
+    component: YourSales,
     requireAuth: true,
   },
 ];

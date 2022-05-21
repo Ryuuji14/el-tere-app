@@ -1,5 +1,6 @@
 import { Heading, ScrollView, Text, View, Button } from "native-base";
 import { ImageBackground, Dimensions } from "react-native";
+import { Header } from "../components/Header";
 import RegisterForm from "../components/screens/register/RegisterForm";
 
 const { width, height } = Dimensions.get("screen");
@@ -8,9 +9,17 @@ const Register = ({ navigation }) => {
   return (
     <ImageBackground
       source={require("../../assets/register-bg.png")}
-      style={{ width, height, zIndex: 1, paddingHorizontal: 30, flex: 1 }}
+      style={{
+        width,
+        height,
+        zIndex: 1,
+        paddingHorizontal: 30,
+        flex: 1,
+      }}
     >
-      <Heading color="white" fontSize={45} fontWeight="bold" mt={5}>
+      <Header navigation={navigation} pt={4} />
+
+      <Heading color="white" fontSize={45} fontWeight="bold" mt={4}>
         Únete a{"\n"}EL TERE
       </Heading>
 
