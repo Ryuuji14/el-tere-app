@@ -19,6 +19,8 @@ import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
 import { OrderDetail } from "../screens/OrderDetail";
 import { YourSales } from "../screens/YourSales";
+import SingleProduct from "../screens/ConsultarProducto";
+1;
 
 const Stack = createNativeStackNavigator();
 
@@ -85,6 +87,7 @@ const stackRoutes = [
   {
     name: "SingleProduct",
     component: SingleProduct,
+    requireAuth: true,
   },
   {
     name: "YourOrders",

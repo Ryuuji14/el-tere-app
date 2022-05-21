@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import {
   Badge,
   Button,
@@ -26,10 +26,9 @@ import ComercioCard from "../components/screens/ComercioCard";
 import PromocionCard from "../components/screens/PromocionCard";
 import BottomNavigation from "../navigation/BottomNavigation";
 import promociones from "../../assets/promociones.json";
+import { dashboardAPI } from "../api/dashboard";
 
 var { height } = Dimensions.get("window");
-
-
 
 const ICONS_PROPS = {
   size: 5,
@@ -68,6 +67,7 @@ const categorias = [
 const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("");
+  const [promotionsAndEvents, setPromotionsAndEvents] = useState([]);
 
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0);
 
@@ -89,6 +89,33 @@ const Dashboard = () => {
       comercio.name.toLowerCase().includes(searchBy.toLowerCase())
     );
   }, [comercios, searchBy]);
+
+  useEffect(() => {
+    const getPromotions = async () => {
+      try {
+        const [eventData, promotionData] = await Promise.all([
+          dashboardAPI.getEvents(),
+          dashboardAPI.getPromotions(),
+        ]);
+
+        setPromotionsAndEvents(
+          [...(eventData?.items || []), ...(promotionData?.items || [])].sort(
+            (a, b) => {
+              if (a?.starts_at > b?.starts_at) return 1;
+
+              if (a?.starts_at < b?.starts_at) return -1;
+
+              return 0;
+            }
+          )
+        );
+      } catch (error) {
+        console.log(error.response);
+      }
+    };
+
+    getPromotions();
+  }, []);
 
   return (
     <ScrollView>
@@ -164,13 +191,14 @@ const Dashboard = () => {
                 Promociones y Eventos
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <HStack space={2}>
-                  {promociones.map((element) => (
+                <HStack space={2} py={2}>
+                  {promotionsAndEvents.map((element) => (
                     <PromocionCard
                       key={element.id}
-                      image={element.image}
-                      name={element.name}
+                      image={element.photo}
+                      name={element.title}
                       description={element.description}
+                      discount={element.discount}
                     />
                   ))}
                 </HStack>
