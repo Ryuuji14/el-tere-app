@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   ImageBackground,
   Dimensions,
@@ -14,10 +15,76 @@ import {
   View,
   Text,
 } from "native-base";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import useAuthContext from "../hooks/useAuthContext";
+import { saleAPI } from "../api/salesAPI";
+import { userAPI } from "../api/userAPI";
+import { addressAPI } from "../api/addressAPI";
+
 const { width, height } = Dimensions.get("screen");
 
+const formatDate = (date) => {
+  const d = new Date(date);
+  const [month, day, year] = d?.toLocaleDateString("en-US").split("/");
+
+  return `${day}/${month}/${year}` || "";
+};
+
+const getTotalPedidoAmount = (pedidos) => {
+  return pedidos.reduce((acc, pedido) => {
+    return acc + pedido.quantity * pedido.price;
+  }, 0);
+};
+
 const Perfil = () => {
+  const {
+    dispatch,
+    state: { user },
+  } = useAuthContext();
+  const [sales, setSales] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
+  const [pedidos, setPedidos] = useState([]);
+
+  useEffect(() => {
+    if (user?.id) {
+      const getUserInfo = async () => {
+        try {
+          const [
+            { data: userInfo },
+            { data: salesInfo },
+            { data: userAddresses },
+          ] = await Promise.all([
+            userAPI.getUser(user.id),
+            saleAPI.getUserSales(user.id),
+            addressAPI.getUserAddresses(user.id),
+          ]);
+
+          setUserInfo({
+            ...userInfo,
+            address: userAddresses?.[0]?.address || "",
+            comments: 0,
+          });
+          setSales(salesInfo);
+
+          if (salesInfo.length > 0) {
+            const salesIds = salesInfo.map((sale) => sale.id);
+
+            const pedidosResponses = await Promise.all(
+              salesIds
+                .slice(0, 2)
+                .map((id) => saleAPI.getSaleProductBySaleId(id))
+            );
+
+            setPedidos(pedidosResponses.map((response) => response.data));
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getUserInfo();
+    }
+  }, [user]);
+
   return (
     <ImageBackground
       source={require("../../assets/register-bg.png")}
@@ -55,6 +122,7 @@ const Perfil = () => {
           overflow="hidden"
           bgColor="#DD8457"
           alignSelf="center"
+          zIndex={10}
         >
           <Image
             source={require("../../assets/LOGO-EL-TERE-2.png")}
@@ -70,7 +138,24 @@ const Perfil = () => {
         >
           {/* User Info */}
           <Stack w="80%" alignSelf="center" mb={2}>
-            <HStack justifyContent="flex-end">
+            <HStack justifyContent="space-between">
+              <TouchableOpacity
+                onPress={() => dispatch({ type: "LOGOUT" })}
+                activeOpacity={0.8}
+              >
+                <View
+                  w="10"
+                  h="10"
+                  bgColor="#DD8457"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  rounded="full"
+                >
+                  <Icon as={Entypo} name="log-out" size="md" color="#fff" />
+                </View>
+              </TouchableOpacity>
+
               <TouchableOpacity
                 onPress={() => console.log("go to edit")}
                 activeOpacity={0.8}
@@ -94,10 +179,10 @@ const Perfil = () => {
               </TouchableOpacity>
             </HStack>
             <Text color="#5A7E64" textAlign="center" fontSize={20} mb={4}>
-              Ana Jiménez
+              {userInfo?.first_name} {userInfo?.last_name}
             </Text>
             <Text color="#9393AA" textAlign="center" fontSize={16}>
-              Carrera 27, calle 34. {"\n"} Barqusimeto
+              {userInfo?.address}
             </Text>
           </Stack>
 
@@ -112,7 +197,7 @@ const Perfil = () => {
             <HStack justifyContent="center" w="49%">
               <Stack alignItems="center">
                 <Text fontSize={45} fontWeight="medium" color="#5A7E64" mb={-3}>
-                  2
+                  {sales.length || 0}
                 </Text>
                 <Text color="#9393AA" fontSize={16}>
                   Pedidos
@@ -123,7 +208,7 @@ const Perfil = () => {
             <HStack justifyContent="center" w="49%">
               <Stack alignItems="center">
                 <Text fontSize={45} fontWeight="medium" color="#5A7E64" mb={-3}>
-                  20
+                  {userInfo?.comments || 0}
                 </Text>
                 <Text color="#9393AA" fontSize={16}>
                   Comentarios
@@ -143,7 +228,7 @@ const Perfil = () => {
             >
               Tus pedidos más recientes
             </Text>
-            {[1, 2].map(() => (
+            {pedidos.map((pedido, index) => (
               <View
                 w="100%"
                 borderWidth={1}
@@ -166,11 +251,17 @@ const Perfil = () => {
                   </Stack>
                   <Stack>
                     <Text color="#41634A" fontSize={14} fontWeight="bold">
-                      Pedido 1
+                      Pedido {sales[index]?.id}
                     </Text>
-                    <Text color="#9393AA">N° de artículos:</Text>
-                    <Text color="#9393AA">Fecha:</Text>
-                    <Text color="#9393AA">Total: 20$</Text>
+                    <Text color="#9393AA">
+                      N° de artículos: {pedido.length}
+                    </Text>
+                    <Text color="#9393AA">
+                      Fecha: {formatDate(sales[index]?.createdAt)}
+                    </Text>
+                    <Text color="#9393AA">
+                      Total: {getTotalPedidoAmount(pedido)}$
+                    </Text>
                   </Stack>
                 </HStack>
               </View>

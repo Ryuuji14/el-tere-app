@@ -22,6 +22,8 @@ const ComercioCard = (props) => {
 
   return (
     <TouchableOpacity
+      width="50%"
+      activeOpacity="0"
       onPress={() =>
         Navigation.navigate("Comercio", {
           image: props.image,

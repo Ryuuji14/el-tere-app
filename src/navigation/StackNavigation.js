@@ -8,13 +8,14 @@ import BottomNavigation from "./BottomNavigation";
 
 import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
+import { YourSales } from "../screens/YourSales";
+import useAuthContext from "../hooks/useAuthContext";
 import Perfil from "../screens/Perfil";
 import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
 import { OrderDetail } from "../screens/OrderDetail";
-import { YourSales } from "../screens/YourSales";
+import SingleProduct from "../screens/ConsultarProducto";
 
-import useAuthContext from "../hooks/useAuthContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -79,8 +80,8 @@ const stackRoutes = [
     requireAuth: true,
   },
   {
-    name: "YourOrders",
-    component: YourSales,
+    name: "SingleProduct",
+    component: SingleProduct,
     requireAuth: true,
   },
 ];
@@ -92,7 +93,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="YourOrders"
+      initialRouteName="Dashboard"
       screenOptions={{
         headerShown: false,
       }}
