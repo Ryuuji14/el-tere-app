@@ -4,6 +4,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import {
   Button,
@@ -20,6 +21,8 @@ import useAuthContext from "../hooks/useAuthContext";
 import { saleAPI } from "../api/salesAPI";
 import { userAPI } from "../api/userAPI";
 import { addressAPI } from "../api/addressAPI";
+import useLoading from "../hooks/useLoading";
+import useCustomToast from "../hooks/useCustomToast";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -44,43 +47,43 @@ const Perfil = ({ navigation }) => {
   const [sales, setSales] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [pedidos, setPedidos] = useState([]);
+  const { showErrorToast } = useCustomToast();
+  const { isLoading, startLoading, stopLoading } = useLoading();
+
+  const getUserInfo = async () => {
+    startLoading();
+    try {
+      const [{ data: userInfo }, { data: salesInfo }, { data: userAddresses }] =
+        await Promise.all([
+          userAPI.getUser(user.id),
+          saleAPI.getUserSales(7),
+          addressAPI.getUserAddresses(user.id),
+        ]);
+
+      setUserInfo({
+        ...userInfo,
+        address: userAddresses?.[0]?.address || "",
+        comments: 0,
+      });
+      setSales(salesInfo);
+
+      if (salesInfo.length > 0) {
+        const salesIds = salesInfo.map((sale) => sale.id);
+
+        const pedidosResponses = await Promise.all(
+          salesIds.slice(0, 2).map((id) => saleAPI.getSaleProductBySaleId(id))
+        );
+
+        setPedidos(pedidosResponses.map((response) => response.data));
+      }
+    } catch (error) {
+      showErrorToast(error);
+    }
+    stopLoading();
+  };
 
   useEffect(() => {
     if (user?.id) {
-      const getUserInfo = async () => {
-        try {
-          const [
-            { data: userInfo },
-            { data: salesInfo },
-            { data: userAddresses },
-          ] = await Promise.all([
-            userAPI.getUser(user.id),
-            saleAPI.getUserSales(user.id),
-            addressAPI.getUserAddresses(user.id),
-          ]);
-
-          setUserInfo({
-            ...userInfo,
-            address: userAddresses?.[0]?.address || "",
-            comments: 0,
-          });
-          setSales(salesInfo);
-
-          if (salesInfo.length > 0) {
-            const salesIds = salesInfo.map((sale) => sale.id);
-
-            const pedidosResponses = await Promise.all(
-              salesIds
-                .slice(0, 2)
-                .map((id) => saleAPI.getSaleProductBySaleId(id))
-            );
-
-            setPedidos(pedidosResponses.map((response) => response.data));
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
       getUserInfo();
     }
   }, [user]);
@@ -135,6 +138,9 @@ const Perfil = ({ navigation }) => {
           contentContainerStyle={{
             paddingBottom: 30,
           }}
+          refreshControl={
+            <RefreshControl refreshing={true} onRefresh={getUserInfo} />
+          }
         >
           {/* User Info */}
           <Stack w="80%" alignSelf="center" mb={2}>
