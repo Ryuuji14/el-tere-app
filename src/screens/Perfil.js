@@ -257,7 +257,7 @@ const Perfil = () => {
                       N° de artículos: {pedido.length}
                     </Text>
                     <Text color="#9393AA">
-                      Fecha: {formatDate(sales[index].createdAt)}
+                      Fecha: {formatDate(sales[index]?.createdAt)}
                     </Text>
                     <Text color="#9393AA">
                       Total: {getTotalPedidoAmount(pedido)}$
