@@ -36,7 +36,7 @@ const getTotalPedidoAmount = (pedidos) => {
   }, 0);
 };
 
-const Perfil = () => {
+const Perfil = ({ navigation }) => {
   const {
     dispatch,
     state: { user },
@@ -157,7 +157,7 @@ const Perfil = () => {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => console.log("go to edit")}
+                onPress={() => navigation?.navigate("EditPerfil")}
                 activeOpacity={0.8}
               >
                 <View

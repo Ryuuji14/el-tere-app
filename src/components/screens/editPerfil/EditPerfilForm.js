@@ -35,7 +35,7 @@ import { userAPI } from "../../../api/userAPI";
 import { userInterestAPI } from "../../../api/userInterest";
 import { interestAPI } from "../../../api/interestAPI";
 
-export const EditPerfilForm = () => {
+export const EditPerfilForm = ({ navigation }) => {
   // hooks
   const {
     state: { user },
@@ -122,7 +122,6 @@ export const EditPerfilForm = () => {
 
       showSuccesToast("Edicion exitosa");
     } catch (error) {
-      console.log(error?.response?.data);
       showErrorToast("Error al actualizar");
     }
     stopLoading();
@@ -143,10 +142,8 @@ export const EditPerfilForm = () => {
       try {
         const interest = userInterests[findInterestIndex];
 
-        console.log("interest", interest);
-
         await userInterestAPI.updateUserInterestStatus(
-          interest.interest_id,
+          interest.id,
           !interest?.active
         );
 
@@ -158,7 +155,6 @@ export const EditPerfilForm = () => {
           )
         );
       } catch (error) {
-        console.log(error?.response?.data);
         showErrorToast(error);
       }
     } else {
@@ -170,6 +166,7 @@ export const EditPerfilForm = () => {
         const newUserInterests = [...userInterests, data];
         setUserInterests(newUserInterests);
       } catch (error) {
+        console.log("post error");
         showErrorToast(error);
       }
     }
@@ -372,7 +369,7 @@ export const EditPerfilForm = () => {
         />
 
         <Button
-          onPress={() => console.log}
+          onPress={() => navigation?.navigate("YourDirections")}
           py={2}
           variant="outline"
           rounded="full"

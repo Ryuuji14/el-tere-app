@@ -26,6 +26,12 @@ export const ModalDirectionForm = ({
     try {
       if (addressInfo) {
         // update address
+        const { data } = await userAddressAPI.updateUserAddress(
+          addressInfo.id,
+          address
+        );
+        afterSubmit?.(data);
+        showSuccesToast("¡Dirección modifica con exito!");
       } else {
         // add address
         const { data } = await userAddressAPI.addUserAddress(user?.id, address);
@@ -42,6 +48,8 @@ export const ModalDirectionForm = ({
   useEffect(() => {
     if (addressInfo?.id) {
       setAddress(addressInfo.address);
+    } else {
+      setAddress("");
     }
   }, [addressInfo]);
 
