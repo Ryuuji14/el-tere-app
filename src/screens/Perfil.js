@@ -139,7 +139,7 @@ const Perfil = ({ navigation }) => {
             paddingBottom: 30,
           }}
           refreshControl={
-            <RefreshControl refreshing={true} onRefresh={getUserInfo} />
+            <RefreshControl refreshing={isLoading} onRefresh={getUserInfo} />
           }
         >
           {/* User Info */}
