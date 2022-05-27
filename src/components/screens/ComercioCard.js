@@ -6,9 +6,9 @@ import {
   HStack,
   Icon,
   Image,
-  AspectRatio
+  AspectRatio,
 } from "native-base";
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
   FontAwesome,
@@ -17,13 +17,14 @@ import {
 } from "@expo/vector-icons";
 
 const ComercioCard = (props) => {
-
   const Navigation = useNavigation();
 
   return (
     <TouchableOpacity
-      width="50%"
       activeOpacity="0"
+      style={{
+        width: 175,
+      }}
       onPress={() =>
         Navigation.navigate("Comercio", {
           image: props.image,
@@ -32,7 +33,7 @@ const ComercioCard = (props) => {
           rating: props.rating,
           horaApertura: props.horaApertura,
           horaCierre: props.horaCierre,
-          delivery: props.delivery
+          delivery: props.delivery,
         })
       }
     >
@@ -47,23 +48,23 @@ const ComercioCard = (props) => {
         shadow={2}
         _dark={{
           borderColor: "coolGray.600",
-          backgroundColor: "gray.700"
+          backgroundColor: "gray.700",
         }}
         _web={{
           shadow: 2,
-          borderWidth: 0
+          borderWidth: 0,
         }}
         _light={{
-          backgroundColor: "gray.50"
+          backgroundColor: "gray.50",
         }}
-        my='2'
+        my="2"
       >
-        <VStack space="2" >
+        <VStack space="2">
           <Box>
             <AspectRatio w="100%" ratio={16 / 9}>
               <Image
                 source={{
-                  uri: props.image
+                  uri: props.image,
                 }}
                 alt={props.name}
               />
@@ -71,33 +72,30 @@ const ComercioCard = (props) => {
           </Box>
           <Box px="2">
             <Text bold>
-              {props.name.length > 22 ? props.name.substring(0, 22 - 3)
-                + '...' : props.name
-              }
+              {props.name.length > 22
+                ? props.name.substring(0, 22 - 3) + "..."
+                : props.name}
             </Text>
           </Box>
-          <HStack justifyContent='space-between'>
+          <HStack justifyContent="space-between">
             <Box px="2">
-              <Text color='grey'>
-                {props.type.length > 16 ? props.type.substring(0, 16 - 3)
-                  + '...' : props.type
-                }
+              <Text color="grey">
+                {props.type.length > 16
+                  ? props.type.substring(0, 16 - 3) + "..."
+                  : props.type}
               </Text>
             </Box>
-            <Box px="2" pb="2" mr='2'>
-              <HStack alignItems='center' space={2}>
-                <Icon as={FontAwesome} name="star" color='yellow.500' />
-                <Text>
-                  {props.rating}
-                </Text>
+            <Box px="2" pb="2" mr="2">
+              <HStack alignItems="center" space={2}>
+                <Icon as={FontAwesome} name="star" color="yellow.500" />
+                <Text>{props.rating}</Text>
               </HStack>
             </Box>
           </HStack>
         </VStack>
       </Box>
     </TouchableOpacity>
-  )
-}
-
+  );
+};
 
 export default ComercioCard;

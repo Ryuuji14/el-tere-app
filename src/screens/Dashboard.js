@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, useEffect } from "react";
+import React, { useRef, useMemo, useState, useEffect, Fragment } from "react";
 import {
   Badge,
   Button,
@@ -15,7 +15,7 @@ import {
   Icon,
   ScrollView,
 } from "native-base";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import Logo from "../../assets/LOGO-EL-TERE.png";
 import {
   FontAwesome,
@@ -27,6 +27,9 @@ import PromocionCard from "../components/screens/PromocionCard";
 import BottomNavigation from "../navigation/BottomNavigation";
 import promociones from "../../assets/promociones.json";
 import { dashboardAPI } from "../api/dashboard";
+import { companyAPI } from "../api/companyAPI";
+
+import useCustomToast from "../hooks/useCustomToast";
 
 var { height } = Dimensions.get("window");
 
@@ -68,6 +71,8 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("");
   const [promotionsAndEvents, setPromotionsAndEvents] = useState([]);
+  const { showErrorToast } = useCustomToast();
+  const [areas, setAreas] = useState([]);
 
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0);
 
@@ -117,8 +122,20 @@ const Dashboard = () => {
     getPromotions();
   }, []);
 
+  useEffect(() => {
+    const getAreasWithProducts = async () => {
+      try {
+        const { data } = await companyAPI.getAreasWithProducts();
+        setAreas(data || []);
+      } catch (error) {
+        showErrorToast(error);
+      }
+    };
+    getAreasWithProducts();
+  }, []);
+
   return (
-    <ScrollView>
+    <ScrollView bgColor="white">
       <View bgColor="white" px={7} pb={5}>
         <Stack>
           <HStack space={3} alignItems="center">
@@ -209,7 +226,38 @@ const Dashboard = () => {
             Comercios
           </Text>
 
-          <View>
+          {areas.map(({ area }) => (
+            <Fragment key={area.id}>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text color="#41634A" pt={2} pb={1} bold>
+                  {area?.name}
+                </Text>
+                <TouchableOpacity>
+                  <Text color="#41634A">Ver todos</Text>
+                </TouchableOpacity>
+              </HStack>
+              <FlatList
+                horizontal
+                data={area.companies || []}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <ComercioCard
+                    key={item.id}
+                    id={item.id}
+                    image={item.image}
+                    name={item.name}
+                    type={item?.type || ""}
+                    rating={item.rating || 0}
+                    horaApertura={item.horaApertura}
+                    horaCierre={item.closing_time}
+                    delivery={item.closing_time}
+                  />
+                )}
+              />
+            </Fragment>
+          ))}
+
+          {/* <View>
             <FlatList
               columnWrapperStyle={{ justifyContent: "space-between" }}
               numColumns={2}
@@ -229,7 +277,7 @@ const Dashboard = () => {
               )}
               keyExtractor={(item) => item.name}
             />
-          </View>
+          </View> */}
         </KeyboardAvoidingView>
       </View>
     </ScrollView>

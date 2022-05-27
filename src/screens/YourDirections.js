@@ -29,6 +29,7 @@ export const YourDirections = () => {
   const [directions, setDirections] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const { showErrorToast, showSuccesToast } = useCustomToast();
 
   useEffect(() => {
     if (user?.id) {
@@ -38,8 +39,7 @@ export const YourDirections = () => {
           const { data } = await userAddressAPI.getUserAddress(user.id);
           setDirections(data);
         } catch (error) {
-          console.log(error);
-          // showErrorToast(error);
+          showErrorToast(error);
         }
         stopLoading();
       };
@@ -58,7 +58,29 @@ export const YourDirections = () => {
   };
 
   const afterSubmit = (newAddress) => {
-    setDirections([...directions, newAddress]);
+    if (selectedAddress) {
+      setDirections((prevDirections) =>
+        prevDirections.map((direction) =>
+          direction.id === selectedAddress.id ? newAddress : direction
+        )
+      );
+    } else {
+      setDirections([...directions, newAddress]);
+    }
+    handleClose();
+  };
+
+  const deleteAddress = async (addressId) => {
+    startLoading();
+    try {
+      await userAddressAPI.deleteUserAddress(addressId);
+      setDirections(directions.filter((address) => address.id !== addressId));
+      showSuccesToast("Dirección eliminada con exito");
+      handleClose();
+    } catch (error) {
+      showErrorToast(error);
+    }
+    stopLoading();
   };
 
   return (
@@ -117,6 +139,7 @@ export const YourDirections = () => {
                   />
                 </TouchableOpacity>
                 <IconButton
+                  onPress={() => deleteAddress(dir.id)}
                   bgColor="#D87949"
                   rounded="xl"
                   _icon={{
