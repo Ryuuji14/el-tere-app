@@ -37,13 +37,13 @@ const Cart = (props) => {
     return (total += cart.product.price * cart.product.quantity)
   });
 
-
   return (
     <>
       {props.cartItems.length ? (
         <View backgroundColor="#DB7F50" width={width} h="100%">
           <Text style={{ alignSelf: "center" }} fontSize='30' color="white" my="2"> Tu Carrito </Text>
           <View
+            paddingBottom="70%"
             backgroundColor="white"
             mx="6"
             borderWidth="5"
@@ -83,7 +83,7 @@ const Cart = (props) => {
                   width="80%"
                   bgColor="#DB7F50"
                   borderRadius="20"
-                // onPress={() => props.navigation.navigate("Checkout")}
+                onPress={() => props.navigation.navigate("ConfirmarPedido")}
                 >
                   <Text color="white" fontSize="18" >Procesar</Text>
                 </Button>

@@ -42,6 +42,7 @@ const ProductoCard = (props) => {
       <Box
         width={175}
         maxW="80"
+        mx={2}
         rounded="lg"
         overflow="hidden"
         borderColor="coolGray.200"

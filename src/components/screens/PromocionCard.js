@@ -16,7 +16,6 @@ const PromocionCard = ({
     if (!image || !image.includes("https")) {
       return "https://via.placeholder.com/300.png?text=no+image";
     }
-
     return image;
   };
 
@@ -88,6 +87,7 @@ const PromocionCard = ({
                 left={-10}
                 bottom={0.5}
                 source={require("../../../assets/LOGO-EL-TERE-2.png")}
+                alt="pinche prop requirida"
               />
               <Text zIndex={10} right={2} bottom={0.5}>
                 {isPromo ? "Promo" : "Evento"}

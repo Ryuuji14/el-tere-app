@@ -37,11 +37,12 @@ const ComercioCard = (props) => {
       }
     >
       <Box
+        mr={2}
         width={175}
         maxW="80"
         rounded="lg"
         overflow="hidden"
-        borderColor="coolGray.200"
+        borderColor="#5A7E64"
         borderWidth="1"
         shadow={2}
         _dark={{

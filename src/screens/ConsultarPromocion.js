@@ -32,11 +32,6 @@ const Promocion = ({ route }) => {
     price: route.params.price,
   });
 
-
-  const [count, setCount] = useState(1);
-  const onPress = () => setCount(prevCount => prevCount + 1);
-  const onPress1 = () => setCount(prevCount => Math.max(prevCount - 1, 1));
-
   return (
     <View
       backgroundColor="#DB7F50"

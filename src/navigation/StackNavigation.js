@@ -19,8 +19,10 @@ import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
 import { OrderDetail } from "../screens/OrderDetail";
 import { YourSales } from "../screens/YourSales";
-import SingleProduct from "../screens/ConsultarProducto";
-1;
+import ConfirmarPedido from "../screens/ConfirmarPedido";
+import Cart from "../screens/Cart/Cart";
+import RealizaPago from "../screens/RealizaPago"
+
 
 const Stack = createNativeStackNavigator();
 
@@ -93,6 +95,20 @@ const stackRoutes = [
     name: "YourOrders",
     component: YourSales,
     requireAuth: true,
+  },
+  {
+    name: "ConfirmarPedido",
+    component: ConfirmarPedido,
+    requireAuth: true,
+  },
+  {
+    name:"Cart",
+    component: Cart,
+  },
+  {
+    name:"RealizaPago",
+    component: RealizaPago,
+    requiereAuth: true,
   },
 ];
 
