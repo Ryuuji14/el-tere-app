@@ -5,16 +5,11 @@ import Register from "../screens/Register";
 import RecoverPassword from "../screens/RecoverPassword";
 import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
-
 import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
-
 import useAuthContext from "../hooks/useAuthContext";
-
 import Perfil from "../screens/Perfil";
 import SingleProduct from "../screens/ConsultarProducto";
-
-
 import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
 import { OrderDetail } from "../screens/OrderDetail";
@@ -72,6 +67,11 @@ const stackRoutes = [
     requireAuth: true,
   },
   {
+    name: "RealizaPago",
+    component: RealizaPago, 
+    requireAuth: true,
+  },
+  {
     name: "EditPerfil",
     component: EditPerfil,
     requireAuth: true,
@@ -104,12 +104,9 @@ const stackRoutes = [
   {
     name:"Cart",
     component: Cart,
+    requireAuth: true,
   },
-  {
-    name:"RealizaPago",
-    component: RealizaPago,
-    requiereAuth: true,
-  },
+  
 ];
 
 const StackNavigation = () => {

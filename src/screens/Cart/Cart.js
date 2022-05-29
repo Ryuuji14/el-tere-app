@@ -83,13 +83,14 @@ const Cart = (props) => {
                   width="80%"
                   bgColor="#DB7F50"
                   borderRadius="20"
-                onPress={() => props.navigation.navigate("ConfirmarPedido")}
+                  onPress={() => props.navigation.navigate("ConfirmarPedido")}
                 >
                   <Text color="white" fontSize="18" >Procesar</Text>
                 </Button>
               </HStack>
             </VStack>
             <SwipeListView
+            
               data={props.cartItems || []}
               renderItem={(data) => (
                 <Pressable h="20" bgColor="white" key={data.item.product?.id}>
@@ -103,7 +104,6 @@ const Cart = (props) => {
                     <Text ml="4" fontSize="18" mt="4">
                       <Text fontSize="16" color='gray.400' >{data?.item?.product?.quantity}x </Text>
                       {data?.item?.product?.name}</Text>
-        
                     <Text
                       style={{ position: 'absolute', right: 10 }}
                       bold mt="4"

@@ -27,6 +27,7 @@ const ComercioCard = (props) => {
       }}
       onPress={() =>
         Navigation.navigate("Comercio", {
+          id: props.id,
           image: props.image,
           name: props.name,
           type: props.type,

@@ -24,8 +24,6 @@ import {
 } from "@expo/vector-icons";
 import ComercioCard from "../components/screens/ComercioCard";
 import PromocionCard from "../components/screens/PromocionCard";
-import BottomNavigation from "../navigation/BottomNavigation";
-import promociones from "../../assets/promociones.json";
 import { dashboardAPI } from "../api/dashboard";
 import { companyAPI } from "../api/companyAPI";
 
@@ -129,6 +127,7 @@ const Dashboard = () => {
         setAreas(data || []);
       } catch (error) {
         showErrorToast(error);
+        console.log(error)
       }
     };
     getAreasWithProducts();
@@ -244,11 +243,11 @@ const Dashboard = () => {
                   <ComercioCard
                     key={item.id}
                     id={item.id}
-                    image={item.image}
+                    image={item.photo}
                     name={item.name}
                     type={item?.type || ""}
                     rating={item.rating || 0}
-                    horaApertura={item.horaApertura}
+                    horaApertura={item.opening_time}
                     horaCierre={item.closing_time}
                     delivery={item.closing_time}
                   />

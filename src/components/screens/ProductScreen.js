@@ -28,10 +28,15 @@ import PromocionCard from "./PromocionCard"
 import { connect } from "react-redux";
 import { Tab, TabView } from '@rneui/themed';
 const { width, height } = Dimensions.get("window");
-const productos = require("../../../assets/productos.json");
+
+
 const promociones = require("../../../assets/promociones.json");
 
-const ProductScreen = ({ promociones = [], productos = [] }) => {
+
+
+
+const ProductScreen = ({ promociones = [], productos = []}) => {
+
   return (
     <ScrollView>
       <View
@@ -65,17 +70,19 @@ const ProductScreen = ({ promociones = [], productos = [] }) => {
             <FlatList
               columnWrapperStyle={{ justifyContent: "space-between" }}
               numColumns={2}
-              data={productos}
+              data={productos || []}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <ProductoCard
                   key={item.id}
                   id={item.id}
-                  image={item.image}
+                  company_id={item.company_id}
+                  description={item.description}
+                  image={item.photo}
                   name={item.name}
                   price={item.price}
                 />
               )}
-              keyExtractor={(item) => item.name}
             />
           </View>
         </KeyboardAvoidingView>

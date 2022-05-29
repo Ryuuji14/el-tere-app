@@ -32,7 +32,9 @@ const SingleProduct = ({
   cartItems,
 }) => {
   const [item, setItem] = useState({
+    company_id: route.params?.company_id,
     id: route.params?.id,
+    description: route.params?.description,
     name: route.params?.name,
     image: route.params?.image,
     price: route.params?.price,
@@ -55,7 +57,7 @@ const SingleProduct = ({
             {item.name}
           </Text>
           <Text color="#9393AA" fontSize="md">
-            ACA VA LA DESCRIPCION
+            {item.description}
           </Text>
           <Text color="#9393AA" fontSize="md">
             Precio: ${item.price}

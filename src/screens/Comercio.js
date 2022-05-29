@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Badge,
   Button,
@@ -29,13 +29,16 @@ import { connect } from "react-redux";
 import { Tab, TabView } from '@rneui/themed';
 import ProductScreen from '../components/screens/ProductScreen';
 import Comment from '../components/screens/Comment';
-const productos = require("../../assets/productos.json");
+import { useFocusEffect } from '@react-navigation/native';
+import { productsAPI } from '../api/productsAPI';
 const promociones = require("../../assets/promociones.json");
+import useCustomToast from "../hooks/useCustomToast";
 
 const { width, height } = Dimensions.get("window");
 
 const Comercio = ({ route, cartItems }) => {
   const [market, setMarket] = useState({
+    id: route.params.id,
     name: route.params.name,
     image: route.params.image,
     type: route.params.type,
@@ -46,11 +49,23 @@ const Comercio = ({ route, cartItems }) => {
   });
 
   const [index, setIndex] = useState(0);
-  // console.log(cartItems.map(({ product: { image, ...prod } }) => prod));
+  const [products, setProducts] = useState([]);
+  const { showErrorToast } = useCustomToast();
 
-  // const findProductIsInCart = (productId, cartItems) => {
-  //   return cartItems.find((item) => item.product.id === productId);
-  // };
+  useFocusEffect(
+    useCallback(() => {
+    const getProducts = async () => {
+    try {
+      const { data } = await productsAPI.getProducts(market?.id);
+      setProducts(data || []);
+      
+    } catch (error) {
+      showErrorToast(error);
+    }
+    };
+  getProducts();
+}, [])
+)
 
   return (
     <View
@@ -120,32 +135,32 @@ const Comercio = ({ route, cartItems }) => {
       >
         <Tab.Item
           title="Productos"
-          titleStyle={{ 
-            fontSize: 12, color: 
-            index === 0 ? '#41634A' : 'gray'
+          titleStyle={{
+            fontSize: 12, color:
+              index === 0 ? '#41634A' : 'gray'
           }}
           containerStyle={{
             backgroundColor: 'white',
           }}
-          icon={{ 
-            name: 'basket', 
-            type: 'ionicon', 
+          icon={{
+            name: 'basket',
+            type: 'ionicon',
             color: index === 0 ? '#41634A' : '#9393AA'
           }}
         />
         <Tab.Item
           title="Comentarios"
-          titleStyle={{ 
-            fontSize: 12, color: 
-            index === 1 ? '#41634A' : 'gray'
+          titleStyle={{
+            fontSize: 12, color:
+              index === 1 ? '#41634A' : 'gray'
           }}
           containerStyle={{
             backgroundColor: 'white',
           }}
-          icon={<Icon as={Entypo} 
-          size="8" 
-          name="message" 
-          color= {index === 1 ? "#41634A" : '#9393AA'}
+          icon={<Icon as={Entypo}
+            size="8"
+            name="message"
+            color={index === 1 ? "#41634A" : '#9393AA'}
           />}
         />
       </Tab>
@@ -164,11 +179,11 @@ const Comercio = ({ route, cartItems }) => {
         >
           <ProductScreen
             promociones={promociones}
-            productos={productos}
+            productos={products}
           />
         </TabView.Item>
         <TabView.Item style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
-          <Comment/>
+          <Comment />
         </TabView.Item>
       </TabView>
     </View>

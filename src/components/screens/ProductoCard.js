@@ -19,25 +19,27 @@ import * as actions from "../../Redux/Actions/cartActions";
 
 
 const ProductoCard = (props) => {
-  const { name, image, price, id, cartItems, modifyProductQuantity } = props;
+  const { name, image, price, id, description, cartItems, modifyProductQuantity } = props;
 
   const productInCart = cartItems.find((item) => item.product.id === id);
 
   const Navigation = useNavigation();
-  
+
 
   return (
-    <TouchableOpacity 
-    style={{ width: '50%'}}
-    activeOpacity="0"
-    onPress={ () =>
-      Navigation.navigate("SingleProduct", {
-     name: props.name,
-     image: props.image,
-     price: props.price,
-     id: props.id,
-      })
-    }
+    <TouchableOpacity
+      style={{ width: '50%' }}
+      activeOpacity="0"
+      onPress={() =>
+        Navigation.navigate("SingleProduct", {
+          company_id: props.company_id,
+          name: props.name,
+          description: props.description,
+          image: props.image,
+          price: props.price,
+          id: props.id,
+        })
+      }
     >
       <Box
         width={175}

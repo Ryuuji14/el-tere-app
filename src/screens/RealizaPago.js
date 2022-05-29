@@ -1,43 +1,29 @@
 import {
-  Container,
-  Image,
-  FlatList,
-  Box,
-  List,
-  Pressable,
   Text,
-  HStack,
   View,
-  Avatar,
-  IconButton,
   Button,
   VStack,
   Divider,
-  Center,
-  Stack,
-  Heading,
 } from "native-base";
 import {
   StyleSheet,
-  TouchableOpacity,
-  TouchableHighlight,
   Dimensions,
 } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-
-import { SwipeListView } from "react-native-swipe-list-view";
-
-import { connect } from "react-redux";
-import * as actions from "../Redux/Actions/cartActions";
-import { FontAwesome } from "@expo/vector-icons";
-
 var { height, width } = Dimensions.get("window");
 
 const RealizaPago = (props) => {
 
+  const item = {
+    id: props.route.params.id,
+    comercio: props.route.params.comercio,
+    nombre: props.route.params.first_name,
+    apellido: props.route.params.last_name,
+    total: props.route.params.total
+  }
+
   return (
     <>
-      <View backgroundColor="#DB7F50" width={width} h="100%">
+      <View backgroundColor="#DB7F50" width={width} h="100%" >
         <Text style={{ alignSelf: "center" }} fontSize='30' color="white" my="2"> Realiza el Pago </Text>
         <View
           backgroundColor="white"
@@ -45,69 +31,46 @@ const RealizaPago = (props) => {
           borderWidth="5"
           borderColor="white"
           borderRadius='20'
+          
         >
           <VStack
             space={2}
             mb={4}
-            justifyContent='center'
+            justifyContent='center'          
           >
             <Text
               color="#9393AA"
               fontSize="16"
               style={{ alignSelf: "center" }}
             > Para terminar de validar el pedido ponte en contacto con el comercio para realizar el pago: </Text>
-            <HStack space="2" justifyContent='center'>
-              <VStack space="2" alignItems='center'>
+              <VStack space="2" alignItems='center' >
+                <Text
+                  color="#6E6E7A"
+                  fontSize="18">
+                    <Text bold>Comercio: </Text> {item.comercio}
+                </Text>
+                <Text
+                  color="#6E6E7A"
+                  fontSize="18"><Text bold >Responsable: </Text> {item.nombre} {item.apellido}
+                </Text>
                 <Text
                   color="#6E6E7A"
                   fontSize="18"
                   bold
-                >
-                  Comercio:
+                >Telefono de Contacto:
                 </Text>
                 <Text
                   color="#6E6E7A"
                   fontSize="18"
-                  bold
-                >
-                  Responsable
-                </Text>
-
-              </VStack>
-            </HStack>
-            <Box
-              alignItems="center"
-              width="80%"
-              alignSelf="center"
-              rounded="lg"
-              borderColor="#F96332"
-              borderWidth="1"
-              borderRadius="10"
-            >
-              <VStack>
-                <Text
-                  bold
-                  fontSize='18'
-                  color='#6E6E7A'
-                >
-                  Comercio:
+                ><Text bold>Monto a Pagar: </Text> ${item.total}
                 </Text>
                 <Text
-                  bold
-                  fontSize='18'
-                  color='#6E6E7A'
-                >
-                  Subtotal: ${total}
-                </Text>
-                <Text
-                  bold
-                  fontSize='18'
-                  color='#6E6E7A'
-                >
-                  Con Delivery: $
+                  color="#6E6E7A"
+                  fontSize="18"
+                ><Text bold>Codigo del Pedido: </Text> {item.id}
                 </Text>
                 <Divider
-                  
+                  width="100%"
                   my="2"
                   _light={{
                     bg: "#41634A",
@@ -117,11 +80,12 @@ const RealizaPago = (props) => {
                   }}
                 />
                 <Text
-                  bold
-                  fontSize='18'
-                  color='#6E6E7A'
+                  color="#9393AA"
+                  fontSize="18"
+                  style={{ alignSelf: "center" }}
                 >
-                  TOTAL a pagar: $
+                  Luego de realizar el pago, validaremos tu pedido.
+                  Debes esperar mientras actualizamos el estatus de tu pedido.
                 </Text>
                 <Button
                   mt="2"
@@ -129,12 +93,12 @@ const RealizaPago = (props) => {
                   width="80%"
                   bgColor="#DB7F50"
                   borderRadius="20"
-                 onPress={() => props.navigation.navigate("RealizaPago")}
+                //onPress={() => onSubmit()}
                 >
-                  <Text color="white" fontSize="16" >PROCESAR PEDIDO</Text>
+                  <Text color="white" fontSize="16" >VER TUS PEDIDOS</Text>
                 </Button>
               </VStack>
-            </Box>
+
           </VStack>
         </View>
       </View>
