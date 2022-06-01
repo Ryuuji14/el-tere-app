@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Heading,
@@ -15,9 +15,22 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 
 
-const Comment = () => {
+const Comment = (props) => {
+  const item = {
+    id: props.id,
+    name: props.firstName,
+    last_name: props.lastName,
+    rating: props.rating,
+    date: props.date,
+    description: props.description,
+  }
+
+  useEffect(() => {
+console.log(item)
+  })
+
   return (
-    <Box alignItems="center" mt="2" width="100%">
+    <Box alignItems="center" mt="2" width="100%" maxWidth="80">
       <Box height="75%" rounded="lg" overflow="hidden" borderColor="#DB7F50" borderWidth="1" _dark={{
         borderColor: "#DB7F50",
         backgroundColor: "white"
@@ -32,10 +45,10 @@ const Comment = () => {
             <HStack>
             <Avatar/>
             <Heading size="sm" ml="2">
-              Persona Nombre
+              {item.name} {item.last_name}
             </Heading>
             <Icon as={FontAwesome} mt="6" name="star" color='yellow.500' style={{position: 'absolute', left: 55}} />
-            <Text mt="5" ml="4"style={{position: 'absolute', left: 55}}>4</Text>
+            <Text mt="5" ml="4"style={{position: 'absolute', left: 55}}>{item.rating}</Text>
             </HStack>
             <Text 
             fontSize="xs" _light={{
@@ -45,7 +58,9 @@ const Comment = () => {
             }} fontWeight="500" ml="-0.5" mt="10"
             style={{ position: 'absolute', right: 10 }}
             >
-              01/06/2021
+              {
+                item.date
+              }
             </Text>
             <Divider
             width="100%"
@@ -59,15 +74,12 @@ const Comment = () => {
           />
           </Stack>
           <Text fontWeight="400">
-            Bengaluru (also called Bangalore) is the center of India's high-tech
-            industry. The city is also known for its parks and nightlife.
+            {item.description}
           </Text>
-
         </Stack>
       </Box>
     </Box>
   )
 };
-
 
 export default Comment;

@@ -33,6 +33,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { productsAPI } from '../api/productsAPI';
 const promociones = require("../../assets/promociones.json");
 import useCustomToast from "../hooks/useCustomToast";
+import { reviewAPI } from '../api/reviewAPI';
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -51,22 +53,38 @@ const Comercio = ({ route, cartItems }) => {
   const [index, setIndex] = useState(0);
   const [products, setProducts] = useState([]);
   const { showErrorToast } = useCustomToast();
+  const [comments, setComments] = useState([]);
+
 
   useFocusEffect(
     useCallback(() => {
-    const getProducts = async () => {
-    try {
-      const { data } = await productsAPI.getProducts(market?.id);
-      setProducts(data || []);
-      
-    } catch (error) {
-      showErrorToast(error);
-    }
-    };
-  getProducts();
-}, [])
-)
+      const getProducts = async () => {
+        try {
+          const { data } = await productsAPI.getProducts(market?.id);
+          setProducts(data || []);
+        } catch (error) {
+          showErrorToast(error);
+        }
+      }
+      getProducts();
+    }, [])
+  )
+  useFocusEffect(
+    useCallback(() => {
+      const getComments = async () => {
+        try {
+          const { data } = await reviewAPI.getReviews(market?.id);
+          setComments(data || []);
+          console.log(comments);
 
+        } catch (error) {
+          showErrorToast(error);
+          console.log(error);
+        }
+      }
+      getComments();
+    }, [])
+  )
   return (
     <View
       minH={height}
@@ -183,7 +201,31 @@ const Comercio = ({ route, cartItems }) => {
           />
         </TabView.Item>
         <TabView.Item style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
-          <Comment />
+
+          <FlatList
+            data={comments || []}
+            renderItem={({ comment }) => (
+              <Comment
+                key={comment?.id}
+                firstName={comment?.user_review?.first_name}
+                lastName={comment?.user_review?.last_name}
+                rating={comment?.rating}
+                date={comment?.createdAt}
+                description={comment?.description}
+              />
+            )}
+            keyExtractor={(comment) => comment?.id}
+          />
+          {/* {  comments.map((comment) => (
+        <Comment
+              key={comment?.id}
+              firstName={comment?.user_review?.first_name}
+              lastName={comment?.user_review?.last_name}
+              rating={comment?.rating}
+              date={comment?.createdAt}
+              description={comment?.description}
+            />  
+       ))} */}
         </TabView.Item>
       </TabView>
     </View>

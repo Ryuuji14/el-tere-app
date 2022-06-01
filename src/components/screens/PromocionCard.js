@@ -23,14 +23,21 @@ const PromocionCard = ({
 
   return (
     <TouchableOpacity
-      onPress={() =>
-        Navigation.navigate("ConsultarPromocion", {
-          name: name,
-          image: image,
-          price: price,
-          id: id,
-        })
-      }
+      onPress={() => {
+        isPromo ?
+          Navigation.navigate("Promocion", {
+            name: name,
+            image: image,
+            price: price,
+            id: id,
+          })
+          :
+          Navigation.navigate("ConsultarEvento", {
+            name: name,
+            image: image,
+            description: description,
+          })
+      }}
     >
       <Box
         width={220}

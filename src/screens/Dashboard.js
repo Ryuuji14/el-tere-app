@@ -224,7 +224,6 @@ const Dashboard = () => {
           <Text pt={2} pb={2} bold color="grey">
             Comercios
           </Text>
-
           {areas.map(({ area }) => (
             <Fragment key={area.id}>
               <HStack alignItems="center" justifyContent="space-between">

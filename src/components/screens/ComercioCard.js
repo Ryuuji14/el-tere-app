@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import {
   Box,
   VStack,
@@ -12,8 +12,6 @@ import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
   FontAwesome,
-  MaterialIcons,
-  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 
 const ComercioCard = (props) => {
