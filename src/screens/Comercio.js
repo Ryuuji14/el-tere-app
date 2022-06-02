@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from "react";
 import {
   Badge,
   Button,
@@ -17,24 +17,20 @@ import {
   IconButton,
   Divider,
 } from "native-base";
-import {
-  FontAwesome,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Dimensions, StyleSheet } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import ProductoCard from "../components/screens/ProductoCard";
 import PromocionCard from "../components/screens/PromocionCard";
 import { connect } from "react-redux";
-import { Tab, TabView } from '@rneui/themed';
-import ProductScreen from '../components/screens/ProductScreen';
-import Comment from '../components/screens/Comment';
-import { useFocusEffect } from '@react-navigation/native';
-import { productsAPI } from '../api/productsAPI';
+import { Tab, TabView } from "@rneui/themed";
+import ProductScreen from "../components/screens/ProductScreen";
+import Comment from "../components/screens/Comment";
+import { useFocusEffect } from "@react-navigation/native";
+import { productsAPI } from "../api/productsAPI";
 const promociones = require("../../assets/promociones.json");
 import useCustomToast from "../hooks/useCustomToast";
-import { reviewAPI } from '../api/reviewAPI';
-
+import { reviewAPI } from "../api/reviewAPI";
 
 const { width, height } = Dimensions.get("window");
 
@@ -55,7 +51,6 @@ const Comercio = ({ route, cartItems }) => {
   const { showErrorToast } = useCustomToast();
   const [comments, setComments] = useState([]);
 
-
   useFocusEffect(
     useCallback(() => {
       const getProducts = async () => {
@@ -65,30 +60,26 @@ const Comercio = ({ route, cartItems }) => {
         } catch (error) {
           showErrorToast(error);
         }
-      }
+      };
       getProducts();
     }, [])
-  )
+  );
   useFocusEffect(
     useCallback(() => {
       const getComments = async () => {
         try {
           const { data } = await reviewAPI.getReviews(market?.id);
           setComments(data || []);
-          console.log(comments);
-
         } catch (error) {
           showErrorToast(error);
           console.log(error);
         }
-      }
+      };
       getComments();
     }, [])
-  )
+  );
   return (
-    <View
-      minH={height}
-      width={width}>
+    <View minH={height} width={width}>
       <View>
         <Image
           width="100%"
@@ -144,42 +135,45 @@ const Comercio = ({ route, cartItems }) => {
         value={index}
         onChange={(e) => setIndex(e)}
         containerStyle={{
-          backgroundColor: 'white',
+          backgroundColor: "white",
         }}
         indicatorStyle={{
-          backgroundColor: '#41634A',
+          backgroundColor: "#41634A",
           height: 4,
         }}
       >
         <Tab.Item
           title="Productos"
           titleStyle={{
-            fontSize: 12, color:
-              index === 0 ? '#41634A' : 'gray'
+            fontSize: 12,
+            color: index === 0 ? "#41634A" : "gray",
           }}
           containerStyle={{
-            backgroundColor: 'white',
+            backgroundColor: "white",
           }}
           icon={{
-            name: 'basket',
-            type: 'ionicon',
-            color: index === 0 ? '#41634A' : '#9393AA'
+            name: "basket",
+            type: "ionicon",
+            color: index === 0 ? "#41634A" : "#9393AA",
           }}
         />
         <Tab.Item
           title="Comentarios"
           titleStyle={{
-            fontSize: 12, color:
-              index === 1 ? '#41634A' : 'gray'
+            fontSize: 12,
+            color: index === 1 ? "#41634A" : "gray",
           }}
           containerStyle={{
-            backgroundColor: 'white',
+            backgroundColor: "white",
           }}
-          icon={<Icon as={Entypo}
-            size="8"
-            name="message"
-            color={index === 1 ? "#41634A" : '#9393AA'}
-          />}
+          icon={
+            <Icon
+              as={Entypo}
+              size="8"
+              name="message"
+              color={index === 1 ? "#41634A" : "#9393AA"}
+            />
+          }
         />
       </Tab>
       <Divider />
@@ -188,23 +182,19 @@ const Comercio = ({ route, cartItems }) => {
         onChange={setIndex}
         animationType="spring"
         containerStyle={{
-          backgroundColor: 'white',
+          backgroundColor: "white",
         }}
         disableSwipe
       >
-        <TabView.Item
-          style={{ backgroundColor: 'white', }}
-        >
-          <ProductScreen
-            promociones={promociones}
-            productos={products}
-          />
+        <TabView.Item style={{ backgroundColor: "white" }}>
+          <ProductScreen promociones={promociones} productos={products} />
         </TabView.Item>
-        <TabView.Item style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
-
+        <TabView.Item
+          style={{ backgroundColor: "white", width: "100%", height: "100%" }}
+        >
           <FlatList
             data={comments || []}
-            renderItem={({ comment }) => (
+            renderItem={({ item: comment }) => (
               <Comment
                 key={comment?.id}
                 firstName={comment?.user_review?.first_name}
