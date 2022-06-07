@@ -16,6 +16,7 @@ import {
   ScrollView,
   IconButton,
   Divider,
+  StatusBar,
 } from "native-base";
 import {
   FontAwesome,
@@ -34,6 +35,7 @@ import { productsAPI } from '../api/productsAPI';
 const promociones = require("../../assets/promociones.json");
 import useCustomToast from "../hooks/useCustomToast";
 import { reviewAPI } from '../api/reviewAPI';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const { width, height } = Dimensions.get("window");
@@ -54,7 +56,7 @@ const Comercio = ({ route, cartItems }) => {
   const [products, setProducts] = useState([]);
   const { showErrorToast } = useCustomToast();
   const [comments, setComments] = useState([]);
-
+  const regex = /(\d{4}-\d{2}-\d{2})/;
 
   useFocusEffect(
     useCallback(() => {
@@ -88,7 +90,8 @@ const Comercio = ({ route, cartItems }) => {
   return (
     <View
       minH={height}
-      width={width}>
+      width={width}
+    >
       <View>
         <Image
           width="100%"
@@ -132,7 +135,7 @@ const Comercio = ({ route, cartItems }) => {
 
             <Icon as={Entypo} name="clock" ml="2" color="gray.500" />
             <Text fontSize="11">
-              {market.horaApertura} - {market.horaCierre}
+              {market.horaApertura.split("", 5)} am - {market.horaCierre.split("", 5)} pm
             </Text>
             <Icon as={MaterialCommunityIcons} size="6" name="motorbike" />
             <Text fontSize="11">delivery</Text>
@@ -193,6 +196,7 @@ const Comercio = ({ route, cartItems }) => {
         disableSwipe
       >
         <TabView.Item
+
           style={{ backgroundColor: 'white', }}
         >
           <ProductScreen
@@ -201,31 +205,22 @@ const Comercio = ({ route, cartItems }) => {
           />
         </TabView.Item>
         <TabView.Item style={{ backgroundColor: 'white', width: '100%', height: '100%' }}>
-
-          <FlatList
-            data={comments || []}
-            renderItem={({ comment }) => (
-              <Comment
-                key={comment?.id}
-                firstName={comment?.user_review?.first_name}
-                lastName={comment?.user_review?.last_name}
-                rating={comment?.rating}
-                date={comment?.createdAt}
-                description={comment?.description}
-              />
-            )}
-            keyExtractor={(comment) => comment?.id}
-          />
-          {/* {  comments.map((comment) => (
-        <Comment
-              key={comment?.id}
-              firstName={comment?.user_review?.first_name}
-              lastName={comment?.user_review?.last_name}
-              rating={comment?.rating}
-              date={comment?.createdAt}
-              description={comment?.description}
-            />  
-       ))} */}
+          
+            <FlatList
+              styles={{ justifyContent: 'space-between' }}
+              data={comments || []}
+              renderItem={({ item: comment }) => (
+                <Comment
+                  key={comment?.id}
+                  firstName={comment?.user_review?.first_name}
+                  lastName={comment?.user_review?.last_name}
+                  rating={comment?.rating}
+                  date={comment?.createdAt}
+                  description={comment?.description}
+                />
+              )}
+              keyExtractor={(comment) => comment?.id}
+            />
         </TabView.Item>
       </TabView>
     </View>

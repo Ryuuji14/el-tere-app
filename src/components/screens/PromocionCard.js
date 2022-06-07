@@ -9,6 +9,8 @@ const PromocionCard = ({
   id,
   price,
   discount,
+  location,
+  date,
 }) => {
   const Navigation = useNavigation();
 
@@ -30,12 +32,16 @@ const PromocionCard = ({
             image: image,
             price: price,
             id: id,
+            discount: discount,
+            description: description,
           })
           :
           Navigation.navigate("ConsultarEvento", {
             name: name,
             image: image,
             description: description,
+            location: location,
+            date: date,
           })
       }}
     >

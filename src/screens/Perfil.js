@@ -23,6 +23,7 @@ import { userAPI } from "../api/userAPI";
 import { addressAPI } from "../api/addressAPI";
 import useLoading from "../hooks/useLoading";
 import useCustomToast from "../hooks/useCustomToast";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -33,6 +34,8 @@ const formatDate = (date) => {
   return `${day}/${month}/${year}` || "";
 };
 
+
+
 const getTotalPedidoAmount = (pedidos) => {
   return pedidos.reduce((acc, pedido) => {
     return acc + pedido.quantity * pedido.price;
@@ -40,12 +43,15 @@ const getTotalPedidoAmount = (pedidos) => {
 };
 
 const Perfil = ({ navigation }) => {
+  const Navigation = useNavigation();
   const {
     dispatch,
     state: { user },
   } = useAuthContext();
   const [sales, setSales] = useState([]);
+  const [allPedidos, setAllPedidos] = useState([]);
   const [userInfo, setUserInfo] = useState({});
+  const [cantidades, setCantidades] = useState([]);
   const [pedidos, setPedidos] = useState([]);
   const { showErrorToast } = useCustomToast();
   const { isLoading, startLoading, stopLoading } = useLoading();
@@ -56,7 +62,7 @@ const Perfil = ({ navigation }) => {
       const [{ data: userInfo }, { data: salesInfo }, { data: userAddresses }] =
         await Promise.all([
           userAPI.getUser(user.id),
-          saleAPI.getUserSales(7),
+          saleAPI.getUserSales(user.id),
           addressAPI.getUserAddresses(user.id),
         ]);
 
@@ -67,14 +73,20 @@ const Perfil = ({ navigation }) => {
       });
       setSales(salesInfo);
 
+
       if (salesInfo.length > 0) {
         const salesIds = salesInfo.map((sale) => sale.id);
 
         const pedidosResponses = await Promise.all(
           salesIds.slice(0, 2).map((id) => saleAPI.getSaleProductBySaleId(id))
         );
-
+        const pedidosResponsesAll = await Promise.all(
+          salesIds.map((id) => saleAPI.getSaleProductBySaleId(id))
+        );
+        setAllPedidos(pedidosResponsesAll.map((pedido) => pedido.data));
+        setCantidades(allPedidos.map((pedido) => pedido?.length));
         setPedidos(pedidosResponses.map((response) => response.data));
+        
       }
     } catch (error) {
       showErrorToast(error);
@@ -84,9 +96,18 @@ const Perfil = ({ navigation }) => {
 
   useEffect(() => {
     if (user?.id) {
+
+      console.log(cantidades);
       getUserInfo();
     }
   }, [user]);
+
+
+  const products = allPedidos.map((pedido) => {
+    return {
+      cantidad: pedido?.product?.length
+    }  
+  });
 
   return (
     <ImageBackground
@@ -282,6 +303,10 @@ const Perfil = ({ navigation }) => {
                 color: "#DB7F50",
                 fontSize: 20,
               }}
+              onPress={() => Navigation.navigate("YourOrders",{
+                sales,
+                cantidades,
+              })} 
             >
               VER TODOS
             </Button>

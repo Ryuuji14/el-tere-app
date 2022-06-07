@@ -3,13 +3,26 @@ import { HStack, Icon, IconButton, Stack, Text, View } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export const SaleHistory = () => {
+export const SaleHistory = (props) => {
+  
+  const item = {
+    sales: props.sales,
+  }
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const [month, day, year] = d?.toLocaleDateString("en-US").split("/");
+  
+    return `${day}/${month}/${year}` || "";
+  };
+  const regex = /\d{4}-\d{2}-\d{2}/;
+  
   return (
     <Stack>
       <Text textAlign="center" fontSize={18} color="#9393AA" mb={3}>
         Estos son tus pedidos ya {"\n"} pagados y validados validados:
       </Text>
-      {[1, 2].map((_, index) => (
+      {item.sales.map((sale, index) => (
         <TouchableOpacity activeOpacity={0.9} key={index.toString()}>
           <View
             w="100%"
@@ -31,7 +44,7 @@ export const SaleHistory = () => {
                   color="#41634A"
                 />
                 <Text color="#41634A" fontSize={15} fontWeight="bold">
-                  Pedido nro: 45646
+                  Pedido nro: {sale.id}
                 </Text>
               </HStack>
               <HStack>
@@ -51,11 +64,11 @@ export const SaleHistory = () => {
             </HStack>
 
             <Text mt={-1} color="#9393AA">
-              Comercios: La Pastora
+              Comercios: {sale.company.name}
             </Text>
             <HStack mt={1} justifyContent="space-between">
-              <Text color="#6E6E7A">Total: 20$</Text>
-              <Text color="#9393AA">20/03/2022</Text>
+              <Text color="#6E6E7A">Total: ${sale.total_amount}</Text>
+              <Text color="#9393AA">{regex.exec(sale.createdAt)}</Text>
             </HStack>
           </View>
         </TouchableOpacity>

@@ -42,12 +42,12 @@ const ProductoCard = (props) => {
       }
     >
       <Box
-        width={175}
+        width={150}
         maxW="80"
-        mx={2}
+        mx={3}
         rounded="lg"
         overflow="hidden"
-        borderColor="coolGray.200"
+        borderColor="#41634A"
         borderWidth="1"
         shadow={2}
         _dark={{

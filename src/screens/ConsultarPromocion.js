@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Image,
   StyleSheet,
   ScrollView,
   Dimensions,
@@ -17,12 +16,14 @@ import {
   Icon,
   IconButton,
   Input,
+  Image,
 } from 'native-base'
 import { Entypo, FontAwesome } from "@expo/vector-icons";
-
-var {  width } = Dimensions.get("window");
+var { width } = Dimensions.get("window");
 import { connect } from "react-redux";
 import * as actions from "../Redux/Actions/cartActions"
+import Logo from "../../assets/LOGO-EL-TERE-2.png";
+
 
 const Promocion = ({ route }) => {
   const [item, setItem] = useState({
@@ -30,24 +31,33 @@ const Promocion = ({ route }) => {
     name: route.params.name,
     image: route.params.image,
     price: route.params.price,
+    description: route.params.description,
   });
 
   return (
     <View
-      backgroundColor="#DB7F50"
+      backgroundColor="white"
       width={width}
       alignContent="center"
     >
       <View
         backgroundColor="white"
         width="100%">
+          <HStack justifyContent="flex-start" alignItems="flex-start"> 
+          <Image
+            source={{ Logo}}
+            alt="logo"
+            size="sm"   
+          />
+          <Text mt="2" bold fontSize="16" >Promoción</Text>
+          </HStack>
         <VStack
           justifyContent='center'
           alignItems="center"
           space={2}
         >
           <Avatar
-            mt="20"
+            mt="2"
             source={{ uri: item.image }}
             size="2xl"
           />
@@ -62,44 +72,37 @@ const Promocion = ({ route }) => {
             color="#9393AA"
             fontSize="md"
           >
-            ACA VA LA DESCRIPCION
+            {item.description}
           </Text>
-          <Text
-            color="#9393AA"
-            fontSize="md"
-          >
-            Precio: ${item.price}
-          </Text>
-          <Divider my="2" _light={{
+          <Divider my="2" borderWidth="2" _light={{
             bg: "#41634A"
           }} _dark={{
             bg: "#41634A"
           }} />
           <View
             height="50%"
-            mt="2"
           >
-            <HStack h="10" space={4} mt="20" ml="8">
+            <HStack h="10" space={4} mt="20" ml="8" >
               <IconButton
                 icon={<Icon as={Entypo} name="minus" color="white" />}
                 bgColor="#DB7F50"
                 size="lg"
                 rounded="full"
-                onPress={onPress1}
+              //   onPress={onPress1}
               />
               <Input
                 w="12"
                 bgColor="#CAC8C8"
                 fontSize="lg"
                 isReadOnly
-                value={count.toString()}
+              //value={count.toString()}
               />
               <IconButton
                 icon={<Icon as={Entypo} name="plus" color="white" />}
                 bgColor="#DB7F50"
                 size="lg"
                 rounded="full"
-                onPress={onPress}
+              //onPress={onPress}
               />
             </HStack>
             <Text
@@ -122,7 +125,9 @@ const Promocion = ({ route }) => {
               >
                 <Text color="white" fontSize="lg">AÑADIR</Text>
               </Button>
+              
             </View>
+            
           </View>
         </VStack>
       </View>
@@ -134,11 +139,11 @@ const Promocion = ({ route }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     addItemToCart: (product) =>
-     dispatch(
-       actions.addToCart({
-         product:
-        { ...product,quantity: 1,},
+      dispatch(
+        actions.addToCart({
+          product:
+            { ...product, quantity: 1, },
         }))
   }
 }
-export default connect (null, mapDispatchToProps)(Promocion);
+export default connect(null, mapDispatchToProps)(Promocion);

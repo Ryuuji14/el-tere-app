@@ -18,6 +18,9 @@ import ConfirmarPedido from "../screens/ConfirmarPedido";
 import Cart from "../screens/Cart/Cart";
 import RealizaPago from "../screens/RealizaPago"
 import ConsultarEvento from "../screens/ConsultarEvento";
+import ConsultarPromocion from "../screens/ConsultarPromocion";
+
+
 
 const Stack = createNativeStackNavigator();
 
@@ -109,6 +112,11 @@ const stackRoutes = [
   {
     name:"Cart",
     component: Cart,
+    requireAuth: true,
+  },
+  {
+    name:"Promocion",
+    component: ConsultarPromocion,
     requireAuth: true,
   },
 ];
