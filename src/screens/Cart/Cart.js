@@ -90,7 +90,6 @@ const Cart = (props) => {
               </HStack>
             </VStack>
             <SwipeListView
-            
               data={props.cartItems || []}
               renderItem={(data) => (
                 <Pressable h="20" bgColor="white" key={data.item.product?.id}>

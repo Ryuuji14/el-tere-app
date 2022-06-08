@@ -107,8 +107,8 @@ const Dashboard = () => {
               if (a?.starts_at > b?.starts_at) return 1;
 
               if (a?.starts_at < b?.starts_at) return -1;
-
               return 0;
+              
             }
           )
         );
@@ -215,6 +215,8 @@ const Dashboard = () => {
                       name={element.title}
                       description={element.description}
                       discount={element.discount}
+                      location={element.location}
+                      date={element.starts_at}
                     />
                   ))}
                 </HStack>
@@ -235,6 +237,7 @@ const Dashboard = () => {
                 </TouchableOpacity>
               </HStack>
               <FlatList
+               
                 horizontal
                 data={area.companies || []}
                 keyExtractor={(item) => item.id}

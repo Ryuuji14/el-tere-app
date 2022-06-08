@@ -93,18 +93,25 @@ const onSubmit = async () => {
       user_id: user.id,
       delivery_type: selection ? "delivery" : "pick_up",
       company_id: company,
+      sale_products: props.cartItems.map(cart => {
+        return {
+          product_id: cart.product.id,
+          quantity: cart.product.quantity,
+          price: cart.product.price,
+          discount: 0,
+        }
+      }),
     })
-    //const response = await productSaleAPI.addProductSale(props.cartItems, data.id)
     showSuccesToast("¡Pedido realizado Exitosamente!");
     console.log(data)
-    props.navigation.navigate("RealizaPago",{
+      navigate.navigate("RealizaPago",{
       id: data?.id,
       comercio: _company?.name,
       first_name: _company?.user?.first_name,
       last_name: _company?.user?.last_name,
       total: total,
-
     });
+  
   }
   catch (error) {
     showErrorToast("Error");
@@ -264,7 +271,7 @@ return (
                 width="80%"
                 bgColor="#DB7F50"
                 borderRadius="20"
-                onPress={() => onSubmit()}
+                onPress={() => {onSubmit()}}
               >
                 <Text color="white" fontSize="16" >PROCESAR PEDIDO</Text>
               </Button>
@@ -283,7 +290,6 @@ const mapStateToProps = (state) => {
     cartItems: cartItems,
   };
 };
-
 
 
 const styles = StyleSheet.create({

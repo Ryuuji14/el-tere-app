@@ -79,13 +79,11 @@ const ComercioCard = (props) => {
           <HStack justifyContent="space-between">
             <Box px="2">
               <Text color="grey">
-                {props.type.length > 16
-                  ? props.type.substring(0, 16 - 3) + "..."
-                  : props.type}
+                {props.horaApertura.split("",5)} am-{props.horaCierre.split("",5)} pm
               </Text>
             </Box>
-            <Box px="2" pb="2" mr="2">
-              <HStack alignItems="center" space={2}>
+            <Box px="2" pb="2" >
+              <HStack alignItems="center" space={1}>
                 <Icon as={FontAwesome} name="star" color="yellow.500" />
                 <Text>{props.rating}</Text>
               </HStack>

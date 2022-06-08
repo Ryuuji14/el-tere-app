@@ -4,12 +4,14 @@ import {
   Button,
   VStack,
   Divider,
+  HStack,
 } from "native-base";
 import {
   StyleSheet,
   Dimensions,
 } from "react-native";
 var { height, width } = Dimensions.get("window");
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 
 const RealizaPago = (props) => {
 
@@ -20,6 +22,7 @@ const RealizaPago = (props) => {
     apellido: props.route.params.last_name,
     total: props.route.params.total
   }
+  const Navigation = useNavigation();
 
   return (
     <>
@@ -85,18 +88,43 @@ const RealizaPago = (props) => {
                   style={{ alignSelf: "center" }}
                 >
                   Luego de realizar el pago, validaremos tu pedido.
-                  Debes esperar mientras actualizamos el estatus de tu pedido.
+                  Debes esperar mientras actualizamos el estatus de tu pedido. {"\n"}
+                  {"\n"}
+                  Puedes ver tus pedidos desde tu perfil.
                 </Text>
+                <HStack space={2}>
                 <Button
                   mt="2"
                   mb="4"
-                  width="80%"
+                  width="40%"
                   bgColor="#DB7F50"
                   borderRadius="20"
-                //onPress={() => onSubmit()}
+                onPress={()=>Navigation.reset({
+                  index: 1,
+                  key: null,   
+                  routes: [{name: "Dashboard"}],
+                })}
                 >
-                  <Text color="white" fontSize="16" >VER TUS PEDIDOS</Text>
+                  <Text color="white" fontSize="16" >INICIO</Text>
+
                 </Button>
+
+                <Button
+                  mt="2"
+                  mb="4"
+                  width="40%"
+                  bgColor="#DB7F50"
+                  borderRadius="20"
+                onPress={() => Navigation.reset({
+                  index: 0,
+                  routes: [{name: "Perfil"}],
+                })}
+                >
+                  <Text color="white" fontSize="16" >PERFIL</Text>
+
+                </Button>
+
+                </HStack>
               </VStack>
 
           </VStack>
