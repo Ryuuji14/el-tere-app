@@ -24,6 +24,7 @@ import { Entypo, FontAwesome } from "@expo/vector-icons";
 var { width } = Dimensions.get("window");
 import { connect } from "react-redux";
 import * as actions from "../Redux/Actions/cartActions";
+import { useVerifyProductByCompanyId } from "../hooks/useVerifyProductByCompanyId";
 
 const SingleProduct = ({
   route,
@@ -31,6 +32,9 @@ const SingleProduct = ({
   modifyProductQuantity,
   cartItems,
 }) => {
+  const { canAddProduct, showAlertDialog, AlertDialog } =
+    useVerifyProductByCompanyId(route.params?.company_id, cartItems);
+
   const [item, setItem] = useState({
     company_id: route.params?.company_id,
     id: route.params?.id,
@@ -109,8 +113,12 @@ const SingleProduct = ({
                 borderRadius="20"
                 mt="16"
                 onPress={() => {
-                  addItemToCart(item);
-                  
+                  canAddProduct
+                    ? addItemToCart({
+                        ...item,
+                        company_id: route.params?.company_id,
+                      })
+                    : showAlertDialog();
                 }}
               >
                 <Text color="white" fontSize="lg">
@@ -121,6 +129,7 @@ const SingleProduct = ({
           </View>
         </VStack>
       </View>
+      <AlertDialog />
     </View>
   );
 };

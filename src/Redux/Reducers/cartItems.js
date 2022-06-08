@@ -8,6 +8,15 @@ import {
 const cartItems = (state = [], action) => {
   switch (action.type) {
     case ADD_TO_CART:
+      const product = action.payload.product;
+
+      const isThereAnotherCompanyId = state.some(
+        (item) => item.product.company_id !== product?.company_id
+      );
+
+      if (isThereAnotherCompanyId) {
+        return state;
+      }
       return [...state, action.payload];
     case MODIFY_PRODUCT_QUANTITY: {
       const newState = [...state];
