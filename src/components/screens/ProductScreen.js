@@ -51,9 +51,9 @@ const ProductScreen = ({ promociones = [], productos = []}) => {
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <HStack space={2}>
-                  {promociones?.map((element) => (
+                  {promociones?.map((element, index) => (
                     <PromocionCard
-                      key={element.id}
+                      key={index.toString()}
                       image={element.image}
                       name={element.name}
                       description={element.description}
@@ -72,9 +72,9 @@ const ProductScreen = ({ promociones = [], productos = []}) => {
               numColumns={2}
               data={productos || []}
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
+              renderItem={({ item, index }) => (
                 <ProductoCard
-                  key={item.id}
+                  key={index.toString()}
                   id={item.id}
                   company_id={item.company_id}
                   description={item.description}

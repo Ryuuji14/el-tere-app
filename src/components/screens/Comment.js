@@ -10,9 +10,11 @@ import {
   Avatar,
   Icon,
   Divider,
+  Image,
 } from "native-base";
 import { StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import Logo from "../../../assets/LOGO-EL-TERE-2.png"
 
 
 const Comment = (props) => {
@@ -24,10 +26,12 @@ const Comment = (props) => {
     date: props.date,
     description: props.description,
   }
-  const regex = /\d{4}-\d{2}-\d{2}/;
-  useEffect(() => {
-    console.log(item)
-  })
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const [month, day, year] = d?.toLocaleDateString("en-US").split("/");
+    return `${day}/${month}/${year}` || "";
+  };
 
   return (
     <View
@@ -35,24 +39,23 @@ const Comment = (props) => {
       alignItems='center'
     >
       <Box
-        width="90%"
+        width="100%"
         mt="2"
         alignItems="center"
-        height="80%"
         rounded="lg"
         overflow="hidden"
         borderColor="#DB7F50"
         borderWidth="1"
       >
-        <Stack p="2" backgroundColor='white' width="80%">
+        <Stack p="2" backgroundColor='white' width="80%" space={2}>
           <Stack space={2}>
             <HStack>
-              <Avatar />
+              <Image source={Logo} alt="logo" size="xs"/>
               <Heading size="sm" ml="2">
                 {item.name} {item.last_name}
               </Heading>
               <Icon as={FontAwesome} mt="6" name="star" color='yellow.500' style={{ position: 'absolute', left: 55 }} />
-              <Text mt="5" ml="4" style={{ position: 'absolute', left: 55 }}>{item.rating}</Text>
+              <Text mt="5" ml="4" style={{ position: 'absolute', left: 55 }}>{item.rating.toFixed(0)}</Text>
             </HStack>
             <Text
               fontSize="xs" _light={{
@@ -63,7 +66,7 @@ const Comment = (props) => {
               style={{ position: 'absolute', right: 10 }}
             >
               {
-                regex.exec(item.date)
+                formatDate(item.date)
               }
             </Text>
             <Divider
@@ -77,9 +80,11 @@ const Comment = (props) => {
               }}
             />
           </Stack>
+          <Stack width="80%" mb="4">
           <Text fontWeight="400">
             {item.description}
           </Text>
+          </Stack>
         </Stack>
       </Box>
     </View>

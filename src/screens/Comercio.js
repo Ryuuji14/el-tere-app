@@ -123,7 +123,7 @@ const Comercio = ({ route, cartItems }) => {
           <Stack>
             <HStack alignItems="center" space={2}>
               <Icon as={FontAwesome} name="star" color="yellow.500" />
-              <Text fontSize="11">{market.rating}</Text>
+              <Text fontSize="11">{market.rating.toFixed(0)}</Text>
 
               <Icon as={Entypo} name="clock" ml="2" color="gray.500" />
               <Text fontSize="11">
@@ -206,9 +206,9 @@ const Comercio = ({ route, cartItems }) => {
             <FlatList
             contentContainerStyle={{ width: "100%", paddingBottom: "50%", display : "flex" }}
               data={comments || []}
-              renderItem={({ item: comment }) => (
+              renderItem={({ item: comment, index }) => (
                 <Comment
-                  key={comment?.id}
+                  key={index.toString()}
                   firstName={comment?.user_review?.first_name}
                   lastName={comment?.user_review?.last_name}
                   rating={comment?.rating}
@@ -218,7 +218,6 @@ const Comercio = ({ route, cartItems }) => {
               )}
               keyExtractor={(comment) => comment?.id}
               ListEmptyComponent={() => ( <Text fontSize="16" alignContent="center" alignSelf='center' textAlign='center'>No hay comentarios {'\n'}en este comercio</Text>)}
-              
             />
             </SafeAreaView>
           </TabView.Item>

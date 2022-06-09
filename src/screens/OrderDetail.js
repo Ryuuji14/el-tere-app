@@ -19,11 +19,10 @@ export const OrderDetail = (props) => {
         source={require("../../assets/register-bg.png")}
         style={{ width, height, zIndex: 1, paddingHorizontal: 30, flex: 1 }}
       >
-        <Heading color="white" fontSize={45} fontWeight="bold" mt={5}>
+        <Heading color="white" fontSize={36} fontWeight="bold" >
           Pedido nro: {'\n'} {item.sales?.id}
         </Heading>
-        <ScrollView flex="1" width="full" px={4} backgroundColor='white' mt='10' borderTopRadius={20} showsVerticalScrollIndicator={false}>
-
+        <ScrollView flex="1" width="full" px={4} backgroundColor='white'  borderTopRadius={20} showsVerticalScrollIndicator={false}>
           <Text
             mt='4'
             fontSize={18}
@@ -34,10 +33,10 @@ export const OrderDetail = (props) => {
 
           {item.sales.delivery_type === "delivery" ? (
             <> 
-            <Text fontSize={18}> Delivery </Text>
+            <Text fontSize={18} bold> Delivery </Text>
               <View mb={4}>
-                <Text fontSize={14} color="gray.700">
-                  Dirección de envío
+                <Text fontSize={14} bold color="gray.700">
+                  Dirección de envío:
                 </Text>
                 <Text fontSize={14} color="gray.500">
                   Carrera 17 entre 39 y 40, Barquisimeto Residencuas Caracaro 3-3

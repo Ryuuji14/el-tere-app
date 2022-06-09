@@ -40,7 +40,7 @@ const Cart = (props) => {
   return (
     <>
       {props.cartItems.length ? (
-        <View backgroundColor="#DB7F50" width={width} h="100%">
+        <View backgroundColor="#DB7F50" width={width} h="100%" >
           <Text style={{ alignSelf: "center" }} fontSize='30' color="white" my="2"> Tu Carrito </Text>
           <View
             paddingBottom="70%"
@@ -130,6 +130,7 @@ const Cart = (props) => {
               previewOpenValue={-40}
               previewOpenDelay={3000}
               onRowDidOpen={() => null}
+              keyExtractor={(item) => item.product?.id}
             />
           </View>
 
