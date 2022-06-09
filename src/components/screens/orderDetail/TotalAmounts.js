@@ -7,9 +7,7 @@ const TEXT_PROPS = {
 
 export const TotalAmounts = ({
   subTotal = 0,
-  cargoEntrega = 0,
   delivery = 0,
-  bokkingFee = 0,
   total = 0,
 }) => {
   return (
@@ -28,16 +26,8 @@ export const TotalAmounts = ({
           <Text {...TEXT_PROPS}>${subTotal}</Text>
         </HStack>
         <HStack justifyContent="space-between">
-          <Text {...TEXT_PROPS}>Cargo por entrega</Text>
-          <Text {...TEXT_PROPS}>${cargoEntrega}</Text>
-        </HStack>
-        <HStack justifyContent="space-between">
-          <Text {...TEXT_PROPS}>Delivery gratis</Text>
+          <Text {...TEXT_PROPS}>Con Delivery</Text>
           <Text {...TEXT_PROPS}>${delivery}</Text>
-        </HStack>
-        <HStack justifyContent="space-between">
-          <Text {...TEXT_PROPS}>Booking fee</Text>
-          <Text {...TEXT_PROPS}>${bokkingFee}</Text>
         </HStack>
       </Stack>
       <HStack justifyContent="space-between" px={2}>

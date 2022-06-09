@@ -11,6 +11,7 @@ import {
   Icon,
   Divider,
 } from "native-base";
+import { StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
 
@@ -84,5 +85,11 @@ const Comment = (props) => {
     </View>
   )
 };
+
+ const styles = StyleSheet.create ({
+  item: {
+
+  }
+ })
 
 export default Comment;

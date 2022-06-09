@@ -51,7 +51,6 @@ const Perfil = ({ navigation }) => {
   const [sales, setSales] = useState([]);
   const [allPedidos, setAllPedidos] = useState([]);
   const [userInfo, setUserInfo] = useState({});
-  const [cantidades, setCantidades] = useState([]);
   const [pedidos, setPedidos] = useState([]);
   const { showErrorToast } = useCustomToast();
   const { isLoading, startLoading, stopLoading } = useLoading();
@@ -71,7 +70,7 @@ const Perfil = ({ navigation }) => {
         address: userAddresses?.[0]?.address || "",
         comments: 0,
       });
-      setSales(salesInfo);
+      setSales(salesInfo.filter((sale) => sale.active));
 
 
       if (salesInfo.length > 0) {
@@ -80,11 +79,7 @@ const Perfil = ({ navigation }) => {
         const pedidosResponses = await Promise.all(
           salesIds.slice(0, 2).map((id) => saleAPI.getSaleProductBySaleId(id))
         );
-        const pedidosResponsesAll = await Promise.all(
-          salesIds.map((id) => saleAPI.getSaleProductBySaleId(id))
-        );
-        setAllPedidos(pedidosResponsesAll.map((pedido) => pedido.data));
-        setCantidades(allPedidos.map((pedido) => pedido?.length));
+
         setPedidos(pedidosResponses.map((response) => response.data));
         
       }
@@ -96,18 +91,9 @@ const Perfil = ({ navigation }) => {
 
   useEffect(() => {
     if (user?.id) {
-
-      console.log(cantidades);
       getUserInfo();
     }
   }, [user]);
-
-
-  const products = allPedidos.map((pedido) => {
-    return {
-      cantidad: pedido?.product?.length
-    }  
-  });
 
   return (
     <ImageBackground
@@ -305,7 +291,6 @@ const Perfil = ({ navigation }) => {
               }}
               onPress={() => Navigation.navigate("YourOrders",{
                 sales,
-                cantidades,
               })} 
             >
               VER TODOS

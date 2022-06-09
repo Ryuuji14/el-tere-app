@@ -177,5 +177,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductoCard);
-
-// export default connect(null, mapDispatchToProps)(ProductoCard);

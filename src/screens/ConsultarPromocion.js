@@ -43,11 +43,12 @@ const Promocion = ({ route }) => {
       <View
         backgroundColor="white"
         width="100%">
-          <HStack justifyContent="flex-start" alignItems="flex-start"> 
+          <HStack justifyContent="flex-start" alignItems="flex-start" space={1}> 
           <Image
-            source={{ Logo}}
+            source={Logo}
+            resizeMode="contain"
             alt="logo"
-            size="sm"   
+            size='xs'
           />
           <Text mt="2" bold fontSize="16" >Promoción</Text>
           </HStack>

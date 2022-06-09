@@ -12,7 +12,6 @@ export const SaleHistory = (props) => {
   const formatDate = (date) => {
     const d = new Date(date);
     const [month, day, year] = d?.toLocaleDateString("en-US").split("/");
-  
     return `${day}/${month}/${year}` || "";
   };
   const regex = /\d{4}-\d{2}-\d{2}/;
@@ -68,7 +67,7 @@ export const SaleHistory = (props) => {
             </Text>
             <HStack mt={1} justifyContent="space-between">
               <Text color="#6E6E7A">Total: ${sale.total_amount}</Text>
-              <Text color="#9393AA">{regex.exec(sale.createdAt)}</Text>
+              <Text color="#9393AA"> Completado el:{"\n"}    {formatDate(sale.createdAt)}</Text>
             </HStack>
           </View>
         </TouchableOpacity>

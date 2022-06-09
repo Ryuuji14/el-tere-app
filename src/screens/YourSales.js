@@ -15,12 +15,9 @@ export const YourSales = (props) => {
 
  const item ={
   sales: props.route.params.sales,
-  productos: props.route.params.cantidades,
  }
 
-
-
- const pending = item.sales.filter((sale) => sale.status === "to_deliver");
+ const pending = item.sales.filter((sale) => sale.status === "to_deliver" || sale.status === "pending");
  const complete= item.sales.filter((sale) => sale.status === "complete");
 
 

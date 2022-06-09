@@ -1,8 +1,5 @@
 import React, { useState, useCallback } from "react";
 import {
-  Badge,
-  Button,
-  KeyboardAvoidingView,
   Stack,
   Input,
   HStack,
@@ -32,7 +29,7 @@ import { productsAPI } from "../api/productsAPI";
 const promociones = require("../../assets/promociones.json");
 import useCustomToast from "../hooks/useCustomToast";
 import { reviewAPI } from '../api/reviewAPI';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native';
 
 
 const { width, height } = Dimensions.get("window");
@@ -132,8 +129,14 @@ const Comercio = ({ route, cartItems }) => {
               <Text fontSize="11">
                 {market.horaApertura.split("", 5)} am - {market.horaCierre.split("", 5)} pm
               </Text>
+
+              { market?.delivery && (
+                <>
               <Icon as={MaterialCommunityIcons} size="6" name="motorbike" />
               <Text fontSize="11">delivery</Text>
+              </>
+              ) 
+            }
             </HStack>
           </Stack>
         </View>
@@ -199,7 +202,9 @@ const Comercio = ({ route, cartItems }) => {
           <TabView.Item
             style={{ backgroundColor: "white", width: "100%", height: "100%" }}
           >
+            <SafeAreaView style={styles.container}> 
             <FlatList
+            contentContainerStyle={{ width: "100%", paddingBottom: "50%", display : "flex" }}
               data={comments || []}
               renderItem={({ item: comment }) => (
                 <Comment
@@ -212,7 +217,10 @@ const Comercio = ({ route, cartItems }) => {
                 />
               )}
               keyExtractor={(comment) => comment?.id}
+              ListEmptyComponent={() => ( <Text fontSize="16" alignContent="center" alignSelf='center' textAlign='center'>No hay comentarios {'\n'}en este comercio</Text>)}
+              
             />
+            </SafeAreaView>
           </TabView.Item>
         </TabView>
       </View>
@@ -229,6 +237,8 @@ const Comercio = ({ route, cartItems }) => {
       subtitle: {
         fontSize: 18,
       color: "#9393AA",
+  },
+  container: {
   },
 });
 

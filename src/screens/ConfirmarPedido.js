@@ -42,7 +42,7 @@ const ConfirmarPedido = (props) => {
   const getUserAddresses = async () => {
     startLoading();
     try {
-      const [ { data: userAddresses }] = await Promise.all([
+      const [{ data: userAddresses }] = await Promise.all([
         addressAPI.getUserAddresses(user.id),
       ]);
       setUserAdresses(userAddresses);
@@ -55,233 +55,237 @@ const ConfirmarPedido = (props) => {
 
   useFocusEffect(
     useCallback(() => {
-    if (user?.id) {
-      getUserAddresses();
-    }
-  }, [user]))
-
-
-
-var total = 0;
-props.cartItems.forEach(cart => {
-  return (total += cart.product.price * cart.product.quantity)
-});
-
-const [_company, setCompany] = useState([])
-const [selection, setSelection] = useState(false)
-const [selection1, setSelection1] = useState(false)
-const company = props.cartItems[0].product.company_id
-
-useFocusEffect(
-  useCallback(() => {
-    const getCompanyProduct = async () => {
-      try {
-        const { data } = await companyAPI.getCompanyProduct(company);
-        setCompany(data || []);
-      } catch (error) {
-        showErrorToast(error);
+      if (user?.id) {
+        getUserAddresses();
       }
-    };
-    getCompanyProduct();
-  }, [])
-)
+    }, [user]))
 
-const onSubmit = async () => {
-  startLoading();
-  try{
-    const {data} = await saleAPI.addSale({
-      user_id: user.id,
-      delivery_type: selection ? "delivery" : "pick_up",
-      company_id: company,
-      sale_products: props.cartItems.map(cart => {
-        return {
-          product_id: cart.product.id,
-          quantity: cart.product.quantity,
-          price: cart.product.price,
-          discount: 0,
+
+
+  var total = 0;
+  props.cartItems.forEach(cart => {
+    return (total += cart.product.price * cart.product.quantity)
+  });
+
+  const [_company, setCompany] = useState([])
+  const [selection, setSelection] = useState(false)
+  const [selection1, setSelection1] = useState(false)
+  const company = props.cartItems[0].product.company_id
+
+  useFocusEffect(
+    useCallback(() => {
+      const getCompanyProduct = async () => {
+        try {
+          const { data } = await companyAPI.getCompanyProduct(company);
+          setCompany(data || []);
+        } catch (error) {
+          showErrorToast(error);
         }
-      }),
-    })
-    showSuccesToast("¡Pedido realizado Exitosamente!");
-    console.log(data)
-      navigate.navigate("RealizaPago",{
-      id: data?.id,
-      comercio: _company?.name,
-      first_name: _company?.user?.first_name,
-      last_name: _company?.user?.last_name,
-      total: total,
-    });
-  
+      };
+      getCompanyProduct();
+    }, [])
+  )
+
+  const onSubmit = async () => {
+    startLoading();
+    try {
+      const { data } = await saleAPI.addSale({
+        user_id: user.id,
+        delivery_type: selection ? "delivery" : "pick_up",
+        company_id: company,
+        sale_products: props.cartItems.map(cart => {
+          return {
+            product_id: cart.product.id,
+            quantity: cart.product.quantity,
+            price: cart.product.price,
+            discount: 0,
+          }
+        }),
+      })
+      showSuccesToast("¡Pedido realizado Exitosamente!");
+      console.log(data)
+      navigate.reset({
+        index: 0, routes: [{
+          name: "RealizaPago", params: {
+            id: data?.id,
+            comercio: _company?.name,
+            first_name: _company?.user?.first_name,
+            last_name: _company?.user?.last_name,
+            total: total,
+          }
+        }]
+      });
+    }
+    catch (error) {
+      showErrorToast("Error");
+      console.log(error)
+    }
+    stopLoading();
   }
-  catch (error) {
-    showErrorToast("Error");
-    console.log(error)
-  }
-  stopLoading();
-}
 
 
-return (
-  <>
-    <View backgroundColor="#DB7F50" width={width} h="100%">
-      <Text style={{ alignSelf: "center" }} fontSize='30' color="white" my="2"> Confirma tu Pedido </Text>
-      <View
-        backgroundColor="white"
-        mx="6"
-        borderWidth="5"
-        borderColor="white"
-        borderRadius='20'
-      >
-        <VStack
-          space={2}
-          mb={4}
-          justifyContent='center'
+  return (
+    <>
+      <View backgroundColor="#DB7F50" width={width} h="100%">
+        <Text style={{ alignSelf: "center" }} fontSize='30' color="white" my="2"> Confirma tu Pedido </Text>
+        <View
+          backgroundColor="white"
+          mx="6"
+          borderWidth="5"
+          borderColor="white"
+          borderRadius='20'
         >
-          <Text
-            color="#9393AA"
-            fontSize="16"
-            style={{ alignSelf: "center" }}
-          > Estos son los detalles de tu pedido: </Text>
-          <HStack space="2" justifyContent='center'>
-            <Icon mt="8" as={FontAwesome} name="shopping-cart" size={60} color="#41634A" />
-            <VStack space="2" alignItems='center'>
-              <Text
-                color="#6E6E7A"
-                fontSize="18"
-                bold
-              >
-                Comercio: {_company?.name}
-              </Text>
-
-              <Button
-                width="80%"
-                bgColor="#DB7F50"
-                borderRadius="20"
-                onPress={() => props.navigation.navigate("Cart")}
-              >
-                <Text color="white" fontSize="18" >EDITAR CARRITO</Text>
-              </Button>
-            </VStack>
-          </HStack>
-          {
-            _company?.delivery === true && (
-              <VStack
-                justifyContent="center"
-                space="2"
-                alignItems="center"
-              >
-                <HStack
-                  justifyContent="center"
-                  space="2"
-                  alignItems="center"
-                >
-                  <Text
-                    color="#6E6E7A"
-                    fontSize="18"
-                    bold
-                  >
-                    ¿Deseas Delivery?
-                  </Text>
-                  <Box w="3/4" maxW="50">
-                    <Select borderColor="#DB7F50" borderRadius="20" selectedValue={selection} minWidth="100" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
-                      bg: "#DB7F50",
-                      textColor: "white",
-                      endIcon: <CheckIcon size="5" />
-                    }} mt={1} onValueChange={itemValue => setSelection(itemValue)}>
-                      <Select.Item label="Si" value={true} />
-                      <Select.Item label="No" value={false} />
-                    </Select>
-                  </Box>
-
-                </HStack>
+          <VStack
+            space={2}
+            mb={4}
+            justifyContent='center'
+          >
+            <Text
+              color="#9393AA"
+              fontSize="16"
+              style={{ alignSelf: "center" }}
+            > Estos son los detalles de tu pedido: </Text>
+            <HStack space="2" justifyContent='center'>
+              <Icon mt="8" as={FontAwesome} name="shopping-cart" size={60} color="#41634A" />
+              <VStack space="2" alignItems='center'>
                 <Text
                   color="#6E6E7A"
                   fontSize="18"
                   bold
                 >
-                  Direccion para Delivery:
+                  Comercio: {_company?.name}
                 </Text>
-                <Box w="3/4" maxW="300" >
-                  <Select borderColor="#DB7F50" borderRadius="20" selectedValue={selection1} minWidth="200" accessibilityLabel="Escoge tu direccion" placeholder="Escoge tu direccion" _selectedItem={{
-                    bg: "#DB7F50",
-                    textColor: "white",
-                    endIcon: <CheckIcon size="5" />
-                  }} mt={1} onValueChange={itemValue => setSelection1(itemValue)}>
-                     {addresses.map(address => {
-                      return (
-                        <Select.Item key={address.id} label={address.address} value={address.address} />
-                      )})}  
-                  </Select>
-                </Box>
-              </VStack>
-            )
-          }
-          <Box
-            mt="4"
-            alignItems="center"
-            width="80%"
-            alignSelf="center"
-            rounded="lg"
-            borderColor="#F96332"
-            borderWidth="1"
-            borderRadius="10"
-          >
-            <VStack>
-              <Text
-                bold
-                fontSize='18'
-                color='#6E6E7A'
-              >
-                Comercio: {_company?.name}
-              </Text>
-              <Text
-                bold
-                fontSize='18'
-                color='#6E6E7A'
-              >
-                Subtotal: ${total}
-              </Text>
-              <Text
-                bold
-                fontSize='18'
-                color='#6E6E7A'
-              >
-                Con Delivery: $
-              </Text>
-              <Divider
 
-                my="2"
-                _light={{
-                  bg: "#41634A",
-                }}
-                _dark={{
-                  bg: "#41634A",
-                }}
-              />
-              <Text
-                bold
-                fontSize='18'
-                color='#6E6E7A'
-              >
-                TOTAL a pagar: ${total}
-              </Text>
-              <Button
-                mt="2"
-                mb="4"
-                width="80%"
-                bgColor="#DB7F50"
-                borderRadius="20"
-                onPress={() => {onSubmit()}}
-              >
-                <Text color="white" fontSize="16" >PROCESAR PEDIDO</Text>
-              </Button>
-            </VStack>
-          </Box>
-        </VStack>
+                <Button
+                  width="80%"
+                  bgColor="#DB7F50"
+                  borderRadius="20"
+                  onPress={() => props.navigation.navigate("Cart")}
+                >
+                  <Text color="white" fontSize="18" >EDITAR CARRITO</Text>
+                </Button>
+              </VStack>
+            </HStack>
+            {
+              _company?.delivery === true && (
+                <VStack
+                  justifyContent="center"
+                  space="2"
+                  alignItems="center"
+                >
+                  <HStack
+                    justifyContent="center"
+                    space="2"
+                    alignItems="center"
+                  >
+                    <Text
+                      color="#6E6E7A"
+                      fontSize="18"
+                      bold
+                    >
+                      ¿Deseas Delivery?
+                    </Text>
+                    <Box w="3/4" maxW="50">
+                      <Select borderColor="#DB7F50" borderRadius="20" selectedValue={selection} minWidth="100" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
+                        bg: "#DB7F50",
+                        textColor: "white",
+                        endIcon: <CheckIcon size="5" />
+                      }} mt={1} onValueChange={itemValue => setSelection(itemValue)}>
+                        <Select.Item label="Si" value={true} />
+                        <Select.Item label="No" value={false} />
+                      </Select>
+                    </Box>
+
+                  </HStack>
+                  <Text
+                    color="#6E6E7A"
+                    fontSize="18"
+                    bold
+                  >
+                    Direccion para Delivery:
+                  </Text>
+                  <Box w="3/4" maxW="300" >
+                    <Select borderColor="#DB7F50" borderRadius="20" selectedValue={selection1} minWidth="200" accessibilityLabel="Escoge tu direccion" placeholder="Escoge tu direccion" _selectedItem={{
+                      bg: "#DB7F50",
+                      textColor: "white",
+                      endIcon: <CheckIcon size="5" />
+                    }} mt={1} onValueChange={itemValue => setSelection1(itemValue)}>
+                      {addresses.map(address => {
+                        return (
+                          <Select.Item key={address.id} label={address.address} value={address.address} />
+                        )
+                      })}
+                    </Select>
+                  </Box>
+                </VStack>
+              )
+            }
+            <Box
+              mt="4"
+              alignItems="center"
+              width="80%"
+              alignSelf="center"
+              rounded="lg"
+              borderColor="#F96332"
+              borderWidth="1"
+              borderRadius="10"
+            >
+              <VStack>
+                <Text
+                  bold
+                  fontSize='18'
+                  color='#6E6E7A'
+                >
+                  Comercio: {_company?.name}
+                </Text>
+                <Text
+                  bold
+                  fontSize='18'
+                  color='#6E6E7A'
+                >
+                  Subtotal: ${total}
+                </Text>
+                <Text
+                  bold
+                  fontSize='18'
+                  color='#6E6E7A'
+                >
+                  Con Delivery: $
+                </Text>
+                <Divider
+
+                  my="2"
+                  _light={{
+                    bg: "#41634A",
+                  }}
+                  _dark={{
+                    bg: "#41634A",
+                  }}
+                />
+                <Text
+                  bold
+                  fontSize='18'
+                  color='#6E6E7A'
+                >
+                  TOTAL a pagar: ${total}
+                </Text>
+                <Button
+                  mt="2"
+                  mb="4"
+                  width="80%"
+                  bgColor="#DB7F50"
+                  borderRadius="20"
+                  onPress={() => { onSubmit() }}
+                >
+                  <Text color="white" fontSize="16" >PROCESAR PEDIDO</Text>
+                </Button>
+              </VStack>
+            </Box>
+          </VStack>
+        </View>
       </View>
-    </View>
-  </>
-);
+    </>
+  );
 };
 
 const mapStateToProps = (state) => {

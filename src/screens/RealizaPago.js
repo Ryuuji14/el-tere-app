@@ -12,6 +12,8 @@ import {
 } from "react-native";
 var { height, width } = Dimensions.get("window");
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { connect } from "react-redux";
+import * as actions from "../Redux/Actions/cartActions";
 
 const RealizaPago = (props) => {
 
@@ -34,76 +36,78 @@ const RealizaPago = (props) => {
           borderWidth="5"
           borderColor="white"
           borderRadius='20'
-          
+
         >
           <VStack
             space={2}
             mb={4}
-            justifyContent='center'          
+            justifyContent='center'
           >
             <Text
               color="#9393AA"
               fontSize="16"
               style={{ alignSelf: "center" }}
             > Para terminar de validar el pedido ponte en contacto con el comercio para realizar el pago: </Text>
-              <VStack space="2" alignItems='center' >
-                <Text
-                  color="#6E6E7A"
-                  fontSize="18">
-                    <Text bold>Comercio: </Text> {item.comercio}
-                </Text>
-                <Text
-                  color="#6E6E7A"
-                  fontSize="18"><Text bold >Responsable: </Text> {item.nombre} {item.apellido}
-                </Text>
-                <Text
-                  color="#6E6E7A"
-                  fontSize="18"
-                  bold
-                >Telefono de Contacto:
-                </Text>
-                <Text
-                  color="#6E6E7A"
-                  fontSize="18"
-                ><Text bold>Monto a Pagar: </Text> ${item.total}
-                </Text>
-                <Text
-                  color="#6E6E7A"
-                  fontSize="18"
-                ><Text bold>Codigo del Pedido: </Text> {item.id}
-                </Text>
-                <Divider
-                  width="100%"
-                  my="2"
-                  _light={{
-                    bg: "#41634A",
-                  }}
-                  _dark={{
-                    bg: "#41634A",
-                  }}
-                />
-                <Text
-                  color="#9393AA"
-                  fontSize="18"
-                  style={{ alignSelf: "center" }}
-                >
-                  Luego de realizar el pago, validaremos tu pedido.
-                  Debes esperar mientras actualizamos el estatus de tu pedido. {"\n"}
-                  {"\n"}
-                  Puedes ver tus pedidos desde tu perfil.
-                </Text>
-                <HStack space={2}>
+            <VStack space="2" alignItems='center' >
+              <Text
+                color="#6E6E7A"
+                fontSize="18">
+                <Text bold>Comercio: </Text> {item.comercio}
+              </Text>
+              <Text
+                color="#6E6E7A"
+                fontSize="18"><Text bold >Responsable: </Text> {item.nombre} {item.apellido}
+              </Text>
+              <Text
+                color="#6E6E7A"
+                fontSize="18"
+                bold
+              >Telefono de Contacto:
+              </Text>
+              <Text
+                color="#6E6E7A"
+                fontSize="18"
+              ><Text bold>Monto a Pagar: </Text> ${item.total}
+              </Text>
+              <Text
+                color="#6E6E7A"
+                fontSize="18"
+              ><Text bold>Codigo del Pedido: </Text> {item.id}
+              </Text>
+              <Divider
+                width="100%"
+                my="2"
+                _light={{
+                  bg: "#41634A",
+                }}
+                _dark={{
+                  bg: "#41634A",
+                }}
+              />
+              <Text
+                color="#9393AA"
+                fontSize="18"
+                style={{ alignSelf: "center" }}
+              >
+                Luego de realizar el pago, validaremos tu pedido.
+                Debes esperar mientras actualizamos el estatus de tu pedido. {"\n"}
+                {"\n"}
+                Puedes ver tus pedidos desde tu perfil.
+              </Text>
+              <HStack space={2}>
                 <Button
                   mt="2"
                   mb="4"
                   width="40%"
                   bgColor="#DB7F50"
                   borderRadius="20"
-                onPress={()=>Navigation.reset({
-                  index: 1,
-                  key: null,   
-                  routes: [{name: "Dashboard"}],
-                })}
+                  onPress={() => {
+                    props.clearCart(),
+                    Navigation.reset({
+                      index: 0,
+                      routes: [{ name: "Home" }],
+                    })
+                  }}
                 >
                   <Text color="white" fontSize="16" >INICIO</Text>
 
@@ -115,17 +119,16 @@ const RealizaPago = (props) => {
                   width="40%"
                   bgColor="#DB7F50"
                   borderRadius="20"
-                onPress={() => Navigation.reset({
-                  index: 0,
-                  routes: [{name: "Perfil"}],
-                })}
+                  onPress={() => Navigation.reset({
+                    index: 0,
+                    routes: [{ name: "Perfil" }],
+                  })}
                 >
                   <Text color="white" fontSize="16" >PERFIL</Text>
-
                 </Button>
 
-                </HStack>
-              </VStack>
+              </HStack>
+            </VStack>
 
           </VStack>
         </View>
@@ -134,7 +137,11 @@ const RealizaPago = (props) => {
   );
 };
 
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    clearCart: () => dispatch(actions.clearCart()),
+  };
+};
 
 const styles = StyleSheet.create({
   emptyContainer: {
@@ -185,4 +192,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RealizaPago;
+export default connect(null, mapDispatchToProps)(RealizaPago);
