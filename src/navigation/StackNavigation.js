@@ -5,7 +5,6 @@ import Register from "../screens/Register";
 import RecoverPassword from "../screens/RecoverPassword";
 import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
-
 import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
 import { YourSales } from "../screens/YourSales";
@@ -84,6 +83,11 @@ const stackRoutes = [
     component: SingleProduct,
     requireAuth: true,
   },
+  {
+    name: "YourSales",
+    component: YourSales,
+    requireAuth: true,
+  },
 ];
 
 const StackNavigation = () => {
@@ -93,7 +97,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="NewPassword"
       screenOptions={{
         headerShown: false,
       }}

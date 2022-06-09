@@ -11,7 +11,7 @@ const NewPassword = ({ navigation }) => {
       style={{ width, height, zIndex: 1, paddingHorizontal: 30, flex: 1 }}
     >
       <Heading color="white" fontSize={45} fontWeight="bold" mt={5}>
-        Nueva{"\n"}contraseñaa
+        Nueva{"\n"}contraseña
       </Heading>
 
       <View
@@ -33,7 +33,7 @@ const NewPassword = ({ navigation }) => {
             mb={4}
             alignSelf="center"
           >
-            Introduzca su nueva contraseña
+            ¡Protege el acceso a tu cuenta!
           </Text>
           <Text
             color="#8898AA"
@@ -42,8 +42,7 @@ const NewPassword = ({ navigation }) => {
             alignSelf="center"
             textAlign="center"
           >
-            Recupera el acceso a tu cuenta ingresando tu dirección de correo
-            electrónico y te enviaremos un correo de recuperación:
+            Escribe tu nueva contraseña
           </Text>
           <NewPasswordForm navigation={navigation} />
         </ScrollView>
