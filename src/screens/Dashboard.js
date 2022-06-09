@@ -108,7 +108,6 @@ const Dashboard = () => {
 
               if (a?.starts_at < b?.starts_at) return -1;
               return 0;
-              
             }
           )
         );
@@ -127,7 +126,7 @@ const Dashboard = () => {
         setAreas(data || []);
       } catch (error) {
         showErrorToast(error);
-        console.log(error)
+        console.log(error);
       }
     };
     getAreasWithProducts();
@@ -208,9 +207,9 @@ const Dashboard = () => {
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <HStack space={2} py={2}>
-                  {promotionsAndEvents.map((element) => (
+                  {promotionsAndEvents.map((element, index) => (
                     <PromocionCard
-                      key={element.id}
+                      key={index.toString()}
                       image={element.photo}
                       name={element.title}
                       description={element.description}
@@ -226,8 +225,8 @@ const Dashboard = () => {
           <Text pt={2} pb={2} bold color="grey">
             Comercios
           </Text>
-          {areas.map(({ area }) => (
-            <Fragment key={area.id}>
+          {areas.map(({ area }, index) => (
+            <Fragment key={index.toString()}>
               <HStack alignItems="center" justifyContent="space-between">
                 <Text color="#41634A" pt={2} pb={1} bold>
                   {area?.name}
@@ -237,7 +236,6 @@ const Dashboard = () => {
                 </TouchableOpacity>
               </HStack>
               <FlatList
-               
                 horizontal
                 data={area.companies || []}
                 keyExtractor={(item) => item.id}

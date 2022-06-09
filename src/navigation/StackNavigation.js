@@ -16,11 +16,16 @@ import { OrderDetail } from "../screens/OrderDetail";
 import { YourSales } from "../screens/YourSales";
 import ConfirmarPedido from "../screens/ConfirmarPedido";
 import Cart from "../screens/Cart/Cart";
-import RealizaPago from "../screens/RealizaPago"
+import RealizaPago from "../screens/RealizaPago";
 import ConsultarEvento from "../screens/ConsultarEvento";
 import ConsultarPromocion from "../screens/ConsultarPromocion";
-
-
+import { HStack, Icon, IconButton } from "native-base";
+import {
+  MaterialIcons,
+  Entypo,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Stack = createNativeStackNavigator();
 
@@ -69,14 +74,14 @@ const stackRoutes = [
     component: Perfil,
     requireAuth: true,
   },
-  { 
+  {
     name: "ConsultarEvento",
     component: ConsultarEvento,
     requireAuth: true,
   },
   {
     name: "RealizaPago",
-    component: RealizaPago, 
+    component: RealizaPago,
     requireAuth: true,
   },
   {
@@ -98,6 +103,7 @@ const stackRoutes = [
     name: "SingleProduct",
     component: SingleProduct,
     requireAuth: true,
+    showHeader: true,
   },
   {
     name: "YourOrders",
@@ -110,16 +116,24 @@ const stackRoutes = [
     requireAuth: true,
   },
   {
-    name:"Cart",
+    name: "Cart",
     component: Cart,
     requireAuth: true,
   },
   {
-    name:"Promocion",
+    name: "Promocion",
     component: ConsultarPromocion,
     requireAuth: true,
   },
 ];
+
+const HOC = (Component) => {
+  return (props) => (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Component {...props} />
+    </SafeAreaView>
+  );
+};
 
 const StackNavigation = () => {
   const {
@@ -135,8 +149,72 @@ const StackNavigation = () => {
     >
       {stackRoutes
         .filter(({ requireAuth }) => requireAuth === isAuthenticated)
-        .map(({ name, component }) => (
-          <Stack.Screen key={name} name={name} component={component} />
+        .map(({ name, component, showHeader }, index) => (
+          <Stack.Screen
+            key={index.toString()}
+            name={name}
+            component={showHeader ? component : HOC(component)}
+            options={
+              showHeader &&
+              (({ navigation }) => ({
+                headerShown: showHeader,
+
+                headerStyle: {
+                  backgroundColor: "#DB7F50",
+                },
+                title: "",
+                headerLeft: () => (
+                  <IconButton
+                    _pressed={{
+                      backgroundColor: "#fff2",
+                    }}
+                    onPress={() => navigation.goBack()}
+                    icon={
+                      <Icon
+                        as={Entypo}
+                        name="chevron-left"
+                        color="#fff"
+                        size="2xl"
+                        left={-6}
+                      />
+                    }
+                  />
+                ),
+                headerRight: () => (
+                  <HStack>
+                    <IconButton
+                      _pressed={{
+                        backgroundColor: "#fff2",
+                      }}
+                      onPress={() => navigation.navigate("Notifications")}
+                      icon={
+                        <Icon
+                          as={MaterialCommunityIcons}
+                          name="bell"
+                          color="#fff"
+                          size="xl"
+                        />
+                      }
+                    />
+                    <IconButton
+                      _pressed={{
+                        backgroundColor: "#fff2",
+                      }}
+                      onPress={() => navigation.navigate("Cart")}
+                      icon={
+                        <Icon
+                          as={MaterialIcons}
+                          name="shopping-cart"
+                          color="#fff"
+                          size="xl"
+                        />
+                      }
+                    />
+                  </HStack>
+                ),
+              }))
+            }
+          />
         ))}
     </Stack.Navigator>
   );

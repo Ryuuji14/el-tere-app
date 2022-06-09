@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { NativeBaseProvider } from "native-base";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import StackNavigation from "./src/navigation/StackNavigation";
 import { AuthProvider } from "./src/context/AuthContext";
 
@@ -14,9 +14,7 @@ export default function App() {
         <NavigationContainer>
           <NativeBaseProvider>
             <AuthProvider>
-              <SafeAreaView style={{ flex: 1 }}>
-                <StackNavigation />
-              </SafeAreaView>
+              <StackNavigation />
             </AuthProvider>
           </NativeBaseProvider>
         </NavigationContainer>
