@@ -4,6 +4,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import {
   Button,
@@ -20,6 +21,9 @@ import useAuthContext from "../hooks/useAuthContext";
 import { saleAPI } from "../api/salesAPI";
 import { userAPI } from "../api/userAPI";
 import { addressAPI } from "../api/addressAPI";
+import useLoading from "../hooks/useLoading";
+import useCustomToast from "../hooks/useCustomToast";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -30,57 +34,63 @@ const formatDate = (date) => {
   return `${day}/${month}/${year}` || "";
 };
 
+
+
 const getTotalPedidoAmount = (pedidos) => {
   return pedidos.reduce((acc, pedido) => {
     return acc + pedido.quantity * pedido.price;
   }, 0);
 };
 
-const Perfil = () => {
+const Perfil = ({ navigation }) => {
+  const Navigation = useNavigation();
   const {
     dispatch,
     state: { user },
   } = useAuthContext();
   const [sales, setSales] = useState([]);
+  const [allPedidos, setAllPedidos] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [pedidos, setPedidos] = useState([]);
+  const { showErrorToast } = useCustomToast();
+  const { isLoading, startLoading, stopLoading } = useLoading();
+
+  const getUserInfo = async () => {
+    startLoading();
+    try {
+      const [{ data: userInfo }, { data: salesInfo }, { data: userAddresses }] =
+        await Promise.all([
+          userAPI.getUser(user.id),
+          saleAPI.getUserSales(user.id),
+          addressAPI.getUserAddresses(user.id),
+        ]);
+
+      setUserInfo({
+        ...userInfo,
+        address: userAddresses?.[0]?.address || "",
+        comments: 0,
+      });
+      setSales(salesInfo.filter((sale) => sale.active));
+
+
+      if (salesInfo.length > 0) {
+        const salesIds = salesInfo.map((sale) => sale.id);
+
+        const pedidosResponses = await Promise.all(
+          salesIds.slice(0, 2).map((id) => saleAPI.getSaleProductBySaleId(id))
+        );
+
+        setPedidos(pedidosResponses.map((response) => response.data));
+        
+      }
+    } catch (error) {
+      showErrorToast(error);
+    }
+    stopLoading();
+  };
 
   useEffect(() => {
     if (user?.id) {
-      const getUserInfo = async () => {
-        try {
-          const [
-            { data: userInfo },
-            { data: salesInfo },
-            { data: userAddresses },
-          ] = await Promise.all([
-            userAPI.getUser(user.id),
-            saleAPI.getUserSales(user.id),
-            addressAPI.getUserAddresses(user.id),
-          ]);
-
-          setUserInfo({
-            ...userInfo,
-            address: userAddresses?.[0]?.address || "",
-            comments: 0,
-          });
-          setSales(salesInfo);
-
-          if (salesInfo.length > 0) {
-            const salesIds = salesInfo.map((sale) => sale.id);
-
-            const pedidosResponses = await Promise.all(
-              salesIds
-                .slice(0, 2)
-                .map((id) => saleAPI.getSaleProductBySaleId(id))
-            );
-
-            setPedidos(pedidosResponses.map((response) => response.data));
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
       getUserInfo();
     }
   }, [user]);
@@ -135,6 +145,9 @@ const Perfil = () => {
           contentContainerStyle={{
             paddingBottom: 30,
           }}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={getUserInfo} />
+          }
         >
           {/* User Info */}
           <Stack w="80%" alignSelf="center" mb={2}>
@@ -157,7 +170,7 @@ const Perfil = () => {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => console.log("go to edit")}
+                onPress={() => navigation?.navigate("EditPerfil")}
                 activeOpacity={0.8}
               >
                 <View
@@ -276,6 +289,9 @@ const Perfil = () => {
                 color: "#DB7F50",
                 fontSize: 20,
               }}
+              onPress={() => Navigation.navigate("YourOrders",{
+                sales,
+              })} 
             >
               VER TODOS
             </Button>

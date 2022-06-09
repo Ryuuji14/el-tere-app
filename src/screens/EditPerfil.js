@@ -5,7 +5,7 @@ import { EditPerfilForm } from "../components/screens/editPerfil/EditPerfilForm"
 
 const { width, height } = Dimensions.get("screen");
 
-export const EditPerfil = () => {
+export const EditPerfil = ({ navigation }) => {
   return (
     <ImageBackground
       source={require("../../assets/register-bg.png")}
@@ -64,7 +64,7 @@ export const EditPerfil = () => {
             <Text color="#9393AA" fontSize={16} mb={2}>
               Actualiza tus datos y personaliza tu experiencia en la App.
             </Text>
-            <EditPerfilForm />
+            <EditPerfilForm navigation={navigation} />
           </Stack>
         </ScrollView>
       </Card>

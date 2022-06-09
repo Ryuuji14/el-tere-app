@@ -1,6 +1,7 @@
 import { Dimensions } from "react-native";
 import { useToast, Avatar, Text, HStack, Icon } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
+import { handleErrorMessage } from "../utils/handlers/handleErrors";
 
 const { width } = Dimensions.get("window");
 
@@ -40,9 +41,9 @@ const useCustomToast = () => {
     });
   };
 
-  const showErrorToast = (text = "") => {
+  const showErrorToast = (error = "") => {
     toast.show({
-      title: text,
+      title: handleErrorMessage(error),
     });
   };
 

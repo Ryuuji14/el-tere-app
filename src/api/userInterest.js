@@ -7,8 +7,8 @@ export const userInterestAPI = {
     const { data } = await http.get(`${BASE_URL}/${userId}`);
     return data;
   },
-  updateUserInterestStatus: async (userId, newStatus) => {
-    const { data } = await http.patch(`${BASE_URL}/${userId}`, {
+  updateUserInterestStatus: async (interestId, newStatus) => {
+    const { data } = await http.patch(`${BASE_URL}/${interestId}`, {
       active: newStatus,
     });
     return data;

@@ -9,6 +9,8 @@ const PromocionCard = ({
   id,
   price,
   discount,
+  location,
+  date,
 }) => {
   const Navigation = useNavigation();
 
@@ -16,7 +18,6 @@ const PromocionCard = ({
     if (!image || !image.includes("https")) {
       return "https://via.placeholder.com/300.png?text=no+image";
     }
-
     return image;
   };
 
@@ -24,14 +25,25 @@ const PromocionCard = ({
 
   return (
     <TouchableOpacity
-      onPress={() =>
-        Navigation.navigate("ConsultarPromocion", {
-          name: name,
-          image: image,
-          price: price,
-          id: id,
-        })
-      }
+      onPress={() => {
+        isPromo ?
+          Navigation.navigate("Promocion", {
+            name: name,
+            image: image,
+            price: price,
+            id: id,
+            discount: discount,
+            description: description,
+          })
+          :
+          Navigation.navigate("ConsultarEvento", {
+            name: name,
+            image: image,
+            description: description,
+            location: location,
+            date: date,
+          })
+      }}
     >
       <Box
         width={220}
@@ -88,6 +100,7 @@ const PromocionCard = ({
                 left={-10}
                 bottom={0.5}
                 source={require("../../../assets/LOGO-EL-TERE-2.png")}
+                alt="pinche prop requirida"
               />
               <Text zIndex={10} right={2} bottom={0.5}>
                 {isPromo ? "Promo" : "Evento"}

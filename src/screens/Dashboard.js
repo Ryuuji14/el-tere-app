@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, useEffect } from "react";
+import React, { useRef, useMemo, useState, useEffect, Fragment } from "react";
 import {
   Badge,
   Button,
@@ -15,7 +15,7 @@ import {
   Icon,
   ScrollView,
 } from "native-base";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import Logo from "../../assets/LOGO-EL-TERE.png";
 import {
   FontAwesome,
@@ -24,9 +24,10 @@ import {
 } from "@expo/vector-icons";
 import ComercioCard from "../components/screens/ComercioCard";
 import PromocionCard from "../components/screens/PromocionCard";
-import BottomNavigation from "../navigation/BottomNavigation";
-import promociones from "../../assets/promociones.json";
 import { dashboardAPI } from "../api/dashboard";
+import { companyAPI } from "../api/companyAPI";
+
+import useCustomToast from "../hooks/useCustomToast";
 
 var { height } = Dimensions.get("window");
 
@@ -68,6 +69,8 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("");
   const [promotionsAndEvents, setPromotionsAndEvents] = useState([]);
+  const { showErrorToast } = useCustomToast();
+  const [areas, setAreas] = useState([]);
 
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0);
 
@@ -104,7 +107,6 @@ const Dashboard = () => {
               if (a?.starts_at > b?.starts_at) return 1;
 
               if (a?.starts_at < b?.starts_at) return -1;
-
               return 0;
             }
           )
@@ -117,8 +119,21 @@ const Dashboard = () => {
     getPromotions();
   }, []);
 
+  useEffect(() => {
+    const getAreasWithProducts = async () => {
+      try {
+        const { data } = await companyAPI.getAreasWithProducts();
+        setAreas(data || []);
+      } catch (error) {
+        showErrorToast(error);
+        console.log(error);
+      }
+    };
+    getAreasWithProducts();
+  }, []);
+
   return (
-    <ScrollView>
+    <ScrollView bgColor="white">
       <View bgColor="white" px={7} pb={5}>
         <Stack>
           <HStack space={3} alignItems="center">
@@ -192,13 +207,16 @@ const Dashboard = () => {
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <HStack space={2} py={2}>
-                  {promotionsAndEvents.map((element) => (
+                  {promotionsAndEvents.map((element, index) => (
                     <PromocionCard
-                      key={element.id}
+                      key={index.toString()}
+                      id={element.id}
                       image={element.photo}
                       name={element.title}
                       description={element.description}
                       discount={element.discount}
+                      location={element.location}
+                      date={element.starts_at}
                     />
                   ))}
                 </HStack>
@@ -208,8 +226,38 @@ const Dashboard = () => {
           <Text pt={2} pb={2} bold color="grey">
             Comercios
           </Text>
+          {areas.map(({ area }, index) => (
+            <Fragment key={index.toString()}>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text color="#41634A" pt={2} pb={1} bold>
+                  {area?.name}
+                </Text>
+                <TouchableOpacity>
+                  <Text color="#41634A">Ver todos</Text>
+                </TouchableOpacity>
+              </HStack>
+              <FlatList
+                horizontal
+                data={area.companies || []}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <ComercioCard
+                    key={item.id}
+                    id={item.id}
+                    image={item.photo}
+                    name={item.name}
+                    type={item?.type || ""}
+                    rating={item.rating || 0}
+                    horaApertura={item.opening_time}
+                    horaCierre={item.closing_time}
+                    delivery={item.closing_time}
+                  />
+                )}
+              />
+            </Fragment>
+          ))}
 
-          <View>
+          {/* <View>
             <FlatList
               columnWrapperStyle={{ justifyContent: "space-between" }}
               numColumns={2}
@@ -229,7 +277,7 @@ const Dashboard = () => {
               )}
               keyExtractor={(item) => item.name}
             />
-          </View>
+          </View> */}
         </KeyboardAvoidingView>
       </View>
     </ScrollView>

@@ -13,38 +13,51 @@ import {
   IconButton,
   Input,
 } from "native-base";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
+import { useVerifyProductByCompanyId } from "../../hooks/useVerifyProductByCompanyId";
 import * as actions from "../../Redux/Actions/cartActions";
 
-
 const ProductoCard = (props) => {
-  const { name, image, price, id, cartItems, modifyProductQuantity } = props;
+  const {
+    name,
+    image,
+    price,
+    id,
+    description,
+    cartItems,
+    modifyProductQuantity,
+  } = props;
+
+  const { canAddProduct, showAlertDialog, AlertDialog } =
+    useVerifyProductByCompanyId(props.company_id, cartItems);
 
   const productInCart = cartItems.find((item) => item.product.id === id);
 
   const Navigation = useNavigation();
-  
 
   return (
-    <TouchableOpacity 
-    style={{ width: '50%'}}
-    activeOpacity="0"
-    onPress={ () =>
-      Navigation.navigate("SingleProduct", {
-     name: props.name,
-     image: props.image,
-     price: props.price,
-     id: props.id,
-      })
-    }
+    <TouchableOpacity
+      style={{ width: "50%" }}
+      activeOpacity="0"
+      onPress={() =>
+        Navigation.navigate("SingleProduct", {
+          company_id: props.company_id,
+          name: props.name,
+          description: props.description,
+          image: props.image,
+          price: props.price,
+          id: props.id,
+        })
+      }
     >
       <Box
-        width={175}
+        width={150}
         maxW="80"
+        mx={3}
         rounded="lg"
         overflow="hidden"
-        borderColor="coolGray.200"
+        borderColor="#41634A"
         borderWidth="1"
         shadow={2}
         _dark={{
@@ -125,13 +138,16 @@ const ProductoCard = (props) => {
                   borderRadius="full"
                   bgColor="#DB7F50"
                   onPress={() => {
-                    props.addItemToCart(props);
+                    canAddProduct
+                      ? props.addItemToCart(props)
+                      : showAlertDialog();
                   }}
                 />
               )}
             </Box>
           </HStack>
         </VStack>
+        <AlertDialog />
       </Box>
     </TouchableOpacity>
   );
@@ -161,5 +177,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductoCard);
-
-// export default connect(null, mapDispatchToProps)(ProductoCard);

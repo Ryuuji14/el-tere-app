@@ -28,10 +28,15 @@ import PromocionCard from "./PromocionCard"
 import { connect } from "react-redux";
 import { Tab, TabView } from '@rneui/themed';
 const { width, height } = Dimensions.get("window");
-const productos = require("../../../assets/productos.json");
+
+
 const promociones = require("../../../assets/promociones.json");
 
-const ProductScreen = ({ promociones = [], productos = [] }) => {
+
+
+
+const ProductScreen = ({ promociones = [], productos = []}) => {
+
   return (
     <ScrollView>
       <View
@@ -46,9 +51,9 @@ const ProductScreen = ({ promociones = [], productos = [] }) => {
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <HStack space={2}>
-                  {promociones?.map((element) => (
+                  {promociones?.map((element, index) => (
                     <PromocionCard
-                      key={element.id}
+                      key={index.toString()}
                       image={element.image}
                       name={element.name}
                       description={element.description}
@@ -65,17 +70,19 @@ const ProductScreen = ({ promociones = [], productos = [] }) => {
             <FlatList
               columnWrapperStyle={{ justifyContent: "space-between" }}
               numColumns={2}
-              data={productos}
-              renderItem={({ item }) => (
+              data={productos || []}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item, index }) => (
                 <ProductoCard
-                  key={item.id}
+                  key={index.toString()}
                   id={item.id}
-                  image={item.image}
+                  company_id={item.company_id}
+                  description={item.description}
+                  image={item.photo}
                   name={item.name}
                   price={item.price}
                 />
               )}
-              keyExtractor={(item) => item.name}
             />
           </View>
         </KeyboardAvoidingView>

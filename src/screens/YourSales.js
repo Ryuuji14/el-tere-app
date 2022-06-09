@@ -1,16 +1,25 @@
 import { Icon, Heading, HStack, Text, View } from "native-base";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ImageBackground, Dimensions, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { PendingSales } from "../components/screens/yourOrders/PendingSales";
 import { SaleHistory } from "../components/screens/yourOrders/SalesHistory";
+import { TabRouter } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("screen");
 
 const tabColor = (isActive) => (isActive ? "#567F64" : "gray.400");
 
-export const YourSales = () => {
+export const YourSales = (props) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+ const item ={
+  sales: props.route.params.sales,
+ }
+
+ const pending = item.sales.filter((sale) => sale.status === "to_deliver" || sale.status === "pending");
+ const complete= item.sales.filter((sale) => sale.status === "complete");
+
 
   const changeTab = (index) => setActiveTabIndex(index);
 
@@ -92,7 +101,7 @@ export const YourSales = () => {
         </HStack>
 
         <View px={5} py={4}>
-          {activeTabIndex === 0 ? <PendingSales /> : <SaleHistory />}
+          {activeTabIndex === 0 ? <PendingSales sales={pending}/> : <SaleHistory sales={complete}/>}
         </View>
       </View>
     </ImageBackground>
