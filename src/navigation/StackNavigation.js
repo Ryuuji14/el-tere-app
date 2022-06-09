@@ -124,6 +124,7 @@ const stackRoutes = [
     name: "Promocion",
     component: ConsultarPromocion,
     requireAuth: true,
+    showHeader: true,
   },
 ];
 

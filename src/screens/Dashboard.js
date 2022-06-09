@@ -210,6 +210,7 @@ const Dashboard = () => {
                   {promotionsAndEvents.map((element, index) => (
                     <PromocionCard
                       key={index.toString()}
+                      id={element.id}
                       image={element.photo}
                       name={element.title}
                       description={element.description}
