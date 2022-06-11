@@ -80,7 +80,11 @@ const Promocion = ({ route, cartItems, addMultipleProducts, navigation }) => {
     setProducts(newProducts);
   };
 
-  console.log(cartItems);
+  const calculateTotal = () => {
+    return products.reduce((total, product) => {
+      return total + product.price * product.quantity;
+    }, 0);
+  };
 
   return (
     <View backgroundColor="white" width={width} alignContent="center">
@@ -174,7 +178,7 @@ const Promocion = ({ route, cartItems, addMultipleProducts, navigation }) => {
 
           <View height="50%">
             <Text mt="4" ml="16" fontSize="md" color="#6E6E7A">
-              Subtotal: $
+              Subtotal: $ {calculateTotal()}
             </Text>
             <View ml="8">
               <Button
