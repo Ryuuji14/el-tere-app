@@ -3,7 +3,6 @@ import Onboarding from "../screens/Onboarding";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import RecoverPassword from "../screens/RecoverPassword";
-import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
 import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
@@ -19,6 +18,8 @@ import Cart from "../screens/Cart/Cart";
 import RealizaPago from "../screens/RealizaPago";
 import ConsultarEvento from "../screens/ConsultarEvento";
 import ConsultarPromocion from "../screens/ConsultarPromocion";
+import NewPassword from "../screens/NewPassword";
+import ChangePassword from "../screens/ChangePassword";
 import { HStack, Icon, IconButton } from "native-base";
 import {
   MaterialIcons,
@@ -137,6 +138,11 @@ const stackRoutes = [
     component: YourSales,
     requireAuth: true,
   },
+  {
+    name: "ChangePassword",
+    component: ChangePassword,
+    requireAuth: true,
+  },
 ];
 
 const HOC = (Component) => {
@@ -154,7 +160,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="NewPassword"
+      initialRouteName="Dashboard"
       screenOptions={{
         headerShown: false,
       }}

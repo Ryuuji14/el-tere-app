@@ -11,7 +11,6 @@ import {
 import { Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import {
   loginDefaultValues,
   loginSchema,
@@ -21,8 +20,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
-import { ICONS_PROPS } from "../../../themes/iconStyles";
-import { INPUT_PROPS } from "../../../themes/inputStyles";
+import { ICONS_PROPS } from "../../../themes/iconStyles"
+import { INPUT_PROPS } from "../../../themes/inputStyles"
 import useAuthContext from "../../../hooks/useAuthContext";
 
 const LoginForm = ({ navigation }) => {
@@ -120,7 +119,7 @@ const LoginForm = ({ navigation }) => {
           }}
           backgroundColor="#DB7F50"
         >
-          INICIAR SESION
+          INICIAR SESIÓN
         </Button>
         <Button
           width={240}

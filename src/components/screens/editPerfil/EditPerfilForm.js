@@ -439,7 +439,7 @@ export const EditPerfilForm = ({ navigation }) => {
         EDITAR DATOS
       </Button>
       <Button
-        onPress={() => console.log}
+        onPress={() => navigation?.navigate("ChangePassword")}
         py={1}
         variant="outline"
         rounded="full"
