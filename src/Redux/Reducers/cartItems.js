@@ -3,6 +3,7 @@ import {
   REMOVE_FROM_CART,
   CLEAR_CART,
   MODIFY_PRODUCT_QUANTITY,
+  ADD_MULTIPLE_TO_CART,
 } from "../constants";
 
 const cartItems = (state = [], action) => {
@@ -18,6 +19,43 @@ const cartItems = (state = [], action) => {
         return state;
       }
       return [...state, action.payload];
+
+    case ADD_MULTIPLE_TO_CART:
+      const products = action.payload;
+
+      if (state.length === 0) {
+        return [
+          ...state,
+          ...products.map((el) => ({
+            product: {
+              ...el,
+            },
+          })),
+        ];
+      }
+
+      return [
+        ...state.map((el) => {
+          const product = products.find((item) => item.id === el.product?.id);
+
+          if (product) {
+            return {
+              ...el,
+              product: {
+                ...el.product,
+                quantity: product.quantity,
+              },
+            };
+          }
+
+          return {
+            product: {
+              ...el,
+            },
+          };
+        }),
+      ];
+
     case MODIFY_PRODUCT_QUANTITY: {
       const newState = [...state];
       const index = newState.findIndex(
