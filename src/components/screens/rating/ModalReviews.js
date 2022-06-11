@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AirbnbRating } from 'react-native-elements'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -7,6 +7,7 @@ import useCustomToast from '../../../hooks/useCustomToast'
 import useLoading from '../../../hooks/useLoading'
 import { reviewAPI } from '../../../api/reviewAPI'
 import {reviewSchema, reviewDefaultValues} from '../../../utils/formValidations/dataReviewValidation'
+import { useNavigation } from '@react-navigation/native'
 
 import {
   Text,
@@ -20,6 +21,7 @@ const NewReviewModal = ({ navigation, showModal, setShowModal }) => {
 
   const { showErrorToast, showSuccesToast } = useCustomToast()
   const { isLoading, startLoading, stopLoading } = useLoading()
+  const Navigation = useNavigation()
 
   const {
     state: { user },
@@ -36,22 +38,32 @@ const NewReviewModal = ({ navigation, showModal, setShowModal }) => {
     defaultvalue: reviewDefaultValues,
   })
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (values) => {
     startLoading();
     try {
       const { data } = await reviewAPI.postReview({
         user_id: user.id,
-        data,
+        rating: values.rating,
+        description: values.description,
+        company_id: item.comercioId,
+        title: "Review",
       })
-      showSuccesToast('Review created successfully');
+      showSuccesToast('Tu comentario ha sido creado exitosamente');
       setShowModal(false)
       reset(reviewDefaultValues)
-      navigation?.goBack()
+      Navigation.goBack();
     } catch (error) {
       showErrorToast(error.message)
     }
     stopLoading();
   }
+   const item = {
+    comercioId: navigation?.company_id,
+    comercioName: navigation?.company?.name
+   }
+   useEffect(() => {
+    console.log(item)
+  }, [])
 
   return (
     <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
@@ -67,7 +79,7 @@ const NewReviewModal = ({ navigation, showModal, setShowModal }) => {
         </Text>
       </Modal.Header>
       <Modal.Body>
-        <Text bold color='#6E6E7A' alignSelf='center' fontSize={'lg'}>Comercio: </Text>
+        <Text bold color='#6E6E7A' alignSelf='center' fontSize={'lg'}>Comercio: {item.comercioName}</Text>
 
         <Controller
           name='rating'
@@ -100,7 +112,7 @@ const NewReviewModal = ({ navigation, showModal, setShowModal }) => {
             <FormControl
               isRequired
             >
-              <FormControl.Label><Text mt='4' fontSize={'lg'} color="#6E6E7A" bold> Comentarios: </Text></FormControl.Label>
+              <FormControl.Label><Text mt='4' fontSize={'lg'} color="#6E6E7A" bold> Comentarios:  </Text></FormControl.Label>
               <TextArea 
                 borderRadius='10'
                 borderColor='#F96332'

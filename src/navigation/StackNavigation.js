@@ -26,6 +26,10 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { OrderFinished } from "../screens/OrderFinished";
+import { DetalleProductosFinalizados } from "../screens/DetalleProductosFinalizados";
+
+
 
 const Stack = createNativeStackNavigator();
 
@@ -91,6 +95,7 @@ const stackRoutes = [
     name: "EditPerfil",
     component: EditPerfil,
     requireAuth: true,
+    showHeader: true,
   },
   {
     name: "YourDirections",
@@ -129,6 +134,18 @@ const stackRoutes = [
   {
     name: "Promocion",
     component: ConsultarPromocion,
+    requireAuth: true,
+    showHeader: true,
+  },
+  {
+    name: "OrderFinished",
+    component: OrderFinished,
+    requireAuth: true,
+    showHeader: true,
+  },
+  {
+    name: "ProductosFinalizados",
+    component: DetalleProductosFinalizados,
     requireAuth: true,
     showHeader: true,
   },

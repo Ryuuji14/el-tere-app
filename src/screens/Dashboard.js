@@ -15,18 +15,17 @@ import {
   Icon,
   ScrollView,
 } from "native-base";
-import { StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity , RefreshControl} from "react-native";
 import Logo from "../../assets/LOGO-EL-TERE.png";
 import {
   FontAwesome,
-  MaterialIcons,
-  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import ComercioCard from "../components/screens/ComercioCard";
 import PromocionCard from "../components/screens/PromocionCard";
 import { dashboardAPI } from "../api/dashboard";
 import { companyAPI } from "../api/companyAPI";
 
+import useLoading from "../hooks/useLoading";
 import useCustomToast from "../hooks/useCustomToast";
 
 var { height } = Dimensions.get("window");
@@ -36,7 +35,6 @@ const ICONS_PROPS = {
   color: "black",
   mr: 3,
 };
-const comercios = require("../../assets/comercios.json");
 
 const INPUT_PROPS = {
   borderColor: "#F96332",
@@ -71,6 +69,7 @@ const Dashboard = () => {
   const [promotionsAndEvents, setPromotionsAndEvents] = useState([]);
   const { showErrorToast } = useCustomToast();
   const [areas, setAreas] = useState([]);
+  const { isLoading, startLoading, stopLoading } = useLoading();
 
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0);
 
@@ -87,14 +86,8 @@ const Dashboard = () => {
     }, 350);
   };
 
-  const filteresCommerces = useMemo(() => {
-    return comercios.filter((comercio) =>
-      comercio.name.toLowerCase().includes(searchBy.toLowerCase())
-    );
-  }, [comercios, searchBy]);
-
-  useEffect(() => {
     const getPromotions = async () => {
+      startLoading();
       try {
         const [eventData, promotionData] = await Promise.all([
           dashboardAPI.getEvents(),
@@ -114,13 +107,12 @@ const Dashboard = () => {
       } catch (error) {
         console.log(error.response);
       }
+      stopLoading();
     };
 
-    getPromotions();
-  }, []);
-
-  useEffect(() => {
+   
     const getAreasWithProducts = async () => {
+      startLoading();
       try {
         const { data } = await companyAPI.getAreasWithProducts();
         setAreas(data || []);
@@ -128,12 +120,19 @@ const Dashboard = () => {
         showErrorToast(error);
         console.log(error);
       }
+      stopLoading();
     };
-    getAreasWithProducts();
-  }, []);
+
+    useEffect(() => {
+      getPromotions();
+      getAreasWithProducts();
+    }, []);
+
 
   return (
-    <ScrollView bgColor="white">
+    <ScrollView bgColor="white" refreshControl={
+      <RefreshControl refreshing={isLoading} onRefresh={getAreasWithProducts||getPromotions} />
+    }>
       <View bgColor="white" px={7} pb={5}>
         <Stack>
           <HStack space={3} alignItems="center">

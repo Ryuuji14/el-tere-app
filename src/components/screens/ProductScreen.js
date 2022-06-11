@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Badge,
   Button,
@@ -36,7 +36,6 @@ const promociones = require("../../../assets/promociones.json");
 
 
 const ProductScreen = ({ promociones = [], productos = []}) => {
-
   return (
     <ScrollView>
       <View
@@ -51,12 +50,16 @@ const ProductScreen = ({ promociones = [], productos = []}) => {
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <HStack space={2}>
-                  {promociones?.map((element, index) => (
+                  {promociones.map((element, index) => (
                     <PromocionCard
                       key={index.toString()}
-                      image={element.image}
-                      name={element.name}
+                      id={element.id}
+                      discount={element.discount}
+                      date={element.starts_at}
+                      image={element.photo}
+                      name={element.title}
                       description={element.description}
+                      location={element.location}
                     />
                   ))}
                 </HStack>
@@ -74,7 +77,7 @@ const ProductScreen = ({ promociones = [], productos = []}) => {
               keyExtractor={(item) => item.id}
               renderItem={({ item, index }) => (
                 <ProductoCard
-                  key={index.toString()}
+                  key={item.id}
                   id={item.id}
                   company_id={item.company_id}
                   description={item.description}
