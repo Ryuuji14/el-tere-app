@@ -14,6 +14,7 @@ import {
   Image,
   Icon,
   ScrollView,
+  IconButton,
 } from "native-base";
 import { Dimensions, TouchableOpacity , RefreshControl} from "react-native";
 import Logo from "../../assets/LOGO-EL-TERE.png";
@@ -27,6 +28,7 @@ import { companyAPI } from "../api/companyAPI";
 
 import useLoading from "../hooks/useLoading";
 import useCustomToast from "../hooks/useCustomToast";
+import useAuthContext from "../hooks/useAuthContext";
 
 var { height } = Dimensions.get("window");
 
@@ -63,7 +65,10 @@ const categorias = [
   },
 ];
 
-const Dashboard = () => {
+const Dashboard = ({ navigation }) => {
+  const {
+    state: { selectedCategory },
+  } = useAuthContext();
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("");
   const [promotionsAndEvents, setPromotionsAndEvents] = useState([]);
@@ -114,11 +119,17 @@ const Dashboard = () => {
     const getAreasWithProducts = async () => {
       startLoading();
       try {
-        const { data } = await companyAPI.getAreasWithProducts();
-        setAreas(data || []);
+        if (selectedCategory?.id === -1) {
+          const { data } = await companyAPI.getAreasWithProducts();
+          setAreas(data || []);
+        } else {
+          const { data } = await companyAPI.getCompaniesByCategory(
+            selectedCategory.id
+          );
+          setAreas(data || []);
+        }
       } catch (error) {
         showErrorToast(error);
-        console.log(error);
       }
       stopLoading();
     };
@@ -149,20 +160,31 @@ const Dashboard = () => {
         </Stack>
 
         <KeyboardAvoidingView>
-          <Stack>
-            <HStack>
-              <Input
-                value={search}
-                onChangeText={handleSearch}
-                {...INPUT_PROPS}
-                placeholder="Buscar..."
-                w="100%"
-                InputRightElement={
-                  <Icon as={FontAwesome} name="search" {...ICONS_PROPS} />
-                }
-              />
-            </HStack>
-          </Stack>
+          <HStack space={2}>
+            <Input
+              value={search}
+              onChangeText={handleSearch}
+              {...INPUT_PROPS}
+              placeholder="Buscar..."
+              width="85%"
+              InputRightElement={
+                <Icon as={FontAwesome} name="search" {...ICONS_PROPS} />
+              }
+            />
+            <IconButton
+              bgColor="#DB7F50"
+              rounded="3xl"
+              onPress={() => navigation?.navigate("FilterRubros")}
+              icon={
+                <Icon
+                  as={MaterialIcons}
+                  name="filter-alt"
+                  color="#fff"
+                  size={22}
+                />
+              }
+            />
+          </HStack>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <Stack>
               <HStack mt="2" space={2}>
@@ -225,11 +247,43 @@ const Dashboard = () => {
           <Text pt={2} pb={2} bold color="grey">
             Comercios
           </Text>
-          {areas.map(({ area }, index) => (
-            <Fragment key={index.toString()}>
+          {selectedCategory?.id === -1 &&
+            areas.map(({ area }, index) => (
+              <Fragment key={index.toString()}>
+                <HStack alignItems="center" justifyContent="space-between">
+                  <Text color="#41634A" pt={2} pb={1} bold>
+                    {area?.name}
+                  </Text>
+                  <TouchableOpacity>
+                    <Text color="#41634A">Ver todos</Text>
+                  </TouchableOpacity>
+                </HStack>
+                <FlatList
+                  horizontal
+                  data={area.companies || []}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                    <ComercioCard
+                      key={item.id}
+                      id={item.id}
+                      image={item.photo}
+                      name={item.name}
+                      type={item?.type || ""}
+                      rating={item.rating || 0}
+                      horaApertura={item.opening_time}
+                      horaCierre={item.closing_time}
+                      delivery={item.closing_time}
+                    />
+                  )}
+                />
+              </Fragment>
+            ))}
+
+          {selectedCategory?.id !== -1 && (
+            <>
               <HStack alignItems="center" justifyContent="space-between">
                 <Text color="#41634A" pt={2} pb={1} bold>
-                  {area?.name}
+                  {selectedCategory?.name}
                 </Text>
                 <TouchableOpacity>
                   <Text color="#41634A">Ver todos</Text>
@@ -237,7 +291,7 @@ const Dashboard = () => {
               </HStack>
               <FlatList
                 horizontal
-                data={area.companies || []}
+                data={areas || []}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                   <ComercioCard
@@ -253,30 +307,8 @@ const Dashboard = () => {
                   />
                 )}
               />
-            </Fragment>
-          ))}
-
-          {/* <View>
-            <FlatList
-              columnWrapperStyle={{ justifyContent: "space-between" }}
-              numColumns={2}
-              data={filteresCommerces}
-              renderItem={({ item }) => (
-                <ComercioCard
-                  key={item.id}
-                  id={item.id}
-                  image={item.image}
-                  name={item.name}
-                  type={item.type}
-                  rating={item.rating}
-                  horaApertura={item.horaApertura}
-                  horaCierre={item.horaCierre}
-                  delivery={item.delivery}
-                />
-              )}
-              keyExtractor={(item) => item.name}
-            />
-          </View> */}
+            </>
+          )}
         </KeyboardAvoidingView>
       </View>
     </ScrollView>

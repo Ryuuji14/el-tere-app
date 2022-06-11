@@ -9,6 +9,8 @@ import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
 import useAuthContext from "../hooks/useAuthContext";
 import Perfil from "../screens/Perfil";
+import FilterRubros from "../screens/FilterRubros";
+
 import SingleProduct from "../screens/ConsultarProducto";
 import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
@@ -84,7 +86,7 @@ const stackRoutes = [
     name: "ConsultarEvento",
     component: ConsultarEvento,
     requireAuth: true,
-    showHeader  : true,
+    showHeader: true,
   },
   {
     name: "RealizaPago",
