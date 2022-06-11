@@ -16,14 +16,19 @@ import {
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 var { width } = Dimensions.get("window");
 import { connect } from "react-redux";
-import * as actions from "../Redux/Actions/cartActions";
+import { addMultipleProducts } from "../Redux/Actions/cartActions";
 import Logo from "../../assets/LOGO-EL-TERE-2.png";
 import useCustomToast from "../hooks/useCustomToast";
 import { productsAPI } from "../api/productsAPI";
+import { useVerifyProductByCompanyId } from "../hooks/useVerifyProductByCompanyId";
 
-const Promocion = ({ route, cartItems }) => {
-  const { showErrorToast } = useCustomToast();
+const Promocion = ({ route, cartItems, addMultipleProducts, navigation }) => {
+  const { showErrorToast, showSuccesToast } = useCustomToast();
   const [products, setProducts] = useState([]);
+  const [companyId, setCompanyId] = useState("");
+
+  const { canAddProduct, showAlertDialog, AlertDialog } =
+    useVerifyProductByCompanyId(companyId, cartItems);
 
   const [item, setItem] = useState({
     id: route.params.id,
@@ -38,14 +43,21 @@ const Promocion = ({ route, cartItems }) => {
       const getProducts = async () => {
         try {
           const { data } = await productsAPI.getProductInPromotion(item.id);
-          setProducts(
-            data.map((prod) => ({
-              ...prod,
-              quantity: 1,
-            }))
-          );
-          console.log("products", products);
+          if (data?.length > 0) {
+            setProducts(
+              data.map((prod) => {
+                const findProductInCart = cartItems.find(
+                  (item) => item.product.id === prod.id
+                );
 
+                return {
+                  ...prod,
+                  quantity: findProductInCart?.product.quantity || 1,
+                };
+              })
+            );
+            setCompanyId(data[0].company_id);
+          }
         } catch (error) {
           showErrorToast(error);
         }
@@ -68,11 +80,17 @@ const Promocion = ({ route, cartItems }) => {
     setProducts(newProducts);
   };
 
+  const calculateTotal = () => {
+    return products.reduce((total, product) => {
+      return total + product.price * product.quantity;
+    }, 0);
+  };
+
   return (
     <View backgroundColor="white" width={width} alignContent="center">
       <View backgroundColor="white" width="100%">
         <HStack justifyContent="flex-start" alignItems="flex-start">
-          <Image source={{ Logo }} alt="logo" size="sm" />
+          <Image source={ Logo } alt="logo" size='xs' />
           <Text mt="2" bold fontSize="16">
             Promoción
           </Text>
@@ -160,7 +178,7 @@ const Promocion = ({ route, cartItems }) => {
 
           <View height="50%">
             <Text mt="4" ml="16" fontSize="md" color="#6E6E7A">
-              Subtotal: $
+              Subtotal: $ {calculateTotal()}
             </Text>
             <View ml="8">
               <Button
@@ -169,7 +187,13 @@ const Promocion = ({ route, cartItems }) => {
                 borderRadius="20"
                 mt="16"
                 onPress={() => {
-                  route.addItemToCart(item.id);
+                  if (!canAddProduct) {
+                    showAlertDialog();
+                    return;
+                  }
+                  addMultipleProducts(products);
+                  showSuccesToast("Productos agregados al carrito");
+                  navigation?.goBack();
                 }}
               >
                 <Text color="white" fontSize="lg">
@@ -180,18 +204,22 @@ const Promocion = ({ route, cartItems }) => {
           </View>
         </VStack>
       </View>
+      <AlertDialog />
     </View>
   );
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addItemToCart: (product) =>
-      dispatch(
-        actions.addToCart({
-          product: { ...product, quantity: 1 },
-        })
-      ),
+    // addItemToCart: (product) =>
+    //   dispatch(
+    //     actions.addToCart({
+    //       product: { ...product, quantity: 1 },
+    //     })
+    //   ),
+    addMultipleProducts: (products) => {
+      dispatch(addMultipleProducts(products));
+    },
   };
 };
 

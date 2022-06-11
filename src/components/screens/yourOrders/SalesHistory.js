@@ -2,9 +2,10 @@ import React from "react";
 import { HStack, Icon, IconButton, Stack, Text, View } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 export const SaleHistory = (props) => {
-  
+  const Navigation = useNavigation();
   const item = {
     sales: props.sales,
   }
@@ -22,7 +23,10 @@ export const SaleHistory = (props) => {
         Estos son tus pedidos ya {"\n"} pagados y validados validados:
       </Text>
       {item.sales.map((sale, index) => (
-        <TouchableOpacity activeOpacity={0.9} key={index.toString()}>
+        <TouchableOpacity 
+        activeOpacity={0.9} key={index.toString()}
+        onPress={() => Navigation.navigate("OrderFinished", {sales: item.sales[index]})}
+        >
           <View
             w="100%"
             borderWidth={1}

@@ -8,6 +8,8 @@ import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
 import useAuthContext from "../hooks/useAuthContext";
 import Perfil from "../screens/Perfil";
+import FilterRubros from "../screens/FilterRubros";
+
 import SingleProduct from "../screens/ConsultarProducto";
 import { EditPerfil } from "../screens/EditPerfil";
 import { YourDirections } from "../screens/YourDirections";
@@ -27,6 +29,10 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { OrderFinished } from "../screens/OrderFinished";
+import { DetalleProductosFinalizados } from "../screens/DetalleProductosFinalizados";
+
+
 
 const Stack = createNativeStackNavigator();
 
@@ -81,7 +87,7 @@ const stackRoutes = [
     name: "ConsultarEvento",
     component: ConsultarEvento,
     requireAuth: true,
-    showHeader  : true,
+    showHeader: true,
   },
   {
     name: "RealizaPago",
@@ -92,6 +98,7 @@ const stackRoutes = [
     name: "EditPerfil",
     component: EditPerfil,
     requireAuth: true,
+    showHeader: true,
   },
   {
     name: "YourDirections",
@@ -142,6 +149,16 @@ const stackRoutes = [
     name: "ChangePassword",
     component: ChangePassword,
     requireAuth: true,
+    name: "OrderFinished",
+    component: OrderFinished,
+    requireAuth: true,
+    showHeader: true,
+  },
+  {
+    name: "ProductosFinalizados",
+    component: DetalleProductosFinalizados,
+    requireAuth: true,
+    showHeader: true,
   },
 ];
 

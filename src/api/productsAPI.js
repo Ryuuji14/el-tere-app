@@ -7,6 +7,10 @@ export const productsAPI = {
     const { data } = await http.get(`${BASE_URL}/${companyId}`);
     return data;
   },
+  getProductsById: async (productId) => {
+    const { data } = await http.get(`${"product"}/${productId}`);
+    return data;
+  },
   getProductInPromotion: async (promotionId) => {
     const { data } = await http.get(`product/promotion/${promotionId}`);
     return data;

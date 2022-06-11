@@ -7,6 +7,10 @@ export const userAPI = {
     const { data } = await http.get(`${BASE_URL}/${userId}`);
     return data;
   },
+  getUserComments: async (userId) => {
+    const { data } = await http.get(`${BASE_URL}/${userId}/reviews`);
+    return data;
+  },
   updateUser: async (userId, form) => {
     const { birthday, ...f } = form;
 
@@ -21,4 +25,8 @@ export const userAPI = {
     });
     return data;
   },
+  getNotifications: async (userId) => {
+    const { data } = await http.get(`${BASE_URL}/${userId}/notifications`);
+    return data;
+  }
 };

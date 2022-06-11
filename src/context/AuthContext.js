@@ -9,6 +9,10 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  selectedCategory: {
+    id: -1,
+    name: "",
+  },
 };
 
 const stateReducer = (state, action) => {
@@ -39,6 +43,18 @@ const stateReducer = (state, action) => {
         ...state,
         isAuthenticated: false,
         user: null,
+      };
+    }
+
+    case "SET_CATEGORY": {
+      const { id, name } = action.payload;
+
+      return {
+        ...state,
+        selectedCategory: {
+          id,
+          name,
+        },
       };
     }
 

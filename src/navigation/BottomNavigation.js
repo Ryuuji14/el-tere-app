@@ -14,7 +14,7 @@ const bottomRoutes = [
     component: Dashboard,
     requireAuth: true,
     Icon: ({ focused }) => (
-      <Ionicons name="home" color={focused ? "green" : "white"} size={24} />
+      <Ionicons name="home" color={focused ? "#41634A" : "white"} size={24} />
     ),
   },
   {
@@ -24,7 +24,7 @@ const bottomRoutes = [
     Icon: ({ focused }) => (
       <Ionicons
         name="notifications"
-        color={focused ? "green" : "white"}
+        color={focused ? "#41634A" : "white"}
         size={24}
       />
     ),
@@ -36,7 +36,7 @@ const bottomRoutes = [
     Icon: ({ focused }) => (
       <Ionicons
         name="cart"
-        color={focused ? "green" : "white"}
+        color={focused ? "#41634A" : "white"}
         size={24}
       />
     ),
@@ -48,7 +48,7 @@ const bottomRoutes = [
     Icon: ({ focused }) => (
       <Ionicons
         name="person"
-        color={focused ? "green" : "white"}
+        color={focused ? "#41634A" : "white"}
         size={24}
       />
     ),
@@ -61,9 +61,9 @@ const BottomNavigation = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#F96332",
+          backgroundColor: "#DB7F50",
         },
-        tabBarActiveTintColor: "#41634A",
+        tabBarActiveTintColor: "#DB7F50",
       }}
     >
       {bottomRoutes.map(({ name, component, Icon }) => (

@@ -4,7 +4,7 @@ import { HStack, Icon, IconButton, ScrollView, Stack, Text, View } from "native-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { saleAPI } from "../../../api/salesAPI";
 import useCustomToast from "../../../hooks/useCustomToast";
-import ModalReviews from "../rating/ModalReviews";
+;
 import useLoading from "../../../hooks/useLoading";
 import { useNavigation } from "@react-navigation/native";
 
@@ -19,7 +19,6 @@ export const PendingSales = (props) => {
     sales: props.sales,
   }
   const { isLoading, startLoading, stopLoading } = useLoading()
-  const [showModal, setShowModal] = useState(false);
   const [pedidos, setPedidos] = useState([]);
   const getProducts = async () => {
   try {
@@ -53,11 +52,7 @@ const Navigation = useNavigation();
         Estos son tus pedidos {"\n"} pendientes por pagar para ser {"\n"}{" "}
         validados:
       </Text>
-       <ModalReviews 
-       showModal={showModal}
-       setShowModal={setShowModal}
-       navigation={props.navigation}
-       />
+       
       {pedidos.map((sale, index) => (
         
         <TouchableOpacity 

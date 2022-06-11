@@ -49,7 +49,7 @@ const Perfil = ({ navigation }) => {
     state: { user },
   } = useAuthContext();
   const [sales, setSales] = useState([]);
-  const [allPedidos, setAllPedidos] = useState([]);
+  const [comments, setComments] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [pedidos, setPedidos] = useState([]);
   const { showErrorToast } = useCustomToast();
@@ -58,21 +58,21 @@ const Perfil = ({ navigation }) => {
   const getUserInfo = async () => {
     startLoading();
     try {
-      const [{ data: userInfo }, { data: salesInfo }, { data: userAddresses }] =
+      const [{ data: userInfo }, { data: salesInfo }, { data: userAddresses }, {data: UserComments}] =
         await Promise.all([
           userAPI.getUser(user.id),
           saleAPI.getUserSales(user.id),
           addressAPI.getUserAddresses(user.id),
+          userAPI.getUserComments(user.id),
         ]);
 
       setUserInfo({
         ...userInfo,
         address: userAddresses?.[0]?.address || "",
-        comments: 0,
+
       });
       setSales(salesInfo.filter((sale) => sale.active));
-
-
+      setComments(UserComments);
       if (salesInfo.length > 0) {
         const salesIds = salesInfo.map((sale) => sale.id);
 
@@ -221,7 +221,7 @@ const Perfil = ({ navigation }) => {
             <HStack justifyContent="center" w="49%">
               <Stack alignItems="center">
                 <Text fontSize={45} fontWeight="medium" color="#5A7E64" mb={-3}>
-                  {userInfo?.comments || 0}
+                  {comments.totalItems || 0}
                 </Text>
                 <Text color="#9393AA" fontSize={16}>
                   Comentarios
@@ -238,6 +238,7 @@ const Perfil = ({ navigation }) => {
               fontSize={20}
               fontWeight="bold"
               mb={4}
+              
             >
               Tus pedidos más recientes
             </Text>
@@ -252,6 +253,7 @@ const Perfil = ({ navigation }) => {
                 shadow="3"
                 bgColor="#FFFFFF"
                 mb={5}
+                key={index.toString()}
               >
                 <HStack alignSelf="center" space={3}>
                   <Stack justifyContent="center">
