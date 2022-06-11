@@ -1,6 +1,6 @@
 import { http } from "./http";
 
-const BASE_URL = 'company'
+const BASE_URL = "company";
 
 export const companyAPI = {
   getAreasWithProducts: async () => {
@@ -8,7 +8,11 @@ export const companyAPI = {
     return data;
   },
   getCompanyProduct: async (companyId) => {
-    const {data} =  await http.get(`${BASE_URL}/${companyId}`)
+    const { data } = await http.get(`${BASE_URL}/${companyId}`);
     return data;
-  }
+  },
+  getCompaniesByCategory: async (categoryId) => {
+    const { data } = await http.get(`${BASE_URL}/category/${categoryId}`);
+    return data;
+  },
 };
