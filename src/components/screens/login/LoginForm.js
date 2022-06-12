@@ -56,7 +56,7 @@ const LoginForm = ({ navigation }) => {
           payload: {
             user: {
               email: values.email,
-              id: values.id,
+              id: data?.data?.id,
             },
           },
         });
