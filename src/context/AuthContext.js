@@ -30,7 +30,8 @@ const stateReducer = (state, action) => {
     }
 
     case "LOGIN": {
-      const { user } = action.payload;
+      const { user, token } = action.payload;
+      setSession(token);
       return {
         ...state,
         isAuthenticated: true,

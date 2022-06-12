@@ -54,6 +54,7 @@ const LoginForm = ({ navigation }) => {
         dispatch({
           type: "LOGIN",
           payload: {
+            token,
             user: {
               email: values.email,
               id: data?.data?.id,
@@ -64,7 +65,6 @@ const LoginForm = ({ navigation }) => {
 
       reset(loginDefaultValues);
     } catch (error) {
-      console.log(error?.response?.data);
       showErrorToast("Error al registrar");
     }
     stopLoading();
