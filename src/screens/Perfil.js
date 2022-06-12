@@ -24,6 +24,7 @@ import { addressAPI } from "../api/addressAPI";
 import useLoading from "../hooks/useLoading";
 import useCustomToast from "../hooks/useCustomToast";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -33,8 +34,6 @@ const formatDate = (date) => {
 
   return `${day}/${month}/${year}` || "";
 };
-
-
 
 const getTotalPedidoAmount = (pedidos) => {
   return pedidos.reduce((acc, pedido) => {
@@ -58,18 +57,21 @@ const Perfil = ({ navigation }) => {
   const getUserInfo = async () => {
     startLoading();
     try {
-      const [{ data: userInfo }, { data: salesInfo }, { data: userAddresses }, {data: UserComments}] =
-        await Promise.all([
-          userAPI.getUser(user.id),
-          saleAPI.getUserSales(user.id),
-          addressAPI.getUserAddresses(user.id),
-          userAPI.getUserComments(user.id),
-        ]);
+      const [
+        { data: userInfo },
+        { data: salesInfo },
+        { data: userAddresses },
+        { data: UserComments },
+      ] = await Promise.all([
+        userAPI.getUser(user.id),
+        saleAPI.getUserSales(user.id),
+        addressAPI.getUserAddresses(user.id),
+        userAPI.getUserComments(user.id),
+      ]);
 
       setUserInfo({
         ...userInfo,
         address: userAddresses?.[0]?.address || "",
-
       });
       setSales(salesInfo.filter((sale) => sale.active));
       setComments(UserComments);
@@ -81,7 +83,6 @@ const Perfil = ({ navigation }) => {
         );
 
         setPedidos(pedidosResponses.map((response) => response.data));
-        
       }
     } catch (error) {
       showErrorToast(error);
@@ -153,7 +154,10 @@ const Perfil = ({ navigation }) => {
           <Stack w="80%" alignSelf="center" mb={2}>
             <HStack justifyContent="space-between">
               <TouchableOpacity
-                onPress={() => dispatch({ type: "LOGOUT" })}
+                onPress={async () => {
+                  await AsyncStorage.removeItem("@token");
+                  dispatch({ type: "LOGOUT" });
+                }}
                 activeOpacity={0.8}
               >
                 <View
@@ -238,7 +242,6 @@ const Perfil = ({ navigation }) => {
               fontSize={20}
               fontWeight="bold"
               mb={4}
-              
             >
               Tus pedidos más recientes
             </Text>
@@ -291,9 +294,11 @@ const Perfil = ({ navigation }) => {
                 color: "#DB7F50",
                 fontSize: 20,
               }}
-              onPress={() => Navigation.navigate("YourOrders",{
-                sales,
-              })} 
+              onPress={() =>
+                Navigation.navigate("YourOrders", {
+                  sales,
+                })
+              }
             >
               VER TODOS
             </Button>
