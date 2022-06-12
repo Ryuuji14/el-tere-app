@@ -16,11 +16,9 @@ import {
   ScrollView,
   IconButton,
 } from "native-base";
-import { Dimensions, TouchableOpacity , RefreshControl} from "react-native";
+import { Dimensions, TouchableOpacity, RefreshControl } from "react-native";
 import Logo from "../../assets/LOGO-EL-TERE.png";
-import {
-  FontAwesome,
-} from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import ComercioCard from "../components/screens/ComercioCard";
 import PromocionCard from "../components/screens/PromocionCard";
 import { dashboardAPI } from "../api/dashboard";
@@ -91,59 +89,63 @@ const Dashboard = ({ navigation }) => {
     }, 350);
   };
 
-    const getPromotions = async () => {
-      startLoading();
-      try {
-        const [eventData, promotionData] = await Promise.all([
-          dashboardAPI.getEvents(),
-          dashboardAPI.getPromotions(),
-        ]);
+  const getPromotions = async () => {
+    startLoading();
+    try {
+      const [eventData, promotionData] = await Promise.all([
+        dashboardAPI.getEvents(),
+        dashboardAPI.getPromotions(),
+      ]);
 
-        setPromotionsAndEvents(
-          [...(eventData?.items || []), ...(promotionData?.items || [])].sort(
-            (a, b) => {
-              if (a?.starts_at > b?.starts_at) return 1;
+      setPromotionsAndEvents(
+        [...(eventData?.items || []), ...(promotionData?.items || [])].sort(
+          (a, b) => {
+            if (a?.starts_at > b?.starts_at) return 1;
 
-              if (a?.starts_at < b?.starts_at) return -1;
-              return 0;
-            }
-          )
+            if (a?.starts_at < b?.starts_at) return -1;
+            return 0;
+          }
+        )
+      );
+    } catch (error) {
+      console.log(error.response);
+    }
+    stopLoading();
+  };
+
+  const getAreasWithProducts = async () => {
+    startLoading();
+    try {
+      if (selectedCategory?.id === -1) {
+        const { data } = await companyAPI.getAreasWithProducts();
+        setAreas(data || []);
+      } else {
+        const { data } = await companyAPI.getCompaniesByCategory(
+          selectedCategory.id
         );
-      } catch (error) {
-        console.log(error.response);
+        setAreas(data || []);
       }
-      stopLoading();
-    };
+    } catch (error) {
+      showErrorToast(error);
+    }
+    stopLoading();
+  };
 
-   
-    const getAreasWithProducts = async () => {
-      startLoading();
-      try {
-        if (selectedCategory?.id === -1) {
-          const { data } = await companyAPI.getAreasWithProducts();
-          setAreas(data || []);
-        } else {
-          const { data } = await companyAPI.getCompaniesByCategory(
-            selectedCategory.id
-          );
-          setAreas(data || []);
-        }
-      } catch (error) {
-        showErrorToast(error);
-      }
-      stopLoading();
-    };
+  const init = async () => {
+    await Promise.all([getPromotions(), getAreasWithProducts()]);
+  };
 
-    useEffect(() => {
-      getPromotions();
-      getAreasWithProducts();
-    }, []);
-
+  useEffect(() => {
+    init();
+  }, []);
 
   return (
-    <ScrollView bgColor="white" refreshControl={
-      <RefreshControl refreshing={isLoading} onRefresh={getAreasWithProducts||getPromotions} />
-    }>
+    <ScrollView
+      bgColor="white"
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={init} />
+      }
+    >
       <View bgColor="white" px={7} pb={5}>
         <Stack>
           <HStack space={3} alignItems="center">

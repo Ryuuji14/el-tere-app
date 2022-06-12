@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import {
   Badge,
   Button,
@@ -16,32 +16,26 @@ import {
   ScrollView,
   IconButton,
 } from "native-base";
-import {
-  FontAwesome,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Dimensions, StyleSheet } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import ProductoCard from "./ProductoCard"
+import ProductoCard from "./ProductoCard";
 import { useState } from "react";
-import PromocionCard from "./PromocionCard"
+import PromocionCard from "./PromocionCard";
 import { connect } from "react-redux";
-import { Tab, TabView } from '@rneui/themed';
+import { Tab, TabView } from "@rneui/themed";
 const { width, height } = Dimensions.get("window");
-
 
 const promociones = require("../../../assets/promociones.json");
 
-
-
-
-const ProductScreen = ({ promociones = [], productos = []}) => {
+const ProductScreen = ({
+  promociones = [],
+  productos = [],
+  refreshControl,
+}) => {
   return (
-    <ScrollView>
-      <View
-        bgColor="white"
-        px={7} pb={5}
-        minH={height} >
+    <ScrollView refreshControl={refreshControl}>
+      <View bgColor="white" px={7} pb={5} minH={height}>
         <KeyboardAvoidingView>
           <Stack>
             <VStack>
@@ -91,7 +85,7 @@ const ProductScreen = ({ promociones = [], productos = []}) => {
         </KeyboardAvoidingView>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
-export default ProductScreen
+export default ProductScreen;
