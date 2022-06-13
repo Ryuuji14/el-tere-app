@@ -39,10 +39,9 @@ export const OrderDetail = (props) => {
                   Dirección de envío:
                 </Text>
                 <Text fontSize={14} color="gray.500">
-                  Carrera 17 entre 39 y 40, Barquisimeto Residencuas Caracaro 3-3
+                {item.sales?.address}
                 </Text>
                 <Text fontSize={14} color="gray.500">
-                  Barquisimeto, Lara
                 </Text>
               </View>
             </>)
@@ -77,7 +76,10 @@ export const OrderDetail = (props) => {
               </HStack>
             </Stack>
 
-            <TotalAmounts />
+            <TotalAmounts 
+            total={item.sales.total_amount}
+            
+            />
             <Button
             my='4'
             size="lg"

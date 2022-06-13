@@ -1,6 +1,6 @@
 import React from "react";
-import { HStack, Icon, IconButton, Stack, Text, View } from "native-base";
-import { TouchableOpacity } from "react-native";
+import { HStack, Icon, IconButton, ScrollView, Stack, Text, View } from "native-base";
+import { TouchableOpacity, RefreshControl } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -18,6 +18,7 @@ export const SaleHistory = (props) => {
   const regex = /\d{4}-\d{2}-\d{2}/;
   
   return (
+    <ScrollView>
     <Stack>
       <Text textAlign="center" fontSize={18} color="#9393AA" mb={3}>
         Estos son tus pedidos ya {"\n"} pagados y validados validados:
@@ -77,5 +78,6 @@ export const SaleHistory = (props) => {
         </TouchableOpacity>
       ))}
     </Stack>
+    </ScrollView>
   );
 };

@@ -15,6 +15,10 @@ export const handleErrorMessage = (error) => {
         return error.response.data?.message;
       }
 
+      if (error.response.status === 400) {
+        return error.response.data?.data || error.response.data?.message;
+      }
+
       return error.response.data?.message;
     } else {
       return "Error del servidor, por favor contacte a soporte para mas informacion";

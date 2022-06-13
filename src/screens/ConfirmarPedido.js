@@ -8,6 +8,8 @@ import {
   VStack,
   Divider,
   CheckIcon,
+  FormControl,
+  WarningOutlineIcon,
 } from "native-base";
 import {
   StyleSheet,
@@ -64,8 +66,12 @@ const ConfirmarPedido = (props) => {
 
   var total = 0;
   props.cartItems.forEach(cart => {
-    return (total += cart.product.price * cart.product.quantity)
+    return (total += (cart.product.price * cart.product.quantity) ) 
   });
+var totalcd = 0;
+totalcd = total + delivery;
+const delivery =  selection ? _company.delivery_price : 0; 
+
 
   const [_company, setCompany] = useState([])
   const [selection, setSelection] = useState(false)
@@ -78,6 +84,7 @@ const ConfirmarPedido = (props) => {
         try {
           const { data } = await companyAPI.getCompanyProduct(company);
           setCompany(data || []);
+          console.log(_company)
         } catch (error) {
           showErrorToast(error);
         }
@@ -93,6 +100,10 @@ const ConfirmarPedido = (props) => {
         user_id: user.id,
         delivery_type: selection ? "delivery" : "pick_up",
         company_id: company,
+        address: selection1,
+        delivery_price: _company.delivery_price,
+        subtotal: total,
+        total_amount: total ,
         sale_products: props.cartItems.map(cart => {
           return {
             product_id: cart.product.id,
@@ -111,7 +122,10 @@ const ConfirmarPedido = (props) => {
             comercio: _company?.name,
             first_name: _company?.user?.first_name,
             last_name: _company?.user?.last_name,
-            total: total,
+            delivery_price: _company?.delivery_price,
+            cellphone: _company?.cellphone,
+            total: total + selection ? _company?.delivery_price : 0,
+            address: selection1?.value, 
           }
         }]
       });
@@ -186,7 +200,7 @@ const ConfirmarPedido = (props) => {
                       ¿Deseas Delivery?
                     </Text>
                     <Box w="3/4" maxW="50">
-                      <Select borderColor="#DB7F50" borderRadius="20" selectedValue={selection} minWidth="100" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
+                      <Select borderColor="#DB7F50" borderRadius="20" selectedValue={selection} minWidth="100" fontSize="14" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
                         bg: "#DB7F50",
                         textColor: "white",
                         endIcon: <CheckIcon size="5" />
@@ -205,17 +219,22 @@ const ConfirmarPedido = (props) => {
                     Direccion para Delivery:
                   </Text>
                   <Box w="3/4" maxW="300" >
-                    <Select borderColor="#DB7F50" borderRadius="20" selectedValue={selection1} minWidth="200" accessibilityLabel="Escoge tu direccion" placeholder="Escoge tu direccion" _selectedItem={{
-                      bg: "#DB7F50",
-                      textColor: "white",
-                      endIcon: <CheckIcon size="5" />
-                    }} mt={1} onValueChange={itemValue => setSelection1(itemValue)}>
-                      {addresses.map(address => {
-                        return (
-                          <Select.Item key={address.id} label={address.address} value={address.address} />
-                        )
-                      })}
-                    </Select>
+                    <FormControl isRequired isInvalid>
+                      <Select borderColor="#DB7F50" borderRadius="20" selectedValue={selection1} fontSize="14" minWidth="200" accessibilityLabel="Escoge tu direccion" placeholder="Escoge tu direccion" _selectedItem={{
+                        bg: "#DB7F50",
+                        textColor: "white",
+                        endIcon: <CheckIcon size="5" />
+                      }} mt={1} onValueChange={itemValue => setSelection1(itemValue)}>
+                        {addresses.map(address => {
+                          return (
+                            <Select.Item key={address.id} label={address.address} value={address.address} />
+                          )
+                        })}
+                      </Select>
+                      <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                          Por favor escoge una direccion.
+                        </FormControl.ErrorMessage>
+                    </FormControl>
                   </Box>
                 </VStack>
               )
@@ -250,7 +269,8 @@ const ConfirmarPedido = (props) => {
                   fontSize='18'
                   color='#6E6E7A'
                 >
-                  Con Delivery: $
+                  Con Delivery: ${selection ? _company.delivery_price : 0}
+
                 </Text>
                 <Divider
 
@@ -267,7 +287,7 @@ const ConfirmarPedido = (props) => {
                   fontSize='18'
                   color='#6E6E7A'
                 >
-                  TOTAL a pagar: ${total}
+                  TOTAL a pagar: ${total }
                 </Text>
                 <Button
                   mt="2"

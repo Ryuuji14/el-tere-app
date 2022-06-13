@@ -27,12 +27,11 @@ import Comment from "../components/screens/Comment";
 import { useFocusEffect } from "@react-navigation/native";
 import { productsAPI } from "../api/productsAPI";
 import useCustomToast from "../hooks/useCustomToast";
-import { reviewAPI } from '../api/reviewAPI';
-import { SafeAreaView } from 'react-native';
+import { reviewAPI } from "../api/reviewAPI";
+import { SafeAreaView } from "react-native";
 import { companyAPI } from "../api/companyAPI";
 import useLoading from "../hooks/useLoading";
 import { Stop } from "react-native-svg";
-
 
 const { width, height } = Dimensions.get("window");
 
@@ -55,7 +54,6 @@ const Comercio = ({ route, cartItems }) => {
   const [comments, setComments] = useState([]);
   const regex = /(\d{4}-\d{2}-\d{2})/;
 
-
   const getProducts = async () => {
     startLoading();
     try {
@@ -74,33 +72,29 @@ const Comercio = ({ route, cartItems }) => {
       setComments(data || []);
     } catch (error) {
       showErrorToast(error);
-      console.log(error);
     }
     stopLoading();
-  }
+  };
+
+  const getPromotions = async () => {
+    try {
+      const { data } = await companyAPI.getCompanyPromotions(market?.id);
+      setPromotions(data || []);
+    } catch (error) {
+      showErrorToast(error);
+    }
+  };
 
   useFocusEffect(
     useCallback(() => {
-      const getPromotions = async () => {
-        try {
-          const { data } = await companyAPI.getCompanyPromotions(market?.id);
-          setPromotions(data || []);
-        } catch (error) {
-          showErrorToast(error);
-        }
-      }
       getPromotions();
       getProducts();
       getComments();
-    }
-      , [])
+    }, [])
   );
 
   return (
-    <View
-      minH={height}
-      width={width}
-    >
+    <View minH={height} width={width}>
       <View>
         <Image
           width="100%"
@@ -144,16 +138,16 @@ const Comercio = ({ route, cartItems }) => {
 
             <Icon as={Entypo} name="clock" ml="2" color="gray.500" />
             <Text fontSize="11">
-              {market.horaApertura.split("", 5)} am - {market.horaCierre.split("", 5)} pm
+              {market.horaApertura.split("", 5)} am -{" "}
+              {market.horaCierre.split("", 5)} pm
             </Text>
 
             {market?.delivery && (
-              <>
+              <HStack alignItems="center" space={1}>
                 <Icon as={MaterialCommunityIcons} size="6" name="motorbike" />
                 <Text fontSize="11">delivery</Text>
-              </>
-            )
-            }
+              </HStack>
+            )}
           </HStack>
         </Stack>
       </View>
@@ -214,17 +208,29 @@ const Comercio = ({ route, cartItems }) => {
         disableSwipe
       >
         <TabView.Item style={{ backgroundColor: "white" }}>
-          <ProductScreen promociones={promotions.promotions} productos={products}
+          <ProductScreen
+            promociones={promotions.promotions}
+            productos={products}
             refreshControl={
-              <RefreshControl refreshing={isLoading} onRefresh={getProducts} />
-            } />
+              <RefreshControl
+                refreshing={isLoading}
+                onRefresh={async () => {
+                  await Promise.all([getProducts(), getPromotions()]);
+                }}
+              />
+            }
+          />
         </TabView.Item>
         <TabView.Item
           style={{ backgroundColor: "white", width: "100%", height: "100%" }}
         >
           <SafeAreaView style={styles.container}>
             <FlatList
-              contentContainerStyle={{ width: "100%", paddingBottom: "50%", display: "flex" }}
+              contentContainerStyle={{
+                width: "100%",
+                paddingBottom: "50%",
+                display: "flex",
+              }}
               data={comments || []}
               renderItem={({ item: comment, index }) => (
                 <Comment
@@ -237,9 +243,21 @@ const Comercio = ({ route, cartItems }) => {
                 />
               )}
               keyExtractor={(comment) => comment?.id}
-              ListEmptyComponent={() => (<Text fontSize="16" alignContent="center" alignSelf='center' textAlign='center'>No hay comentarios {'\n'}en este comercio</Text>)}
+              ListEmptyComponent={() => (
+                <Text
+                  fontSize="16"
+                  alignContent="center"
+                  alignSelf="center"
+                  textAlign="center"
+                >
+                  No hay comentarios {"\n"}en este comercio
+                </Text>
+              )}
               refreshControl={
-                <RefreshControl refreshing={isLoading} onRefresh={getComments} />
+                <RefreshControl
+                  refreshing={isLoading}
+                  onRefresh={getComments}
+                />
               }
             />
           </SafeAreaView>
@@ -260,8 +278,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#9393AA",
   },
-  container: {
-  },
+  container: {},
 });
 
 const mapStateToProps = (state) => {

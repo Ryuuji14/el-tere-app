@@ -22,7 +22,10 @@ const RealizaPago = (props) => {
     comercio: props.route.params.comercio,
     nombre: props.route.params.first_name,
     apellido: props.route.params.last_name,
-    total: props.route.params.total
+    total: props.route.params.total,
+    address: props.route.params.address,
+    cellphone: props.route.params.cellphone,
+
   }
   const Navigation = useNavigation();
 
@@ -61,8 +64,8 @@ const RealizaPago = (props) => {
               <Text
                 color="#6E6E7A"
                 fontSize="18"
-                bold
-              >Telefono de Contacto:
+                
+              > <Text bold> Telefono de Contacto:</Text> {item.cellphone}
               </Text>
               <Text
                 color="#6E6E7A"
@@ -119,10 +122,7 @@ const RealizaPago = (props) => {
                   width="40%"
                   bgColor="#DB7F50"
                   borderRadius="20"
-                  onPress={() => Navigation.reset({
-                    index: 0,
-                    routes: [{ name: "Perfil" }],
-                  })}
+                  onPress={() => Navigation.navigate("Perfil")}
                 >
                   <Text color="white" fontSize="16" >PERFIL</Text>
                 </Button>

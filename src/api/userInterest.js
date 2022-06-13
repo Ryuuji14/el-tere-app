@@ -1,10 +1,10 @@
 import { http } from "./http";
 
-const BASE_URL = "interest/user";
+const BASE_URL = "userInterest";
 
 export const userInterestAPI = {
   getUserInterest: async (userId) => {
-    const { data } = await http.get(`${BASE_URL}/${userId}`);
+    const { data } = await http.get(`userInterest/${userId}`);
     return data;
   },
   updateUserInterestStatus: async (interestId, newStatus) => {

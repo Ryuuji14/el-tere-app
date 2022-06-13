@@ -53,9 +53,10 @@ const LoginForm = ({ navigation }) => {
         dispatch({
           type: "LOGIN",
           payload: {
+            token,
             user: {
               email: values.email,
-              id: values.id,
+              id: data?.data?.id,
             },
           },
         });
@@ -63,8 +64,7 @@ const LoginForm = ({ navigation }) => {
 
       reset(loginDefaultValues);
     } catch (error) {
-      console.log(error?.response?.data);
-      showErrorToast("Error al registrar");
+      showErrorToast(error);
     }
     stopLoading();
   };
@@ -75,14 +75,21 @@ const LoginForm = ({ navigation }) => {
         <Controller
           name="email"
           control={control}
-          render={({ field: { onChange, ...field } }) => (
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
             <Input
               {...field}
               onChangeText={onChange}
               placeholder="Correo Electrónico"
               {...INPUT_PROPS}
               InputLeftElement={
-                <Icon as={MaterialIcons} name="email" {...ICONS_PROPS} />
+                <Icon
+                  as={MaterialIcons}
+                  name="email"
+                  {...ICONS_PROPS(Boolean(error?.message))}
+                />
               }
             />
           )}
@@ -91,7 +98,10 @@ const LoginForm = ({ navigation }) => {
         <Controller
           name="password"
           control={control}
-          render={({ field: { onChange, ...field } }) => (
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
             <Input
               {...field}
               secureTextEntry
@@ -99,7 +109,11 @@ const LoginForm = ({ navigation }) => {
               placeholder="Contraseña"
               {...INPUT_PROPS}
               InputLeftElement={
-                <Icon as={MaterialIcons} name="lock" {...ICONS_PROPS} />
+                <Icon
+                  as={MaterialIcons}
+                  name="lock"
+                  {...ICONS_PROPS(Boolean(error?.message))}
+                />
               }
             />
           )}
