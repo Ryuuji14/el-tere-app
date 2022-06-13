@@ -31,8 +31,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { OrderFinished } from "../screens/OrderFinished";
 import { DetalleProductosFinalizados } from "../screens/DetalleProductosFinalizados";
 
-
-
 const Stack = createNativeStackNavigator();
 
 const stackRoutes = [
@@ -148,6 +146,12 @@ const stackRoutes = [
   {
     name: "ProductosFinalizados",
     component: DetalleProductosFinalizados,
+    requireAuth: true,
+    showHeader: true,
+  },
+  {
+    name: "FilterRubros",
+    component: FilterRubros,
     requireAuth: true,
     showHeader: true,
   },

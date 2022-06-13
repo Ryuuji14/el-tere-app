@@ -139,6 +139,28 @@ const Dashboard = ({ navigation }) => {
     init();
   }, []);
 
+  const filtertedAreas = useMemo(() => {
+    if (searchBy && areas.length > 0) {
+      if (selectedCategory?.id !== -1) {
+        return areas.filter((area) =>
+          area?.name?.toLowerCase()?.includes(searchBy.toLowerCase())
+        );
+      }
+
+      return areas.map((el) => ({
+        ...el,
+        area: {
+          ...el.area,
+          companies: el?.area?.companies?.filter((area) =>
+            area?.name?.toLowerCase()?.includes(searchBy.toLowerCase())
+          ),
+        },
+      }));
+    }
+
+    return areas;
+  }, [areas, searchBy]);
+
   return (
     <ScrollView
       bgColor="white"
@@ -250,7 +272,7 @@ const Dashboard = ({ navigation }) => {
             Comercios
           </Text>
           {selectedCategory?.id === -1 &&
-            areas.map(({ area }, index) => (
+            filtertedAreas.map(({ area }, index) => (
               <Fragment key={index.toString()}>
                 <HStack alignItems="center" justifyContent="space-between">
                   <Text color="#41634A" pt={2} pb={1} bold>
@@ -293,7 +315,7 @@ const Dashboard = ({ navigation }) => {
               </HStack>
               <FlatList
                 horizontal
-                data={areas || []}
+                data={filtertedAreas || []}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                   <ComercioCard
