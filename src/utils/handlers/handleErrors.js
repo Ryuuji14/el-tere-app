@@ -16,7 +16,7 @@ export const handleErrorMessage = (error) => {
       }
 
       if (error.response.status === 400) {
-        return error.response.data || error.response.data?.message;
+        return error.response.data?.data || error.response.data?.message;
       }
 
       return error.response.data?.message;
