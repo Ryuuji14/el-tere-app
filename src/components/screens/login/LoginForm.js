@@ -65,7 +65,7 @@ const LoginForm = ({ navigation }) => {
 
       reset(loginDefaultValues);
     } catch (error) {
-      showErrorToast("Error al registrar");
+      showErrorToast(error);
     }
     stopLoading();
   };
