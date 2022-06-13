@@ -1,7 +1,6 @@
-import { Button, Heading, HStack, ScrollView, Stack, Text, View, Divider, Pressable, Avatar, Box, VStack } from "native-base";
-import { SwipeListView } from "react-native-swipe-list-view";
+import { Button, Heading, HStack, ScrollView, Stack, Text, View, VStack } from "native-base";
 import React, { useEffect, useState } from "react";
-import { ImageBackground, Dimensions, StyleSheet } from "react-native";
+import { ImageBackground, Dimensions, StyleSheet, RefreshControl } from "react-native";
 import useLoading from "../hooks/useLoading";
 import useAuthContext from "../hooks/useAuthContext";
 import useCustomToast from "../hooks/useCustomToast";
@@ -51,16 +50,22 @@ const Notifications = () => {
         <Heading color="white" fontSize={36} fontWeight="bold" >
           Tus {'\n'} Notificaciones
         </Heading>
-        <View width="100%" height="100%" bgColor='white' borderRadius={10}  alignItems='center'  >
-          <VStack space={2} py={2} bgcolor="black" >
-            {notifications.items?.map(notification => (
-              <NotificationCard
-                key={notification.id}
-                id={notification.id}
-                message={notification.message}
-                title={notification.title}
+        <View width="100%" height="100%" bgColor='white' borderRadius={10} alignItems='center'  >
+          <VStack space={2} py={2} bgcolor="black" ml="4">
+            <ScrollView refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={getNotifications}
               />
-            ))}
+            }
+            >
+              {notifications.items?.map(notification => (
+                <NotificationCard
+                  key={notification.id}
+                  id={notification.id}
+                  message={notification.message}
+                  title={notification.title}
+                />
+              ))}
+            </ScrollView>
           </VStack>
         </View>
 

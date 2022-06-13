@@ -100,6 +100,7 @@ export const EditPerfilForm = ({ navigation }) => {
           if (interests?.data) {
             setInterests(interests?.data);
           }
+          console.log(interests)
         } catch (error) {
           showErrorToast(error);
         }

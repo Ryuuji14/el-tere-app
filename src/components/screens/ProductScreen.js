@@ -37,7 +37,7 @@ const promociones = require("../../../assets/promociones.json");
 
 const ProductScreen = ({ promociones = [], productos = []}) => {
   return (
-    <ScrollView>
+    <ScrollView width="100%">
       <View
         bgColor="white"
         px={7} pb={5}

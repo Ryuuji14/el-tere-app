@@ -30,6 +30,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { OrderFinished } from "../screens/OrderFinished";
 import { DetalleProductosFinalizados } from "../screens/DetalleProductosFinalizados";
+import Notifications from "../screens/Notifications";
 
 
 
@@ -151,6 +152,12 @@ const stackRoutes = [
     requireAuth: true,
     showHeader: true,
   },
+ {
+   name: "Notifications",
+   component: Notifications,
+    requireAuth: true,
+    showHeader: true,
+ },
 ];
 
 const HOC = (Component) => {

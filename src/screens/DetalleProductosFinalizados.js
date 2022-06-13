@@ -19,11 +19,8 @@ export const DetalleProductosFinalizados = (props) => {
   const getProductos = async () => {
     try {
       startLoading();
-      const productosResponse = await Promise.all(
-        item.idProductos.map((id) => productsAPI.getProductsById(id))
-      );
-      setProductos(productosResponse.map((producto) => producto.data));
-
+      const productosResponse = await productsAPI.getProducts(item.sales.company.id);
+      setProductos(productosResponse);
 
     } catch (error) {
       console.log(error)
@@ -31,9 +28,15 @@ export const DetalleProductosFinalizados = (props) => {
     stopLoading();
   }
   useEffect(() => {
-    console.log(item)
+    
+    console.log("Productos",productos, "idProductos", item.idProductos,"Filtrados", allProducts)
     getProductos();
   }, [])
+
+  let allProducts = productos.data?.filter((producto) => {
+     return item.idProductos.find((id) => id === producto.id)
+  }
+  )
 
   return (
     <>
@@ -45,8 +48,8 @@ export const DetalleProductosFinalizados = (props) => {
           Pedido nro: {'\n'} {item?.sales?.id}
         </Heading>
         <View py={3} px={3} bgColor='white' borderRadius={10}>
-          {productos.map((data,index) => (
-            <Pressable h="20" bgColor="white" >
+          {allProducts?.map((data, index) => (
+            <Pressable h="20" bgColor="white" key={index.toString()} >
               <HStack>
                 <Avatar
                   size="lg"
@@ -66,8 +69,7 @@ export const DetalleProductosFinalizados = (props) => {
                 </Text>
               </HStack>
             </Pressable>
-         
-            ))}
+          ))}
         </View>
       </ImageBackground>
     </>

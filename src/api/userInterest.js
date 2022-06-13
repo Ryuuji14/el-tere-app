@@ -4,7 +4,7 @@ const BASE_URL = "interest/user";
 
 export const userInterestAPI = {
   getUserInterest: async (userId) => {
-    const { data } = await http.get(`${BASE_URL}/${userId}`);
+    const { data } = await http.get(`userInterest/${userId}`);
     return data;
   },
   updateUserInterestStatus: async (interestId, newStatus) => {

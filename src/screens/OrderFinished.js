@@ -6,6 +6,7 @@ import ModalReviews from "../components/screens/rating/ModalReviews";
 import { useNavigation } from "@react-navigation/native";
 import useLoading from "../hooks/useLoading";
 import { saleAPI } from "../api/salesAPI";
+import { companyAPI } from "../api/companyAPI";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -18,13 +19,25 @@ export const OrderFinished = (props) => {
   const Navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
   const [pedidos, setPedidos] = useState([]);
+  const [company, setCompany] = useState({});
 
   const getPedidos = async () => {
     try {
       startLoading();
       const { data } = await saleAPI.getSaleProductBySaleId(item.sales.id);
       setPedidos(data || []);
-      console.log(pedidos)
+    } catch (error) {
+      console.log(error)
+    }
+    stopLoading();
+  }
+
+  const getDeliveryPrice = async () => {
+    try {
+      startLoading();
+      const { data } = await companyAPI.getCompanyProduct(item.sales.company.id);
+      console.log("delivery price",data)
+      setCompany(data);
     } catch (error) {
       console.log(error)
     }
@@ -32,9 +45,12 @@ export const OrderFinished = (props) => {
   }
   useEffect(() => {
     getPedidos();
+    getDeliveryPrice();
   }, [])
-  const idPedidos = pedidos.map((pedido) => pedido.id);
+  const idPedidos = pedidos.map((pedido) => pedido.product_id);
   const quantitys = pedidos.map((pedido) => pedido.quantity);
+  const delivery = item.sales.delivery_type ? company.delivery_price : 0;
+  const subTotal = item.sales.total_amount - delivery;
   return (
     <>
       <ImageBackground
@@ -61,10 +77,7 @@ export const OrderFinished = (props) => {
                   Dirección de envío:
                 </Text>
                 <Text fontSize={14} color="gray.500">
-                  Carrera 17 entre 39 y 40, Barquisimeto Residencuas Caracaro 3-3
-                </Text>
-                <Text fontSize={14} color="gray.500">
-                  Barquisimeto, Lara
+                  {item?.sales?.address}
                 </Text>
               </View>
             </>)
@@ -106,7 +119,11 @@ export const OrderFinished = (props) => {
               </HStack>
             </Stack>
 
-            <TotalAmounts />
+            <TotalAmounts 
+            total={item.sales.total_amount} 
+            delivery={ delivery }
+            subTotal={subTotal}
+            />
             <ModalReviews
               showModal={showModal}
               setShowModal={setShowModal}

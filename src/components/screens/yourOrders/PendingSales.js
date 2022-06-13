@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity , RefreshControl} from "react-native";
 import { HStack, Icon, IconButton, ScrollView, Stack, Text, View } from "native-base";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { saleAPI } from "../../../api/salesAPI";
@@ -46,7 +46,9 @@ const Navigation = useNavigation();
   const regex = /\d{4}-\d{2}-\d{2}/;
 
   return (
-<ScrollView >
+<ScrollView  refreshControl={
+      <RefreshControl refreshing={isLoading} onRefresh={getProducts} />
+    }>
     <Stack>
       <Text textAlign="center" fontSize={18} color="#9393AA" mb={3}>
         Estos son tus pedidos {"\n"} pendientes por pagar para ser {"\n"}{" "}

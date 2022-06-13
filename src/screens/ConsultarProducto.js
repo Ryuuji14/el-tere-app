@@ -76,9 +76,9 @@ const SingleProduct = ({
             }}
           />
 
-          <View height="50%" mt="2">
+          <View height="60%" >
             {productInCart && (
-              <HStack h="10" space={4} mt="20" ml="8">
+              <HStack h="10" space={4} mt="14" ml="8">
                 <IconButton
                   icon={<Icon as={Entypo} name="minus" color="white" />}
                   bgColor="#DB7F50"
