@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import useCustomToast from "../hooks/useCustomToast";
 import { categoryAPI } from "../api/categoyAPI";
 import useAuthContext from "../hooks/useAuthContext";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const FilterRubros = ({ navigation }) => {
   const {

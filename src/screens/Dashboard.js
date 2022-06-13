@@ -20,6 +20,7 @@ import { Dimensions, TouchableOpacity , RefreshControl} from "react-native";
 import Logo from "../../assets/LOGO-EL-TERE.png";
 import {
   FontAwesome,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import ComercioCard from "../components/screens/ComercioCard";
 import PromocionCard from "../components/screens/PromocionCard";
