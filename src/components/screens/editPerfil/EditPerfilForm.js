@@ -93,12 +93,14 @@ export const EditPerfilForm = ({ navigation }) => {
             setValue("gender", gender.toUpperCase());
           }
 
+          console.log(userInterest, user.id);
+
           if (userInterest?.data) {
             setUserInterests(userInterest?.data);
           }
 
-          if (interests?.data) {
-            setInterests(interests?.data);
+          if (interests?.data?.items) {
+            setInterests(interests?.data?.items);
           }
           console.log(interests)
         } catch (error) {
@@ -130,14 +132,13 @@ export const EditPerfilForm = ({ navigation }) => {
 
   const isInterestSelected = (interestId) => {
     return userInterests.some(
-      (interest) =>
-        interest.interest_id === interestId && interest.active === true
+      (interest) => interest.id === interestId && interest.active === true
     );
   };
 
   const selectInterest = async (interestId) => {
     const findInterestIndex = userInterests.findIndex(
-      (int) => int.interest_id === interestId
+      (int) => int.id === interestId
     );
     if (findInterestIndex > -1) {
       try {
@@ -150,9 +151,7 @@ export const EditPerfilForm = ({ navigation }) => {
 
         setUserInterests((prevState) =>
           prevState.map((int) =>
-            int?.interest_id === interestId
-              ? { ...int, active: !int.active }
-              : int
+            int?.id === interestId ? { ...int, active: !int.active } : int
           )
         );
       } catch (error) {
@@ -167,7 +166,7 @@ export const EditPerfilForm = ({ navigation }) => {
         const newUserInterests = [...userInterests, data];
         setUserInterests(newUserInterests);
       } catch (error) {
-        console.log("post error");
+        console.log(error?.response?.data);
         showErrorToast(error);
       }
     }

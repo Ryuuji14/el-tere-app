@@ -18,10 +18,7 @@ import {
 } from "native-base";
 import { Dimensions, TouchableOpacity, RefreshControl } from "react-native";
 import Logo from "../../assets/LOGO-EL-TERE.png";
-import {
-  FontAwesome,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import ComercioCard from "../components/screens/ComercioCard";
 import PromocionCard from "../components/screens/PromocionCard";
 import { dashboardAPI } from "../api/dashboard";
@@ -116,7 +113,6 @@ const Dashboard = ({ navigation }) => {
     stopLoading();
   };
 
-
   const getAreasWithProducts = async () => {
     startLoading();
     try {
@@ -135,17 +131,42 @@ const Dashboard = ({ navigation }) => {
     stopLoading();
   };
 
+  const init = async () => {
+    await Promise.all([getPromotions(), getAreasWithProducts()]);
+  };
+
   useEffect(() => {
-    getPromotions();
-    getAreasWithProducts();
+    init();
   }, []);
 
+  const filtertedAreas = useMemo(() => {
+    if (searchBy && areas.length > 0) {
+      if (selectedCategory?.id !== -1) {
+        return areas.filter((area) =>
+          area?.name?.toLowerCase()?.includes(searchBy.toLowerCase())
+        );
+      }
+
+      return areas.map((el) => ({
+        ...el,
+        area: {
+          ...el.area,
+          companies: el?.area?.companies?.filter((area) =>
+            area?.name?.toLowerCase()?.includes(searchBy.toLowerCase())
+          ),
+        },
+      }));
+    }
+
+    return areas;
+  }, [areas, searchBy]);
 
   return (
-    <ScrollView bgColor="white" refreshControl={
-      <RefreshControl refreshing={isLoading} onRefresh={getAreasWithProducts || getPromotions} />
-    }
-      showsVerticalScrollIndicator={false}
+    <ScrollView
+      bgColor="white"
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={init} />
+      }
     >
       <View bgColor="white" px={7} pb={5}>
         <Stack>
@@ -251,7 +272,7 @@ const Dashboard = ({ navigation }) => {
             Comercios
           </Text>
           {selectedCategory?.id === -1 &&
-            areas.map(({ area }, index) => (
+            filtertedAreas.map(({ area }, index) => (
               <Fragment key={index.toString()}>
                 <HStack alignItems="center" justifyContent="space-between">
                   <Text color="#41634A" pt={2} pb={1} bold>
@@ -294,7 +315,7 @@ const Dashboard = ({ navigation }) => {
               </HStack>
               <FlatList
                 horizontal
-                data={areas || []}
+                data={filtertedAreas || []}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                   <ComercioCard

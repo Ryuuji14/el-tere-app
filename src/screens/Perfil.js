@@ -80,7 +80,8 @@ const Perfil = ({ navigation }) => {
           salesIds.slice(0, 2).map((id) => saleAPI.getSaleProductBySaleId(id))
         );
 
-        setPedidos(pedidosResponses.map((response) => response.data));        
+        setPedidos(pedidosResponses.map((response) => response.data));
+        
       }
     } catch (error) {
       showErrorToast(error);

@@ -31,8 +31,10 @@ import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
 import { addressAPI } from "../../../api/addressAPI";
-import { ICONS_PROPS } from "../../../themes/iconStyles"
-import { INPUT_PROPS } from "../../../themes/inputStyles"
+import { ICONS_PROPS } from "../../../themes/iconStyles";
+import { INPUT_PROPS } from "../../../themes/inputStyles";
+import { useEffect } from "react";
+import { interestAPI } from "../../../api/interestAPI";
 
 const RegisterForm = () => {
   const { showErrorToast, showSuccesToast } = useCustomToast();
@@ -52,6 +54,21 @@ const RegisterForm = () => {
   });
 
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [interestsToSelect, setInterestsToSelect] = useState([]);
+
+  useEffect(() => {
+    const getInterests = async () => {
+      try {
+        const { data } = await interestAPI.getInterest();
+
+        setInterestsToSelect(data?.items || []);
+      } catch (error) {
+        showErrorToast(error);
+      }
+    };
+
+    getInterests();
+  }, []);
 
   const onChange = (_, selectedDate) => {
     setShowDatePicker(false);
@@ -72,10 +89,9 @@ const RegisterForm = () => {
       showSuccesToast("Registro exitoso");
       reset(registerDefaultValues);
       setValue("acceptTermsAndConditions", false);
-      setValue("interests", []);
+      setValue("userInterests", []);
     } catch (error) {
-      console.log(error?.response?.data);
-      showErrorToast("Error al registrar");
+      showErrorToast(error);
     }
     stopLoading();
   };
@@ -376,24 +392,24 @@ const RegisterForm = () => {
       </Text>
 
       <Controller
-        name="interests"
+        name="userInterests"
         control={control}
         render={({ field: { value, onChange, onBlur } }) => (
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={["Deportes", "Salud y Bienestar", "Viajes", "Parrilladas"]}
-            keyExtractor={(item) => item}
+            data={interestsToSelect}
+            keyExtractor={(item) => item.id}
             ItemSeparatorComponent={() => <View w={2} />}
             renderItem={({ item }) => (
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => {
                   const newValue = [...value];
-                  if (newValue.includes(item)) {
-                    newValue.splice(newValue.indexOf(item), 1);
+                  if (newValue.includes(item.id)) {
+                    newValue.splice(newValue.indexOf(item.id), 1);
                   } else {
-                    newValue.push(item);
+                    newValue.push(item.id);
                   }
                   onChange(newValue);
                   onBlur();
@@ -405,11 +421,13 @@ const RegisterForm = () => {
                     borderRadius: 30,
                     borderWidth: 1,
                     borderColor: "#F96332",
-                    backgroundColor: value.includes(item) ? "#F96332" : "#fff",
+                    backgroundColor: value.includes(item.id)
+                      ? "#F96332"
+                      : "#fff",
                   }}
                 >
-                  <Text color={value.includes(item) ? "#fff" : "#9393AA"}>
-                    {item}
+                  <Text color={value.includes(item.id) ? "#fff" : "#9393AA"}>
+                    {item.name}
                   </Text>
                 </Badge>
               </TouchableOpacity>

@@ -1,4 +1,4 @@
-import { object, string } from "yup";
+import { object, string, ref } from "yup";
 
 export const passwordSchema = object({
   password: string().required("requerido"),

@@ -32,8 +32,6 @@ import { OrderFinished } from "../screens/OrderFinished";
 import { DetalleProductosFinalizados } from "../screens/DetalleProductosFinalizados";
 import Notifications from "../screens/Notifications";
 
-
-
 const Stack = createNativeStackNavigator();
 
 const stackRoutes = [
@@ -152,12 +150,12 @@ const stackRoutes = [
     requireAuth: true,
     showHeader: true,
   },
- {
-   name: "Notifications",
-   component: Notifications,
+  {
+    name: "FilterRubros",
+    component: FilterRubros,
     requireAuth: true,
     showHeader: true,
- },
+  },
 ];
 
 const HOC = (Component) => {

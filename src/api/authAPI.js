@@ -12,6 +12,7 @@ export const authAPI = {
       cellphone,
       birthday,
       gender,
+      userInterests,
     } = form;
 
     const [year, month, day] = new Date(birthday)
@@ -27,6 +28,7 @@ export const authAPI = {
       email,
       gender,
       birthday: `${month}/${day}/${year}`,
+      userInterests,
     });
     return data;
   },
