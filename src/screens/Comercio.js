@@ -72,7 +72,6 @@ const Comercio = ({ route, cartItems }) => {
       setComments(data || []);
     } catch (error) {
       showErrorToast(error);
-      console.log(error);
     }
     stopLoading();
   };
@@ -144,10 +143,10 @@ const Comercio = ({ route, cartItems }) => {
             </Text>
 
             {market?.delivery && (
-              <>
+              <HStack alignItems="center" space={1}>
                 <Icon as={MaterialCommunityIcons} size="6" name="motorbike" />
                 <Text fontSize="11">delivery</Text>
-              </>
+              </HStack>
             )}
           </HStack>
         </Stack>

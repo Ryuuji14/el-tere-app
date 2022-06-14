@@ -49,6 +49,8 @@ const LoginForm = ({ navigation }) => {
 
       const token = data?.data?.token;
 
+      console.log(data);
+
       if (token) {
         await AsyncStorage.setItem("@token", token);
         dispatch({
@@ -76,14 +78,21 @@ const LoginForm = ({ navigation }) => {
         <Controller
           name="email"
           control={control}
-          render={({ field: { onChange, ...field } }) => (
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
             <Input
               {...field}
               onChangeText={onChange}
               placeholder="Correo Electrónico"
               {...INPUT_PROPS}
               InputLeftElement={
-                <Icon as={MaterialIcons} name="email" {...ICONS_PROPS} />
+                <Icon
+                  as={MaterialIcons}
+                  name="email"
+                  {...ICONS_PROPS(Boolean(error?.message))}
+                />
               }
             />
           )}
@@ -92,7 +101,10 @@ const LoginForm = ({ navigation }) => {
         <Controller
           name="password"
           control={control}
-          render={({ field: { onChange, ...field } }) => (
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
             <Input
               {...field}
               secureTextEntry
@@ -100,7 +112,11 @@ const LoginForm = ({ navigation }) => {
               placeholder="Contraseña"
               {...INPUT_PROPS}
               InputLeftElement={
-                <Icon as={MaterialIcons} name="lock" {...ICONS_PROPS} />
+                <Icon
+                  as={MaterialIcons}
+                  name="lock"
+                  {...ICONS_PROPS(Boolean(error?.message))}
+                />
               }
             />
           )}

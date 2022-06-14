@@ -1,6 +1,5 @@
 import React, { useRef, useMemo, useState, useEffect, Fragment } from "react";
 import {
-  Badge,
   Button,
   KeyboardAvoidingView,
   Stack,
@@ -16,7 +15,7 @@ import {
   ScrollView,
   IconButton,
 } from "native-base";
-import { Dimensions, TouchableOpacity, RefreshControl } from "react-native";
+import { TouchableOpacity, RefreshControl } from "react-native";
 import Logo from "../../assets/LOGO-EL-TERE.png";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import ComercioCard from "../components/screens/ComercioCard";
@@ -27,8 +26,6 @@ import { companyAPI } from "../api/companyAPI";
 import useLoading from "../hooks/useLoading";
 import useCustomToast from "../hooks/useCustomToast";
 import useAuthContext from "../hooks/useAuthContext";
-
-var { height } = Dimensions.get("window");
 
 const ICONS_PROPS = {
   size: 5,
@@ -65,7 +62,7 @@ const categorias = [
 
 const Dashboard = ({ navigation }) => {
   const {
-    state: { selectedCategory },
+    state: { selectedCategory, user },
   } = useAuthContext();
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("");
@@ -117,8 +114,30 @@ const Dashboard = ({ navigation }) => {
     startLoading();
     try {
       if (selectedCategory?.id === -1) {
-        const { data } = await companyAPI.getAreasWithProducts();
-        setAreas(data || []);
+        switch (categoriaSeleccionada) {
+          case 0:
+            const { data } = await companyAPI.getAreasWithProducts();
+            setAreas(data);
+            break;
+          case 1:
+            const { data: data1 } =
+              await companyAPI.getAreasWithPopularProducts();
+            setAreas(data1);
+            break;
+          case 2:
+            const { data: data2 } = await companyAPI.getAreasWithRecentProducts(
+              user?.id
+            );
+            setAreas(data2);
+            break;
+          case 3:
+            const { data: data3 } =
+              await companyAPI.getAreasWithRecommendedProducts();
+            setAreas(data3);
+            break;
+          default:
+            break;
+        }
       } else {
         const { data } = await companyAPI.getCompaniesByCategory(
           selectedCategory.id
@@ -137,7 +156,7 @@ const Dashboard = ({ navigation }) => {
 
   useEffect(() => {
     init();
-  }, []);
+  }, [categoriaSeleccionada]);
 
   const filtertedAreas = useMemo(() => {
     if (searchBy && areas.length > 0) {
@@ -278,9 +297,9 @@ const Dashboard = ({ navigation }) => {
                   <Text color="#41634A" pt={2} pb={1} bold>
                     {area?.name}
                   </Text>
-                  <TouchableOpacity>
+                  {/* <TouchableOpacity>
                     <Text color="#41634A">Ver todos</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </HStack>
                 <FlatList
                   horizontal
@@ -309,9 +328,9 @@ const Dashboard = ({ navigation }) => {
                 <Text color="#41634A" pt={2} pb={1} bold>
                   {selectedCategory?.name}
                 </Text>
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <Text color="#41634A">Ver todos</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </HStack>
               <FlatList
                 horizontal
