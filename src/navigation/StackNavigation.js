@@ -104,6 +104,7 @@ const stackRoutes = [
     name: "YourDirections",
     component: YourDirections,
     requireAuth: true,
+    showHeader: true,
   },
   {
     name: "OrderDetail",
@@ -225,38 +226,6 @@ const StackNavigation = () => {
                       />
                     }
                   />
-                ),
-                headerRight: () => (
-                  <HStack>
-                    <IconButton
-                      _pressed={{
-                        backgroundColor: "#fff2",
-                      }}
-                      onPress={() => navigation.navigate("Notifications")}
-                      icon={
-                        <Icon
-                          as={MaterialCommunityIcons}
-                          name="bell"
-                          color="#fff"
-                          size="xl"
-                        />
-                      }
-                    />
-                    <IconButton
-                      _pressed={{
-                        backgroundColor: "#fff2",
-                      }}
-                      onPress={() => navigation.navigate("Cart")}
-                      icon={
-                        <Icon
-                          as={MaterialIcons}
-                          name="shopping-cart"
-                          color="#fff"
-                          size="xl"
-                        />
-                      }
-                    />
-                  </HStack>
                 ),
               }))
             }

@@ -83,7 +83,7 @@ const ComercioCard = (props) => {
               </Text>
             </Box>
             <Box px="2" pb="2" >
-              <HStack alignItems="center" space={1}>
+              <HStack alignItems="center" space={0}>
                 <Icon as={FontAwesome} name="star" color="yellow.500" />
                 <Text>{Number(props.rating).toFixed(0)}</Text>
               </HStack>

@@ -21,7 +21,7 @@ export const SaleHistory = (props) => {
     <ScrollView>
     <Stack>
       <Text textAlign="center" fontSize={18} color="#9393AA" mb={3}>
-        Estos son tus pedidos ya {"\n"} pagados y validados validados:
+        Estos son tus pedidos ya {"\n"} pagados y validados:
       </Text>
       {item.sales.map((sale, index) => (
         <TouchableOpacity 
