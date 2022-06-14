@@ -93,7 +93,7 @@ const NewReviewModal = ({ navigation, showModal, setShowModal }) => {
                 reviewColor="#9393AA"
                 reviewSize={16}
                 count={5}
-                reviews={['No me gustó', 'Estuvo regular', 'Me gustó', 'Me encantó', 'Me encantó y lo recomendaria']}
+                reviews={['No me gustó', 'Estuvo regular', 'Me gustó', 'Me encantó', 'Me encantó y lo recomendaría']}
                 showRating
                 size={30}
                 defaultRating={value}

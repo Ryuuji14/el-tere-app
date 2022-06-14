@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity , RefreshControl} from "react-native";
 import { HStack, Icon, IconButton, ScrollView, Stack, Text, View } from "native-base";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { saleAPI } from "../../../api/salesAPI";
 import useCustomToast from "../../../hooks/useCustomToast";
 ;
@@ -97,13 +97,13 @@ const Navigation = useNavigation();
                 <IconButton
                   icon={
                     <Icon
-                      as={MaterialCommunityIcons}
-                      name="message-reply"
+                      as={FontAwesome}
+                      name="warning"
                       color="white"
                       size="2xl"
                     />
                   }
-                  bgColor="#DB7F50"
+                  bgColor="#41634A"
                   rounded="full"
                 />
               </Stack>

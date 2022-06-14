@@ -25,7 +25,6 @@ const RealizaPago = (props) => {
     total: props.route.params.total,
     address: props.route.params.address,
     cellphone: props.route.params.cellphone,
-
   }
   const Navigation = useNavigation();
 

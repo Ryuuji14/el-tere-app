@@ -70,13 +70,14 @@ const ConfirmarPedido = (props) => {
   });
 var totalcd = 0;
 totalcd = total + delivery;
-const delivery =  selection ? _company.delivery_price : 0; 
+
 
 
   const [_company, setCompany] = useState([])
   const [selection, setSelection] = useState(false)
   const [selection1, setSelection1] = useState(false)
   const company = props.cartItems[0].product.company_id
+  const [delivery, setDelivery] = useState([0])
 
   useFocusEffect(
     useCallback(() => {
@@ -84,7 +85,6 @@ const delivery =  selection ? _company.delivery_price : 0;
         try {
           const { data } = await companyAPI.getCompanyProduct(company);
           setCompany(data || []);
-          console.log(_company)
         } catch (error) {
           showErrorToast(error);
         }
@@ -100,10 +100,10 @@ const delivery =  selection ? _company.delivery_price : 0;
         user_id: user.id,
         delivery_type: selection ? "delivery" : "pick_up",
         company_id: company,
-        address: selection1,
-        delivery_price: _company.delivery_price,
+        address: selection1 ? selection1 : "",
+        delivery_price: delivery ,
         subtotal: total,
-        total_amount: total ,
+        total_amount: total + delivery,
         sale_products: props.cartItems.map(cart => {
           return {
             product_id: cart.product.id,
@@ -124,7 +124,7 @@ const delivery =  selection ? _company.delivery_price : 0;
             last_name: _company?.user?.last_name,
             delivery_price: _company?.delivery_price,
             cellphone: _company?.cellphone,
-            total: total + selection ? _company?.delivery_price : 0,
+            total: total,
             address: selection1?.value, 
           }
         }]
@@ -136,6 +136,11 @@ const delivery =  selection ? _company.delivery_price : 0;
     }
     stopLoading();
   }
+
+const onChange = (value) => {
+  setSelection(value),
+  selection===true ? setDelivery(0) : setDelivery( _company.delivery_price)
+}
 
 
   return (
@@ -204,19 +209,23 @@ const delivery =  selection ? _company.delivery_price : 0;
                         bg: "#DB7F50",
                         textColor: "white",
                         endIcon: <CheckIcon size="5" />
-                      }} mt={1} onValueChange={itemValue => setSelection(itemValue)}>
+                      }} mt={1} onValueChange={itemValue => 
+                        onChange(itemValue)
+                      }>
                         <Select.Item label="Si" value={true} />
                         <Select.Item label="No" value={false} />
                       </Select>
                     </Box>
-
                   </HStack>
+                  {
+                    selection === true && (
+                     <>
                   <Text
                     color="#6E6E7A"
                     fontSize="18"
                     bold
                   >
-                    Direccion para Delivery:
+                    Dirección para Delivery:
                   </Text>
                   <Box w="3/4" maxW="300" >
                     <FormControl isRequired isInvalid>
@@ -232,10 +241,12 @@ const delivery =  selection ? _company.delivery_price : 0;
                         })}
                       </Select>
                       <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                          Por favor escoge una direccion.
+                          Por favor escoge una dirección.
                         </FormControl.ErrorMessage>
                     </FormControl>
                   </Box>
+                  </>
+                    ) } 
                 </VStack>
               )
             }
@@ -269,7 +280,7 @@ const delivery =  selection ? _company.delivery_price : 0;
                   fontSize='18'
                   color='#6E6E7A'
                 >
-                  Con Delivery: ${selection ? _company.delivery_price : 0}
+                  Con Delivery: ${delivery}
 
                 </Text>
                 <Divider
@@ -287,7 +298,7 @@ const delivery =  selection ? _company.delivery_price : 0;
                   fontSize='18'
                   color='#6E6E7A'
                 >
-                  TOTAL a pagar: ${total }
+                  TOTAL a pagar: ${total + delivery}
                 </Text>
                 <Button
                   mt="2"
