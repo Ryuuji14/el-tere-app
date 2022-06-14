@@ -114,7 +114,7 @@ const Promocion = ({ route, cartItems, addMultipleProducts, navigation }) => {
             }}
           />
 
-          <VStack width="100%" px={4}>
+          <VStack width="100%" px={4} space={4}>
             {products.map((product) => (
               <HStack
                 key={product.id}

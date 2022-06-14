@@ -20,6 +20,7 @@ import {
   Hidden,
 } from "native-base";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
+import useCustomToast from "../hooks/useCustomToast";
 
 var { width } = Dimensions.get("window");
 import { connect } from "react-redux";
@@ -43,7 +44,7 @@ const SingleProduct = ({
     image: route.params?.image,
     price: route.params?.price,
   });
-
+  const { showErrorToast, showSuccesToast } = useCustomToast();
   const [count, setCount] = useState(1);
   const onPress = () => setCount((prevCount) => prevCount + 1);
   const onPress1 = () => setCount((prevCount) => Math.max(prevCount - 1, 1));
