@@ -48,6 +48,8 @@ const LoginForm = ({ navigation }) => {
 
       const token = data?.data?.token;
 
+      console.log(data);
+
       if (token) {
         await AsyncStorage.setItem("@token", token);
         dispatch({
