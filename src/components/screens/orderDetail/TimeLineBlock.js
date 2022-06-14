@@ -1,7 +1,7 @@
 import { HStack, Stack, Text, View, ZStack } from "native-base";
 import React from "react";
 
-export const TimeLineBlock = ({ isActive = false, text = "", time = "" }) => {
+export const TimeLineBlock = ({ isActive = false, text = ""}) => {
   const activeColor = isActive ? "#DB7F50" : "#5A7E64";
 
   return (
@@ -25,7 +25,7 @@ export const TimeLineBlock = ({ isActive = false, text = "", time = "" }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Text color={activeColor}>{time}</Text>
+        <Text color={activeColor}></Text>
       </View>
     </HStack>
   );

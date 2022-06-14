@@ -50,7 +50,7 @@ const Notifications = () => {
         <Heading color="white" fontSize={36} fontWeight="bold" >
           Tus {'\n'} Notificaciones
         </Heading>
-        <View width="100%" height="100%" bgColor='white' borderRadius={10} alignItems='center'  >
+        <View width="100%" height="100%" bgColor='white' borderRadius={10} alignItems='center' paddingBottom="30%"  >
           <VStack space={2} py={2} bgcolor="black" ml="4">
             <ScrollView refreshControl={
               <RefreshControl refreshing={isLoading} onRefresh={getNotifications}

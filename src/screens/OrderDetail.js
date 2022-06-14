@@ -1,8 +1,10 @@
 import { Button, Heading, HStack, ScrollView, Stack, Text, View, Divider } from "native-base";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ImageBackground, Dimensions } from "react-native";
 import { TimeLineBlock } from "../components/screens/orderDetail/TimeLineBlock";
 import { TotalAmounts } from "../components/screens/orderDetail/TotalAmounts";
+import { companyAPI } from "../api/companyAPI";
+import useLoading from "../hooks/useLoading";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -10,9 +12,23 @@ export const OrderDetail = (props) => {
   const item = {
     sales: props.route.params.sales,
   }
+  const [company, setCompany] = useState({});
+  const { isLoading, startLoading, stopLoading } = useLoading()
+  const getDeliveryPrice = async () => {
+    try {
+      startLoading();
+      const { data } = await companyAPI.getCompanyProduct(item.sales.company.id);
+      setCompany(data);
+    } catch (error) {
+      console.log(error)
+    }
+    stopLoading();
+  }
   useEffect(() => {
-    console.log(item.sales)
+    getDeliveryPrice();
   }, [])
+  const delivery = item.sales.delivery_type ? 0 : company.delivery_price; ;
+  const subTotal = item.sales.total_amount - delivery;
   return (
     <>
       <ImageBackground
@@ -50,14 +66,14 @@ export const OrderDetail = (props) => {
         <Text fontSize={18} bold mt="2"> Estatus:</Text>
 
 
-          <TimeLineBlock text="Orden ingresada" time="4:07 PM" />
+          <TimeLineBlock text="Orden ingresada"  />
           <TimeLineBlock
             isActive
             text="Orden está siendo procesada"
-            time="4:07 PM"
+            
           />
-          <TimeLineBlock text="Orden en camino" time="" />
-          <TimeLineBlock text="Orden entregada Buen provecho" time="" />
+          <TimeLineBlock text="Orden en camino"  />
+          <TimeLineBlock text="Orden entregada "  />
 
           <View mt={3}>
           <Divider
@@ -78,7 +94,8 @@ export const OrderDetail = (props) => {
 
             <TotalAmounts 
             total={item.sales.total_amount}
-            
+            subTotal={subTotal}
+            delivery={delivery}
             />
             <Button
             my='4'
@@ -88,9 +105,15 @@ export const OrderDetail = (props) => {
               fontSize: 19,
               color: "#FFFFFF",
             }}
-            backgroundColor="#DB7F50"
+            backgroundColor="#41634A"
+            onPress={() => {
+              props.navigation.navigate("Incidencias", {
+                sales: item.sales,
+                });
+            }
+            }
           >
-            AIUDAAAAA
+            REPORTAR INCIDENCIA
           </Button>
           </View>
         </ScrollView>

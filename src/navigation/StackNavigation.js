@@ -2,7 +2,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboarding from "../screens/Onboarding";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
-import RecoverPassword from "../screens/RecoverPassword";
 import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
 import Dashboard from "../screens/Dashboard";
@@ -31,6 +30,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { OrderFinished } from "../screens/OrderFinished";
 import { DetalleProductosFinalizados } from "../screens/DetalleProductosFinalizados";
 import Notifications from "../screens/Notifications";
+import RecoverPassword from "../screens/RecoverPassword";
+import Incidencias from "../screens/Incidencias";
+import ReporteIncidencias from "../screens/ReporteIncidencia";
 
 const Stack = createNativeStackNavigator();
 
@@ -53,7 +55,7 @@ const stackRoutes = [
   {
     name: "RecoverPassword",
     component: RecoverPassword,
-    requireAuth: false,
+    requireAuth: true,
   },
   {
     name: "NewPassword",
@@ -125,6 +127,7 @@ const stackRoutes = [
     name: "ConfirmarPedido",
     component: ConfirmarPedido,
     requireAuth: true,
+    showHeader: true,
   },
   {
     name: "Cart",
@@ -156,6 +159,18 @@ const stackRoutes = [
     requireAuth: true,
     showHeader: true,
   },
+  {
+    name: "Incidencias",
+    component: Incidencias,
+    requireAuth: true,
+    showHeader: true,
+  },
+  {
+    name: "ReporteIncidencias",
+    component: ReporteIncidencias,
+    requireAuth: true,
+    showHeader: true,
+  },
 ];
 
 const HOC = (Component) => {
@@ -173,7 +188,7 @@ const StackNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
       }}

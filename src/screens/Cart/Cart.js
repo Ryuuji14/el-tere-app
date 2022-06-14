@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   hiddenButton: {
-    backgroundColor: "red",
+    backgroundColor: "#41634A",
     justifyContent: "center",
     alignItems: "flex-end",
     paddingRight: 25,
