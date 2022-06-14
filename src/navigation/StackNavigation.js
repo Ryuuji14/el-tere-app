@@ -2,8 +2,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboarding from "../screens/Onboarding";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
-import RecoverPassword from "../screens/RecoverPassword";
-import NewPassword from "../screens/NewPassword";
 import BottomNavigation from "./BottomNavigation";
 import Dashboard from "../screens/Dashboard";
 import Comercio from "../screens/Comercio";
@@ -57,12 +55,12 @@ const stackRoutes = [
   {
     name: "RecoverPassword",
     component: RecoverPassword,
-    requireAuth: true,
+    requireAuth: false,
   },
   {
     name: "NewPassword",
     component: NewPassword,
-    requireAuth: false,
+    requireAuth: true,
   },
   {
     name: "Home",
@@ -152,6 +150,8 @@ const stackRoutes = [
     name: "ChangePassword",
     component: ChangePassword,
     requireAuth: true,
+  },
+  {
     name: "OrderFinished",
     component: OrderFinished,
     requireAuth: true,
