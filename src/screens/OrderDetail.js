@@ -27,7 +27,7 @@ export const OrderDetail = (props) => {
   useEffect(() => {
     getDeliveryPrice();
   }, [])
-  const delivery = item.sales.delivery_type ? 0 : company.delivery_price; ;
+  const delivery = company.delivery_price; ;
   const subTotal = item.sales.total_amount - delivery;
   return (
     <>

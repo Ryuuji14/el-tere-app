@@ -86,6 +86,7 @@ const Notifications = ({ setReadNotifications }) => {
           bgColor="white"
           borderRadius={10}
           alignItems="center"
+          paddingBottom="30%"
         >
           <VStack space={2} py={2} bgcolor="black" ml="4">
             <ScrollView

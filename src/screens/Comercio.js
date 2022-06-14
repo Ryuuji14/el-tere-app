@@ -114,13 +114,6 @@ const Comercio = ({ route, cartItems }) => {
             </VStack>
             <HStack space={2}>
               <IconButton
-                icon={<Icon as={Entypo} name="message" />}
-                height="70%"
-                borderRadius="full"
-                variant="solid"
-                bgColor="#DB7F50"
-              />
-              <IconButton
                 icon={<Icon as={Entypo} name="location-pin" />}
                 height="70%"
                 borderRadius="full"
