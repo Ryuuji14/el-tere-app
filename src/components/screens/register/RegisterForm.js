@@ -55,6 +55,7 @@ const RegisterForm = () => {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [interestsToSelect, setInterestsToSelect] = useState([]);
+ ;
 
   useEffect(() => {
     const getInterests = async () => {
@@ -282,7 +283,7 @@ const RegisterForm = () => {
         <Controller
           name="birthday"
           control={control}
-          render={({ field: { value }, fieldState: { error } }) => (
+          render={({ field: { value}, fieldState: { error } }) => (
             <>
               <TouchableOpacity
                 activeOpacity={1}

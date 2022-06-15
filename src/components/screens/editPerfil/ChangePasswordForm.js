@@ -33,6 +33,7 @@ import useLoading from "../../../hooks/useLoading";
 import { authAPI } from "../../../api/authAPI";
 import { ICONS_PROPS } from "../../../themes/iconStyles"
 import { INPUT_PROPS } from "../../../themes/inputStyles"
+import { userAPI } from "../../../api/userAPI";
 
 const ChangePasswordForm = ({ navigation }) => {
   const { showErrorToast, showSuccesToast } = useCustomToast();
@@ -41,12 +42,10 @@ const ChangePasswordForm = ({ navigation }) => {
  const {
     control,
     handleSubmit,
-
     formState: { isValid, errors },
     reset,
   } = useForm({
     mode: "onChange",
-
    // resolver: yupResolver(ChangePasswordFormSchema),
   //  defaultValues: ChangePasswordFormDefaultValues,
   });

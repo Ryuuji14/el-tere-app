@@ -27,7 +27,6 @@ const Register = ({ navigation }) => {
         backgroundColor="#F4F5F7"
         px={5}
         pt={3}
-        pb={5}
         flex={1}
         mt={6}
         borderTopRadius={20}

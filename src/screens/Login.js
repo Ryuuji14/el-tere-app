@@ -36,12 +36,12 @@ const Login = ({ navigation }) => {
         borderBottomRadius={20}
         mb={2}
       >
-        <ScrollView>
+
           <Text color="#8898AA" fontSize={16} mb={4} alignSelf="center">
             Inicia Sesión con tus datos:
           </Text>
           <LoginForm navigation={navigation} />
-        </ScrollView>
+        
       </View>
     </ImageBackground>
   );

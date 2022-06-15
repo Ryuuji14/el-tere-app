@@ -7,6 +7,8 @@ import {
   VStack,
   Divider,
   Text,
+  ScrollView,
+  
 } from "native-base";
 import { Icon } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -23,6 +25,7 @@ import { authAPI } from "../../../api/authAPI";
 import { ICONS_PROPS } from "../../../themes/iconStyles"
 import { INPUT_PROPS } from "../../../themes/inputStyles"
 import useAuthContext from "../../../hooks/useAuthContext";
+import {RefreshControl} from "react-native";
 
 const LoginForm = ({ navigation }) => {
   const { dispatch } = useAuthContext();
@@ -66,116 +69,124 @@ const LoginForm = ({ navigation }) => {
 
       reset(loginDefaultValues);
     } catch (error) {
-      showErrorToast(error);
+      showErrorToast("Datos Incorrectos");
     }
     stopLoading();
   };
 
   return (
     <KeyboardAvoidingView behavior="padding" enabled>
-      <Stack space={4}>
-        <Controller
-          name="email"
-          control={control}
-          render={({
-            field: { onChange, ...field },
-            fieldState: { error },
-          }) => (
-            <Input
-              {...field}
-              onChangeText={onChange}
-              placeholder="Correo Electrónico"
-              {...INPUT_PROPS}
-              InputLeftElement={
-                <Icon
-                  as={MaterialIcons}
-                  name="email"
-                  {...ICONS_PROPS(Boolean(error?.message))}
-                />
-              }
-            />
-          )}
-        />
+      <ScrollView
+      showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+          />
+        }>
+        <Stack space={4}>
+          <Controller
+            name="email"
+            control={control}
+            render={({
+              field: { onChange, ...field },
+              fieldState: { error },
+            }) => (
+              <Input
+                {...field}
+                onChangeText={onChange}
+                placeholder="Correo Electrónico"
+                {...INPUT_PROPS}
+                InputLeftElement={
+                  <Icon
+                    as={MaterialIcons}
+                    name="email"
+                    {...ICONS_PROPS(Boolean(error?.message))}
+                  />
+                }
+              />
+            )}
+          />
 
-        <Controller
-          name="password"
-          control={control}
-          render={({
-            field: { onChange, ...field },
-            fieldState: { error },
-          }) => (
-            <Input
-              {...field}
-              secureTextEntry
-              onChangeText={onChange}
-              placeholder="Contraseña"
-              {...INPUT_PROPS}
-              InputLeftElement={
-                <Icon
-                  as={MaterialIcons}
-                  name="lock"
-                  {...ICONS_PROPS(Boolean(error?.message))}
-                />
-              }
-            />
-          )}
-        />
-      </Stack>
-      <VStack alignItems="center" space={4} mt={4}>
-        <Button
-          disabled={!isValid || isLoading}
-          isLoading={isLoading}
-          onPress={handleSubmit(onSubmit)}
-          width={240}
-          rounded="full"
-          padding={2}
-          _text={{
-            fontSize: 19,
-            color: "#FFFFFF",
-          }}
-          backgroundColor="#DB7F50"
-        >
-          INICIAR SESIÓN
-        </Button>
-        <Button
-          width={240}
-          rounded="full"
-          _text={{
-            fontSize: 19,
-            color: "#DB7F50",
-          }}
-          backgroundColor="#FFFFFF"
-          onPress={() => navigation?.navigate("Register")}
-        >
-          UNETE AL TERE
-        </Button>
+          <Controller
+            name="password"
+            control={control}
+            render={({
+              field: { onChange, ...field },
+              fieldState: { error },
+            }) => (
+              <Input
+                {...field}
+                secureTextEntry
+                onChangeText={onChange}
+                placeholder="Contraseña"
+                {...INPUT_PROPS}
+                InputLeftElement={
+                  <Icon
+                    as={MaterialIcons}
+                    name="lock"
+                    {...ICONS_PROPS(Boolean(error?.message))}
+                  />
+                }
+              />
+            )}
+          />
+        </Stack>
+        <VStack alignItems="center" space={4} mt={4}>
+          <Button
+            disabled={!isValid || isLoading}
+            isLoading={isLoading}
+            onPress={handleSubmit(onSubmit)}
+            width={240}
+            rounded="full"
+            padding={2}
+            _text={{
+              fontSize: 19,
+              color: "#FFFFFF",
+            }}
+            backgroundColor="#DB7F50"
+          >
+            INICIAR SESIÓN
+          </Button>
+          <Button
+            width={240}
+            rounded="full"
+            _text={{
+              fontSize: 19,
+              color: "#DB7F50",
+            }}
+            backgroundColor="#FFFFFF"
+            onPress={() => navigation?.navigate("Register")}
+          >
+            UNETE AL TERE
+          </Button>
 
-        <Link
-          onPress={() => navigation?.navigate("RecoverPassword")}
-          _text={{
-            textDecoration: "none",
-            color: "#DB7F50",
-          }}
-        >
-          ¿Olvidaste tu contraseña?
-        </Link>
+          <Link
+            onPress={() => navigation?.navigate("RecoverPassword")}
+            _text={{
+              textDecoration: "none",
+              color: "#DB7F50",
+            }}
+          >
+            ¿Olvidaste tu contraseña?
+          </Link>
 
-        <Divider backgroundColor="rgba(219,127,80,0.5)" />
-        <Text color="#8898AA" fontSize={16} alignSelf="center">
-          ¿Primera vez usando la App?
-        </Text>
-        <Button
-          width={240}
-          rounded="full"
-          _text={{
-            fontSize: 14,
-            color: "#DB7F50",
-          }}
-          backgroundColor="#FFFFFF"
-        >
-          ENTRA COMO INVITADO/A
-        </Button>
-      </VStack>
+          <Divider backgroundColor="rgba(219,127,80,0.5)" />
+          <Text color="#8898AA" fontSize={16} alignSelf="center">
+            ¿Primera vez usando la App?
+          </Text>
+          <Button
+            width={240}
+            rounded="full"
+            _text={{
+              fontSize: 14,
+              color: "#DB7F50",
+            }}
+            backgroundColor="#FFFFFF"
+          >
+            ENTRA COMO INVITADO/A
+          </Button>
+        </VStack>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

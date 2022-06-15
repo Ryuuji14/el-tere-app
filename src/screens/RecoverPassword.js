@@ -1,6 +1,7 @@
 import { Heading, ScrollView, Text, View } from "native-base";
 import { ImageBackground, Dimensions } from "react-native";
 import RecoverPasswordForm from "../components/screens/password/RecoverPasswordForm";
+import { Header } from "../components/Header";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -10,6 +11,8 @@ const RecoverPassword = ({ navigation }) => {
       source={require("../../assets/register-bg.png")}
       style={{ width, height, zIndex: 1, paddingHorizontal: 30, flex: 1 }}
     >
+       <Header navigation={navigation} pt={4} />
+
       <Heading color="white" fontSize={45} fontWeight="bold" mt={5}>
         Recupera{"\n"}tu cuenta
       </Heading>
@@ -22,7 +25,6 @@ const RecoverPassword = ({ navigation }) => {
         flex={1}
         mt={6}
         borderTopRadius={20}
-        mb={40}
         borderBottomRadius={20}
       >
         <ScrollView>
