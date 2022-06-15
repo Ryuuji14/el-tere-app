@@ -17,23 +17,41 @@ const ReporteIncidencias = (props) => {
   } = useAuthContext();
 
   const item = {
-    sales: props.route.params.sales,
-    data: props.route.params.data,
+   idPedido: props.route.params.idPedido,
+   companyName: props.route.params.companyName,
   }
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const [month, day, year] = d?.toLocaleDateString("en-US").split("/");
+  
+    return `${day}/${month}/${year}` || "";
+  };
 
   const { isLoading, startLoading, stopLoading } = useLoading();
   const { showErrorToast, showSuccesToast } = useCustomToast();
-  const [text, onChangeText] = useState("");
+
+  const [incidencia, setIncidencia] = useState([]);
+  const getIncidencia = async () => {
+    startLoading();
+    try {
+      const { data } = await incindentAPI.getIncidents(item.idPedido);
+      setIncidencia(data);
+    } catch (error) {
+      showErrorToast(error.message);
+    }
+    finally {
+      stopLoading();
+    }
+  }
 
   useEffect(() => {
-    console.log(item.data)
+    getIncidencia();
   }
-    , [])
-
-
+,[])
 
   return (
     <>
+    
       <ImageBackground
         source={require("../../assets/register-bg.png")}
         style={{ width, height, zIndex: 1, paddingHorizontal: 30, flex: 1 }}
@@ -41,6 +59,7 @@ const ReporteIncidencias = (props) => {
         <Heading color="white" fontSize={36} fontWeight="bold" >
           Reporte {'\n'} Incidencias
         </Heading>
+        {incidencia.length > 0 ? (
         <View width="100%" height="80%" bgColor='white' borderRadius={10} alignItems='center'alignContent="center" paddingBottom="10%" textAlign="center"  >
           <Text color="#6E6E7A" textAlign="center" size="18" width="100%" height="20%" my="2">
             Gracias por tu reporte, Nos{"\n"}
@@ -66,7 +85,7 @@ const ReporteIncidencias = (props) => {
 
             >
               <Text color="white" textAlign="center">
-                {item.data.description}
+               {incidencia[0]?.description}
               </Text>
             </Box>
             <Text color="#6E6E7A" bold textAlign="center"> Estatus: </Text>
@@ -79,7 +98,7 @@ const ReporteIncidencias = (props) => {
             borderColor="#41634A"
           />
           <View>
-            <Text color="#6E6E7A" bold textAlign="center"> Pedido Nro: {"\n"} {item.data.sale_id}</Text>
+            <Text color="#6E6E7A" bold textAlign="center"> Pedido Nro: {"\n"} {incidencia[0]?.sale_id} </Text>
           </View>
           <Divider
             borderWidth="1"
@@ -87,7 +106,7 @@ const ReporteIncidencias = (props) => {
             borderColor="#41634A"
           />
           <View>
-            <Text color="#6E6E7A" bold textAlign="center"> Comercio {"\n"} </Text>
+            <Text color="#6E6E7A" bold textAlign="center"> Comercio: {"\n"} {item?.companyName}</Text>
           </View>
           <Divider
             borderWidth="1"
@@ -95,13 +114,27 @@ const ReporteIncidencias = (props) => {
             borderColor="#41634A"
           />
           <View>
-            <Text color="#6E6E7A" bold textAlign="center"> Fecha del Reporte: </Text>
+            <Text color="#6E6E7A" bold textAlign="center"> Fecha del Reporte: {"\n"} {formatDate(incidencia[0]?.createdAt)}</Text>
           </View>
         </View>
+        ) : (
+          <View width="100%" height="80%" bgColor='white' borderRadius={10} style={styles.emptyContainer}  >
+            <Text fontSize="18" color="#6E6E7A"> No hay incidencias</Text>
+          </View>  
+        )}
+
 
       </ImageBackground>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  emptyContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+  },
+});
 
 export default ReporteIncidencias;

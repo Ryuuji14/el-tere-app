@@ -90,6 +90,7 @@ const Notifications = ({ setReadNotifications }) => {
         >
           <VStack space={2} py={2} bgcolor="black" ml="4">
             <ScrollView
+            indicatorStyle={{ backgroundColor: "transparent" }} 
               refreshControl={
                 <RefreshControl
                   refreshing={isLoading}

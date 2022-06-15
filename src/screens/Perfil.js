@@ -34,8 +34,6 @@ const formatDate = (date) => {
   return `${day}/${month}/${year}` || "";
 };
 
-
-
 const getTotalPedidoAmount = (pedidos) => {
   return pedidos.reduce((acc, pedido) => {
     return acc + pedido.quantity * pedido.price;
@@ -71,20 +69,21 @@ const Perfil = ({ navigation }) => {
         address: userAddresses?.[0]?.address || "",
 
       });
-      setSales(salesInfo.filter((sale) => sale.active));
+      setSales(salesInfo.items?.filter((sale) => sale.active));
       setComments(UserComments);
-      if (salesInfo.length > 0) {
-        const salesIds = salesInfo.map((sale) => sale.id);
-
+      if (salesInfo.items?.length > 0) {
+        const salesIds = salesInfo.items?.map((sale) => sale.id);
+     
         const pedidosResponses = await Promise.all(
           salesIds.slice(0, 2).map((id) => saleAPI.getSaleProductBySaleId(id))
         );
-
-        setPedidos(pedidosResponses.map((response) => response.data));
         
+        setPedidos(pedidosResponses.map((response) => response.data));
+
       }
     } catch (error) {
       showErrorToast(error);
+      console.log(error)
     }
     stopLoading();
   };
@@ -242,7 +241,7 @@ const Perfil = ({ navigation }) => {
             >
               Tus pedidos más recientes
             </Text>
-            {pedidos.map((pedido, index) => (
+            {pedidos?.map((pedido, index) => (
               <View
                 w="100%"
                 borderWidth={1}

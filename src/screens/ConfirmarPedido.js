@@ -100,7 +100,7 @@ totalcd = total + delivery;
         user_id: user.id,
         delivery_type: selection ? "delivery" : "pick_up",
         company_id: company,
-        address: selection1 ? selection1 : "",
+        address: selection1 ? selection1 : null,
         delivery_price: delivery ,
         subtotal: total,
         total_amount: total + delivery,
@@ -234,9 +234,9 @@ const onChange = (value) => {
                         textColor: "white",
                         endIcon: <CheckIcon size="5" />
                       }} mt={1} onValueChange={itemValue => setSelection1(itemValue)}>
-                        {addresses.map(address => {
+                        {addresses.map((address, index) => {
                           return (
-                            <Select.Item key={address.id} label={address.address} value={address.address} />
+                            <Select.Item key={index.toString()} label={address.address} value={address.address} />
                           )
                         })}
                       </Select>

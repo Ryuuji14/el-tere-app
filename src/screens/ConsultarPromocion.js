@@ -62,7 +62,7 @@ const Promocion = ({ route, cartItems, addMultipleProducts, navigation }) => {
           showErrorToast(error);
         }
       };
-
+      console.log()
       getProducts();
     }
   }, [item.id, cartItems]);

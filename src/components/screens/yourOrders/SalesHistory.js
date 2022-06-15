@@ -18,7 +18,9 @@ export const SaleHistory = (props) => {
   const regex = /\d{4}-\d{2}-\d{2}/;
   
   return (
-    <ScrollView>
+    <ScrollView 
+    showsVerticalScrollIndicator={false}
+    >
     <Stack>
       <Text textAlign="center" fontSize={18} color="#9393AA" mb={3}>
         Estos son tus pedidos ya {"\n"} pagados y validados:

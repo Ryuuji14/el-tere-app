@@ -186,6 +186,7 @@ const Dashboard = ({ navigation }) => {
       refreshControl={
         <RefreshControl refreshing={isLoading} onRefresh={init} />
       }
+      showsVerticalScrollIndicator={false}
     >
       <View bgColor="white" px={7} pb={5}>
         <Stack>
@@ -293,7 +294,7 @@ const Dashboard = ({ navigation }) => {
           {selectedCategory?.id === -1 &&
             filtertedAreas.map(({ area }, index) => (
               <Fragment key={index.toString()}>
-                <HStack alignItems="center" justifyContent="space-between">
+                <HStack alignItems="center" justifyContent="space-between" >
                   <Text color="#41634A" pt={2} pb={1} bold>
                     {area?.name}
                   </Text>
@@ -301,8 +302,10 @@ const Dashboard = ({ navigation }) => {
                     <Text color="#41634A">Ver todos</Text>
                   </TouchableOpacity> */}
                 </HStack>
+                <View justifyContent="space-between" > 
                 <FlatList
                   horizontal
+                  showsHorizontalScrollIndicator={false}
                   data={area.companies || []}
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
@@ -319,6 +322,7 @@ const Dashboard = ({ navigation }) => {
                     />
                   )}
                 />
+                </View>
               </Fragment>
             ))}
 

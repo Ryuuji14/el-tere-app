@@ -27,6 +27,7 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import { connect } from "react-redux";
 import * as actions from "../../Redux/Actions/cartActions";
 import { FontAwesome } from "@expo/vector-icons";
+import { useEffect } from "react";
 
 var { height, width } = Dimensions.get("window");
 
@@ -36,6 +37,10 @@ const Cart = (props) => {
   props.cartItems.forEach(cart => {
     return (total += cart.product.price * cart.product.quantity)
   });
+useEffect (() => {
+  console.log(props.cartItems)
+}
+, [])
 
   return (
     <>
@@ -97,7 +102,7 @@ const Cart = (props) => {
                     <Avatar
                       size="lg"
                       source={{
-                        uri: data.item.product?.image,
+                        uri: data.item.product?.photo,
                       }}
                     />
                     <Text ml="4" fontSize="18" mt="4">

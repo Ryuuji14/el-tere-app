@@ -24,6 +24,7 @@ const Incidencias = (props) => {
   const { isLoading, startLoading, stopLoading } = useLoading();
   const { showErrorToast, showSuccesToast } = useCustomToast();
   const [text, onChangeText] = useState("");
+ 
 
   const addIncident = async () => {
     startLoading();
@@ -34,12 +35,8 @@ const Incidencias = (props) => {
         description: text,
       });
       showSuccesToast("INCIDENCIA CREADA",);
-      console.log(data) 
-     Navigation.navigate("ReporteIncidencias", {
-       sales: item.sales,
-       data: data,
-      });
-
+     Navigation.navigate.goBack();
+     onChangeText="";
     } catch (error) {
       showErrorToast(error.message);
     }
@@ -47,7 +44,8 @@ const Incidencias = (props) => {
       stopLoading();
     }
   }
-
+ 
+  
 
   return (
     <>
