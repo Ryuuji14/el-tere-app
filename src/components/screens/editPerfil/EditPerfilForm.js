@@ -59,6 +59,7 @@ export const EditPerfilForm = ({ navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [interests, setInterests] = useState([]);
   const [userInterests, setUserInterests] = useState([]);
+  const [isUpdatingInterests, setIsUpdatingInterests] = useState(false);
 
   useEffect(() => {
     if (user?.id) {
@@ -93,8 +94,6 @@ export const EditPerfilForm = ({ navigation }) => {
             setValue("gender", gender.toUpperCase());
           }
 
-          console.log(userInterest, user.id);
-
           if (userInterest?.data) {
             setUserInterests(userInterest?.data);
           }
@@ -102,7 +101,6 @@ export const EditPerfilForm = ({ navigation }) => {
           if (interests?.data?.items) {
             setInterests(interests?.data?.items);
           }
-          console.log(interests)
         } catch (error) {
           showErrorToast(error);
         }
@@ -132,14 +130,17 @@ export const EditPerfilForm = ({ navigation }) => {
 
   const isInterestSelected = (interestId) => {
     return userInterests.some(
-      (interest) => interest.id === interestId && interest.active === true
+      (interest) =>
+        interest.interest_id === interestId && interest.active === true
     );
   };
 
   const selectInterest = async (interestId) => {
+    setIsUpdatingInterests(true);
     const findInterestIndex = userInterests.findIndex(
-      (int) => int.id === interestId
+      (int) => int.interest_id === interestId
     );
+
     if (findInterestIndex > -1) {
       try {
         const interest = userInterests[findInterestIndex];
@@ -151,7 +152,9 @@ export const EditPerfilForm = ({ navigation }) => {
 
         setUserInterests((prevState) =>
           prevState.map((int) =>
-            int?.id === interestId ? { ...int, active: !int.active } : int
+            int?.interest_id === interestId
+              ? { ...int, active: !int.active }
+              : int
           )
         );
       } catch (error) {
@@ -166,10 +169,10 @@ export const EditPerfilForm = ({ navigation }) => {
         const newUserInterests = [...userInterests, data];
         setUserInterests(newUserInterests);
       } catch (error) {
-        console.log(error?.response?.data);
         showErrorToast(error);
       }
     }
+    setIsUpdatingInterests(false);
   };
 
   return (
@@ -401,7 +404,7 @@ export const EditPerfilForm = ({ navigation }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => selectInterest(item?.id)}
+            onPress={() => !isUpdatingInterests && selectInterest(item?.id)}
           >
             <Badge
               colorScheme="success"
