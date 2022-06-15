@@ -41,13 +41,19 @@ const SingleProduct = ({
     id: route.params?.id,
     description: route.params?.description,
     name: route.params?.name,
-    image: route.params?.image,
+    photo: route.params?.photo,
     price: route.params?.price,
   });
+
   const { showErrorToast, showSuccesToast } = useCustomToast();
   const [count, setCount] = useState(1);
   const onPress = () => setCount((prevCount) => prevCount + 1);
   const onPress1 = () => setCount((prevCount) => Math.max(prevCount - 1, 1));
+  const [isDisabled, setIsDisabled] = useState(false);
+  
+  const setDisabled = () => {
+    setIsDisabled(true);
+  }
 
   const productInCart = cartItems.find(
     (item) => item.product.id === route?.params?.id
@@ -57,7 +63,7 @@ const SingleProduct = ({
     <View backgroundColor="#DB7F50" width={width} alignContent="center">
       <View backgroundColor="white" width="100%">
         <VStack justifyContent="center" alignItems="center" space={2}>
-          <Avatar mt="20" source={{ uri: item.image }} size="2xl" />
+          <Avatar mt="20" source={{ uri: item.photo }} size="2xl" />
           <Text fontSize="2xl" bold color="#41634A">
             {item.name}
           </Text>
@@ -113,13 +119,18 @@ const SingleProduct = ({
                 bgColor="#DB7F50"
                 borderRadius="20"
                 mt="16"
+                isDisabled={isDisabled}
                 onPress={() => {
-                  canAddProduct
-                    ? addItemToCart({
-                        ...item,
-                        company_id: route.params?.company_id,
-                      })
-                    : showAlertDialog();
+                  if (!canAddProduct) {
+                    showAlertDialog();
+                    return;
+                  }
+                  addItemToCart({
+                    ...item,
+                    company_id: route.params?.company_id,
+                  })
+                  showSuccesToast("Producto agregado al carrito");
+                  setDisabled();
                 }}
               >
                 <Text color="white" fontSize="lg">
@@ -144,7 +155,9 @@ const mapDispatchToProps = (dispatch) => {
             ...product,
             quantity: 1,
           },
-        })
+
+        }),
+
       ),
     modifyProductQuantity: (productId, quantity) =>
       dispatch(actions.modifyProductQuantity({ productId, quantity })),
@@ -159,3 +172,4 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleProduct);
+

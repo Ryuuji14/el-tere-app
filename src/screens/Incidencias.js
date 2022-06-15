@@ -35,8 +35,7 @@ const Incidencias = (props) => {
         description: text,
       });
       showSuccesToast("INCIDENCIA CREADA",);
-     Navigation.navigate.goBack();
-     onChangeText="";
+     Navigation.goBack();
     } catch (error) {
       showErrorToast(error.message);
     }
@@ -90,6 +89,7 @@ const Incidencias = (props) => {
               placeholder="Describenos tu Incidencia"
               onChangeText={(text) => onChangeText(text)}
               value={text}
+              isLoading={isLoading}
             />
           </View>
         </View>
