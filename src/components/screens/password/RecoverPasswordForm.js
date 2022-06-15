@@ -66,19 +66,26 @@ const RecoverPasswordForm = ({ navigation }) => {
   console.log(errors);
 
   return (
-    <KeyboardAvoidingView enabled>
+    <KeyboardAvoidingView behavior="padding" enabled>
       <Stack space={4}>
-        <Controller
+      <Controller
           name="email"
           control={control}
-          render={({ field: { onChange, ...field } }) => (
+          render={({
+            field: { onChange, ...field },
+            fieldState: { error },
+          }) => (
             <Input
               {...field}
               onChangeText={onChange}
               placeholder="Correo Electrónico"
               {...INPUT_PROPS}
               InputLeftElement={
-                <Icon as={MaterialIcons} name="email" {...ICONS_PROPS} />
+                <Icon
+                  as={MaterialIcons}
+                  name="email"
+                  {...ICONS_PROPS(Boolean(error?.message))}
+                />
               }
             />
           )}
