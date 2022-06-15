@@ -82,6 +82,7 @@ const Comentarios = () => {
             
           <VStack space={2} py={2} bgcolor="black" ml="4" width="80%" >
             <FlatList
+            showsVerticalScrollIndicator={false}
               contentContainerStyle={{
               }}
               data={comentarios.items || []}
