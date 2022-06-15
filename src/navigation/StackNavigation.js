@@ -33,6 +33,7 @@ import Notifications from "../screens/Notifications";
 import RecoverPassword from "../screens/RecoverPassword";
 import Incidencias from "../screens/Incidencias";
 import ReporteIncidencias from "../screens/ReporteIncidencia";
+import Comentarios from "../screens/Comentarios";
 
 const Stack = createNativeStackNavigator();
 
@@ -179,6 +180,12 @@ const stackRoutes = [
   {
     name: "ReporteIncidencias",
     component: ReporteIncidencias,
+    requireAuth: true,
+    showHeader: true,
+  },
+  {
+    name: "Comentarios",
+    component: Comentarios,
     requireAuth: true,
     showHeader: true,
   },

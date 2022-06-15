@@ -1,3 +1,4 @@
+import ChangePassword from "../screens/ChangePassword";
 import { http } from "./http";
 
 const BASE_URL = "user";
@@ -28,5 +29,10 @@ export const userAPI = {
   getNotifications: async (userId) => {
     const { data } = await http.get(`${BASE_URL}/${userId}/notifications`);
     return data;
-  }
-};
+  },
+  ChangePassword: async (userId) => {
+    const { data } = await http.put(`${BASE_URL}/password/${userId}`); 
+    return data;
+  },
+}
+
