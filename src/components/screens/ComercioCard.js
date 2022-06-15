@@ -1,4 +1,3 @@
-
 import {
   Box,
   VStack,
@@ -10,16 +9,13 @@ import {
 } from "native-base";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {
-  FontAwesome,
-} from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 const ComercioCard = (props) => {
   const Navigation = useNavigation();
 
   return (
     <TouchableOpacity
-       
       activeOpacity="0"
       style={{
         width: 175,
@@ -73,7 +69,7 @@ const ComercioCard = (props) => {
           </Box>
           <Box px="2">
             <Text bold>
-              {props.name.length > 22
+              {props?.name?.length > 22
                 ? props.name.substring(0, 22 - 3) + "..."
                 : props.name}
             </Text>
@@ -81,10 +77,11 @@ const ComercioCard = (props) => {
           <HStack justifyContent="space-between">
             <Box px="2">
               <Text color="grey">
-                {props.horaApertura.split("",5)} am-{props.horaCierre.split("",5)} pm
+                {props.horaApertura.split("", 5)} am-
+                {props.horaCierre.split("", 5)} pm
               </Text>
             </Box>
-            <Box px="2" pb="2" >
+            <Box px="2" pb="2">
               <HStack alignItems="center" space={0}>
                 <Icon as={FontAwesome} name="star" color="yellow.500" />
                 <Text>{Number(props.rating).toFixed(0)}</Text>

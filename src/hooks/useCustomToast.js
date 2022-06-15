@@ -43,7 +43,7 @@ const useCustomToast = () => {
 
   const showErrorToast = (error = "") => {
     toast.show({
-      title: handleErrorMessage(error),
+      title: handleErrorMessage(error) || "",
     });
   };
 

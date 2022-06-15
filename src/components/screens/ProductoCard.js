@@ -86,7 +86,7 @@ const ProductoCard = (props) => {
           </Box>
           <Box px="2">
             <Text bold>
-              {props.name.length > 22
+              {props?.name?.length > 22
                 ? props.name.substring(0, 22 - 3) + "..."
                 : props.name}
             </Text>

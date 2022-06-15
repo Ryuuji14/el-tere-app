@@ -113,37 +113,42 @@ const Dashboard = ({ navigation }) => {
   const getAreasWithProducts = async () => {
     startLoading();
     try {
-      if (selectedCategory?.id === -1) {
-        switch (categoriaSeleccionada) {
-          case 0:
-            const { data } = await companyAPI.getAreasWithProducts();
-            setAreas(data);
-            break;
-          case 1:
-            const { data: data1 } =
-              await companyAPI.getAreasWithPopularProducts();
-            setAreas(data1);
-            break;
-          case 2:
-            const { data: data2 } = await companyAPI.getAreasWithRecentProducts(
-              user?.id
+      // if (selectedCategory?.id === -1) {
+      switch (categoriaSeleccionada) {
+        case 0:
+          const { data } = await companyAPI.getAreasWithProducts();
+          setAreas(data);
+          break;
+        case 1:
+          const { data: data1 } = await companyAPI.getAreasWithPopularProducts(
+            selectedCategory?.id
+          );
+          setAreas(data1);
+          break;
+        case 2:
+          const { data: data2 } = await companyAPI.getAreasWithRecentProducts(
+            user?.id,
+            selectedCategory?.id
+          );
+          setAreas(data2);
+          break;
+        case 3:
+          const { data: data3 } =
+            await companyAPI.getAreasWithRecommendedProducts(
+              selectedCategory?.id
             );
-            setAreas(data2);
-            break;
-          case 3:
-            const { data: data3 } =
-              await companyAPI.getAreasWithRecommendedProducts();
-            setAreas(data3);
-            break;
-          default:
-            break;
-        }
-      } else {
-        const { data } = await companyAPI.getCompaniesByCategory(
-          selectedCategory.id
-        );
-        setAreas(data || []);
+          setAreas(data3);
+          break;
+        default:
+          break;
       }
+      // }
+      // else {
+      //   const { data } = await companyAPI.getCompaniesByCategory(
+      //     selectedCategory.id
+      //   );
+      //   setAreas(data || []);
+      // }
     } catch (error) {
       showErrorToast(error);
     }
@@ -291,18 +296,17 @@ const Dashboard = ({ navigation }) => {
           <Text pt={2} pb={2} bold color="grey">
             Comercios
           </Text>
-          {selectedCategory?.id === -1 &&
-            filtertedAreas.map(({ area }, index) => (
-              <Fragment key={index.toString()}>
-                <HStack alignItems="center" justifyContent="space-between" >
-                  <Text color="#41634A" pt={2} pb={1} bold>
-                    {area?.name}
-                  </Text>
-                  {/* <TouchableOpacity>
+          {filtertedAreas.map(({ area }, index) => (
+            <Fragment key={index.toString()}>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text color="#41634A" pt={2} pb={1} bold>
+                  {area?.name}
+                </Text>
+                {/* <TouchableOpacity>
                     <Text color="#41634A">Ver todos</Text>
                   </TouchableOpacity> */}
-                </HStack>
-                <View justifyContent="space-between" > 
+              </HStack>
+              <View justifyContent="space-between">
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
@@ -322,40 +326,9 @@ const Dashboard = ({ navigation }) => {
                     />
                   )}
                 />
-                </View>
-              </Fragment>
-            ))}
-
-          {selectedCategory?.id !== -1 && (
-            <>
-              <HStack alignItems="center" justifyContent="space-between">
-                <Text color="#41634A" pt={2} pb={1} bold>
-                  {selectedCategory?.name}
-                </Text>
-                {/* <TouchableOpacity>
-                  <Text color="#41634A">Ver todos</Text>
-                </TouchableOpacity> */}
-              </HStack>
-              <FlatList
-                horizontal
-                data={filtertedAreas || []}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <ComercioCard
-                    key={item.id}
-                    id={item.id}
-                    image={item.photo}
-                    name={item.name}
-                    type={item?.type || ""}
-                    rating={item.rating || 0}
-                    horaApertura={item.opening_time}
-                    horaCierre={item.closing_time}
-                    delivery={item.closing_time}
-                  />
-                )}
-              />
-            </>
-          )}
+              </View>
+            </Fragment>
+          ))}
         </KeyboardAvoidingView>
       </View>
     </ScrollView>
