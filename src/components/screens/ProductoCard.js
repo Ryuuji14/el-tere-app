@@ -21,7 +21,7 @@ import * as actions from "../../Redux/Actions/cartActions";
 const ProductoCard = (props) => {
   const {
     name,
-    image,
+    photo,
     price,
     id,
     description,
@@ -45,7 +45,7 @@ const ProductoCard = (props) => {
           company_id: props.company_id,
           name: props.name,
           description: props.description,
-          image: props.image,
+          photo: props.photo,
           price: props.price,
           id: props.id,
         })
@@ -78,7 +78,7 @@ const ProductoCard = (props) => {
             <AspectRatio w="100%" ratio={16 / 9}>
               <Image
                 source={{
-                  uri: props.image,
+                  uri: props.photo,
                 }}
                 alt={props.name}
               />

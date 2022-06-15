@@ -59,6 +59,7 @@ const Comercio = ({ route, cartItems }) => {
     try {
       const { data } = await productsAPI.getProducts(market?.id);
       setProducts(data || []);
+      console.log(products);
     } catch (error) {
       showErrorToast(error);
     }

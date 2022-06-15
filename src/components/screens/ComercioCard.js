@@ -19,9 +19,11 @@ const ComercioCard = (props) => {
 
   return (
     <TouchableOpacity
+       
       activeOpacity="0"
       style={{
         width: 175,
+        marginRight: 10,
       }}
       onPress={() =>
         Navigation.navigate("Comercio", {

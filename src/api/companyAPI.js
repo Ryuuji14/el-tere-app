@@ -27,4 +27,8 @@ export const companyAPI = {
     const { data } = await http.get(`${"promotion/company"}/${companyId}`);
     return data;
   },
+  getCompaniesByCategory: async (categoryId) => {
+    const { data } = await http.get(`${BASE_URL}/category/${categoryId}`);
+    return data;
+  },
 };

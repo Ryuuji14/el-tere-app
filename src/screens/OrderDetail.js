@@ -5,6 +5,8 @@ import { TimeLineBlock } from "../components/screens/orderDetail/TimeLineBlock";
 import { TotalAmounts } from "../components/screens/orderDetail/TotalAmounts";
 import { companyAPI } from "../api/companyAPI";
 import useLoading from "../hooks/useLoading";
+import useCustomToast from "../hooks/useCustomToast";
+import { incindentAPI } from "../api/incidentAPI";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -14,6 +16,8 @@ export const OrderDetail = (props) => {
   }
   const [company, setCompany] = useState({});
   const { isLoading, startLoading, stopLoading } = useLoading()
+  const [incidencia, setIncidencia] = useState([]);
+  const { showErrorToast, showSuccesToast } = useCustomToast();
   const getDeliveryPrice = async () => {
     try {
       startLoading();
@@ -24,10 +28,24 @@ export const OrderDetail = (props) => {
     }
     stopLoading();
   }
+  const getIncidencia = async () => {
+    startLoading();
+    try {
+      const { data } = await incindentAPI.getIncidents(item.sales.id);
+      setIncidencia(data);
+    } catch (error) {
+      showErrorToast(error.message);
+    }
+    finally {
+      stopLoading();
+    }
+  }
+
   useEffect(() => {
     getDeliveryPrice();
+    getIncidencia();
   }, [])
-  const delivery = company.delivery_price; ;
+  const delivery =  item.sales.delivery_type === "delivery" ? company.delivery_price : 0;
   const subTotal = item.sales.total_amount - delivery;
   return (
     <>
@@ -112,6 +130,7 @@ export const OrderDetail = (props) => {
                 });
             }
             }
+            isDisabled={incidencia?.length > 0 }
           >
             REPORTAR INCIDENCIA
           </Button>

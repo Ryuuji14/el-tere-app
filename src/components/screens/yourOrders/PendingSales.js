@@ -4,10 +4,10 @@ import { HStack, Icon, IconButton, ScrollView, Stack, Text, View } from "native-
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { saleAPI } from "../../../api/salesAPI";
 import useCustomToast from "../../../hooks/useCustomToast";
-;
 import useLoading from "../../../hooks/useLoading";
 import { useNavigation } from "@react-navigation/native";
-
+import { incindentAPI } from "../../../api/incidentAPI";
+import { set } from "react-hook-form";
 const formatDate = (date) => {
   const d = new Date(date);
   const [month, day, year] = d?.toLocaleDateString("en-US").split("/");
@@ -20,6 +20,8 @@ export const PendingSales = (props) => {
   }
   const { isLoading, startLoading, stopLoading } = useLoading()
   const [pedidos, setPedidos] = useState([]);
+  const [incident,setIncident] = useState([]);
+
   const getProducts = async () => {
   try {
     startLoading();
@@ -29,15 +31,15 @@ export const PendingSales = (props) => {
           salesIds.map((id) => saleAPI.getSaleProductBySaleId(id))
         )
         setPedidos(pedidosResponses.map((pedido) => pedido.data));
-
       }
     } catch (error) {
       console.log(error)
     }
     stopLoading();
   }
+ 
    
-  useEffect (() => {
+  useEffect (() => {  
     getProducts();
   }, [])
 
@@ -48,7 +50,9 @@ const Navigation = useNavigation();
   return (
 <ScrollView  refreshControl={
       <RefreshControl refreshing={isLoading} onRefresh={getProducts} />
-    }>
+    }
+    showsVerticalScrollIndicator={false}
+    >
     <Stack>
       <Text textAlign="center" fontSize={18} color="#9393AA" mb={3}>
         Estos son tus pedidos {"\n"} pendientes por pagar para ser {"\n"}{" "}
@@ -105,12 +109,15 @@ const Navigation = useNavigation();
                   }
                   bgColor="#41634A"
                   rounded="full"
+                  onPress={() => { Navigation.navigate("ReporteIncidencias", { 
+                    idPedido: item.sales[index].id,
+                    companyName: item.sales[index].company.name,
+                  }) }}
                 />
               </Stack>
             </HStack>
           </View>
         </TouchableOpacity>
-        
       ))}
     </Stack>
     </ScrollView>

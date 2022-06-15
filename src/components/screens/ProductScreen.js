@@ -75,7 +75,7 @@ const ProductScreen = ({
                   id={item.id}
                   company_id={item.company_id}
                   description={item.description}
-                  image={item.photo}
+                  photo={item.photo}
                   name={item.name}
                   price={item.price}
                 />

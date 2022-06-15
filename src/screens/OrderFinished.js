@@ -36,7 +36,7 @@ export const OrderFinished = (props) => {
     try {
       startLoading();
       const { data } = await companyAPI.getCompanyProduct(item.sales.company.id);
-      console.log("delivery price",data)
+      
       setCompany(data);
     } catch (error) {
       console.log(error)
@@ -47,9 +47,10 @@ export const OrderFinished = (props) => {
     getPedidos();
     getDeliveryPrice();
   }, [])
+
   const idPedidos = pedidos.map((pedido) => pedido.product_id);
   const quantitys = pedidos.map((pedido) => pedido.quantity);
-  const delivery = item.sales.delivery_type ? company.delivery_price : 0;
+  const delivery =  item.sales.delivery_type === "delivery" ? company.delivery_price : 0;
   const subTotal = item.sales.total_amount - delivery;
   return (
     <>
