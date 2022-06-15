@@ -336,7 +336,7 @@ const RegisterForm = () => {
                 />
                 <View width="90%">
                   <Select
-                    placeholder="Genero"
+                    placeholder="Género"
                     borderWidth={0}
                     style={{
                       width: "100%",
