@@ -1,36 +1,21 @@
-import { useState } from "react";
 import {
-  Badge,
   Button,
-  KeyboardAvoidingView,
   Stack,
   Input,
   FormControl,
-  HStack,
-  Select,
-  Text,
-  View,
-  Checkbox,
-  FlatList,
   VStack,
 } from "native-base";
 import { Icon } from "native-base";
+import { MaterialIcons } from "@expo/vector-icons";
 import {
-  FontAwesome,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { TouchableOpacity } from "react-native";
-/*import {
-  ChangePasswordFormDefaultValues,
-  ChangePasswordFormSchema,
-} from "../../../utils/formValidations/ChangePasswordFormFormValidation";*/
+  passwordSchema,
+  passwordDefaultValues,
+} from "../../../utils/formValidations/changePasswordFormValidation"
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
-import { authAPI } from "../../../api/authAPI";
+import useAuthContext from "../../../hooks/useAuthContext";
 import { ICONS_PROPS } from "../../../themes/iconStyles"
 import { INPUT_PROPS } from "../../../themes/inputStyles"
 import { userAPI } from "../../../api/userAPI";
@@ -39,37 +24,45 @@ const ChangePasswordForm = ({ navigation }) => {
   const { showErrorToast, showSuccesToast } = useCustomToast();
   const { isLoading, startLoading, stopLoading } = useLoading();
 
- const {
+  const {
     control,
     handleSubmit,
     formState: { isValid, errors },
     reset,
   } = useForm({
     mode: "onChange",
-   // resolver: yupResolver(ChangePasswordFormSchema),
-  //  defaultValues: ChangePasswordFormDefaultValues,
+    resolver: yupResolver(passwordSchema),
+    defaultValues: passwordDefaultValues,
   });
+
+  const {
+    state: { user },
+  } = useAuthContext();
 
   const onSubmit = async (values) => {
     startLoading();
     try {
-      const data = await authAPI.requestPasswordReset(values);
+      const data = await userAPI.changeOldPassword(user.id, {
+        old_password: values.current_password,
+        new_password: values.password,
+        confirm_password: values.password_confirmation,
+      });
+      showSuccesToast("Contraseña cambiada correctamente");
       reset(passwordDefaultValues);
-      showSuccesToast("Se envió un correo para recuperar su contraseña");
       navigation?.goBack();
     } catch (error) {
       console.log(error?.response?.data);
-      showErrorToast("Error al registrar");
+      showErrorToast("Error al cambiar contraseña");
     }
     stopLoading();
   };
   console.log(errors);
 
   return (
-    <KeyboardAvoidingView enabled>
+    <>
       <Stack space={3}>
-      <Controller
-          name="previous_password"
+        <Controller
+          name="current_password"
           control={control}
           render={({
             field: { onChange, ...field },
@@ -90,6 +83,9 @@ const ChangePasswordForm = ({ navigation }) => {
                   />
                 }
               />
+              <FormControl.ErrorMessage ml={4}>
+                {error?.message}
+              </FormControl.ErrorMessage>
             </FormControl>
           )}
         />
@@ -116,7 +112,7 @@ const ChangePasswordForm = ({ navigation }) => {
                   />
                 }
               />
-              <FormControl.ErrorMessage>
+              <FormControl.ErrorMessage ml={4}>
                 {error?.message}
               </FormControl.ErrorMessage>
             </FormControl>
@@ -144,11 +140,11 @@ const ChangePasswordForm = ({ navigation }) => {
                   />
                 }
               />
-              <FormControl.HelperText>
+              <FormControl.HelperText ml={4} mr={4}>
                 La contraseña debe contener: mayúscula, minúscula, mínimo 8
                 dígitos, números y un símbolo especial.
               </FormControl.HelperText>
-              <FormControl.ErrorMessage>
+              <FormControl.ErrorMessage ml={4}>
                 {error?.message}
               </FormControl.ErrorMessage>
             </FormControl>
@@ -173,7 +169,7 @@ const ChangePasswordForm = ({ navigation }) => {
           CAMBIAR CONTRASEÑA
         </Button>
       </VStack>
-    </KeyboardAvoidingView>
+    </>
   );
 };
 
