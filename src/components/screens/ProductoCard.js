@@ -17,6 +17,7 @@ import { Alert, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { useVerifyProductByCompanyId } from "../../hooks/useVerifyProductByCompanyId";
 import * as actions from "../../Redux/Actions/cartActions";
+import useCustomToast from "../../hooks/useCustomToast";
 
 const ProductoCard = (props) => {
   const {
@@ -35,6 +36,7 @@ const ProductoCard = (props) => {
   const productInCart = cartItems.find((item) => item.product.id === id);
 
   const Navigation = useNavigation();
+  const { showErrorToast, showSuccesToast } = useCustomToast();
 
   return (
     <TouchableOpacity
@@ -138,9 +140,12 @@ const ProductoCard = (props) => {
                   borderRadius="full"
                   bgColor="#DB7F50"
                   onPress={() => {
-                    canAddProduct
-                      ? props.addItemToCart(props)
-                      : showAlertDialog();
+                   if (!canAddProduct) {
+                    showAlertDialog();
+                    return;
+                  }
+                  props.addItemToCart(props)
+                  showSuccesToast("Producto agregado al carrito");
                   }}
                 />
               )}

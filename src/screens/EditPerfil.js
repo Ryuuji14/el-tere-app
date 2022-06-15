@@ -27,6 +27,7 @@ export const EditPerfil = ({ navigation }) => {
         px={0}
         position="relative"
         pb={0}
+    
       >
         {/* Logo */}
         <View
@@ -43,6 +44,7 @@ export const EditPerfil = ({ navigation }) => {
           overflow="hidden"
           bgColor="#DD8457"
           alignSelf="center"
+          
         >
           <Image
             source={require("../../assets/LOGO-EL-TERE-2.png")}

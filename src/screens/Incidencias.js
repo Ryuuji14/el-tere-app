@@ -1,4 +1,4 @@
-import { Button, Heading, Text, View, Input, Divider, IconButton, Icon } from "native-base";
+import { Button, Heading, Text, View, Input, Divider, IconButton, Icon, KeyboardAvoidingView } from "native-base";
 import React, { useEffect, useState } from "react";
 import { ImageBackground, Dimensions, StyleSheet, RefreshControl } from "react-native";
 import useLoading from "../hooks/useLoading";
@@ -8,6 +8,7 @@ import useCustomToast from "../hooks/useCustomToast";
 import { useNavigation } from "@react-navigation/native";
 
 import { incindentAPI } from "../api/incidentAPI";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -66,6 +67,7 @@ const Incidencias = (props) => {
             width="100%"
             borderColor="#41634A"
           />
+          
           <View
             marginTop="auto"
             position="absolute"
@@ -73,8 +75,11 @@ const Incidencias = (props) => {
             width="100%"
             alignSelf="flex-start"
           >
+            <KeyboardAvoidingView> 
+            <SafeAreaView>
             <Input w="100%" size="lg" py="0"
               borderTopColor="#41634A"
+              multiline={true}
               InputRightElement={<IconButton size="lg"
                 icon={<Icon as={AntDesign}
                   name="rightcircle"
@@ -91,6 +96,8 @@ const Incidencias = (props) => {
               value={text}
               isLoading={isLoading}
             />
+            </SafeAreaView>
+            </KeyboardAvoidingView>
           </View>
         </View>
 

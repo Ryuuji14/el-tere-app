@@ -66,10 +66,10 @@ const ConfirmarPedido = (props) => {
 
   var total = 0;
   props.cartItems.forEach(cart => {
-    return (total += (cart.product.price * cart.product.quantity) ) 
+    return (total += (cart.product.price * cart.product.quantity))
   });
-var totalcd = 0;
-totalcd = total + delivery;
+  var totalcd = 0;
+  totalcd = total + delivery;
 
 
 
@@ -101,7 +101,7 @@ totalcd = total + delivery;
         delivery_type: selection ? "delivery" : "pick_up",
         company_id: company,
         address: selection1 ? selection1 : null,
-        delivery_price: delivery ,
+        delivery_price: delivery,
         subtotal: total,
         total_amount: total + delivery,
         sale_products: props.cartItems.map(cart => {
@@ -125,7 +125,7 @@ totalcd = total + delivery;
             delivery_price: _company?.delivery_price,
             cellphone: _company?.cellphone,
             total: total,
-            address: selection1?.value, 
+            address: selection1?.value,
           }
         }]
       });
@@ -137,10 +137,10 @@ totalcd = total + delivery;
     stopLoading();
   }
 
-const onChange = (value) => {
-  setSelection(value),
-  selection===true ? setDelivery(0) : setDelivery( _company.delivery_price)
-}
+  const onChange = (value) => {
+    setSelection(value),
+      selection === true ? setDelivery(0) : setDelivery(_company.delivery_price)
+  }
 
 
   return (
@@ -209,44 +209,52 @@ const onChange = (value) => {
                         bg: "#DB7F50",
                         textColor: "white",
                         endIcon: <CheckIcon size="5" />
-                      }} mt={1} onValueChange={itemValue => 
+                      }} mt={1} onValueChange={itemValue =>
                         onChange(itemValue)
                       }>
-                        <Select.Item label="Si" value={true} />
-                        <Select.Item label="No" value={false} />
+                        <Select.Item key={"32"} label="Si" value={true} />
+                        <Select.Item key={"54"} label="No" value={false} />
                       </Select>
                     </Box>
                   </HStack>
                   {
                     selection === true && (
-                     <>
-                  <Text
-                    color="#6E6E7A"
-                    fontSize="18"
-                    bold
-                  >
-                    Dirección para Delivery:
-                  </Text>
-                  <Box w="3/4" maxW="300" >
-                    <FormControl isRequired isInvalid>
-                      <Select borderColor="#DB7F50" borderRadius="20" selectedValue={selection1} fontSize="14" minWidth="200" accessibilityLabel="Escoge tu direccion" placeholder="Escoge tu direccion" _selectedItem={{
-                        bg: "#DB7F50",
-                        textColor: "white",
-                        endIcon: <CheckIcon size="5" />
-                      }} mt={1} onValueChange={itemValue => setSelection1(itemValue)}>
-                        {addresses.map((address, index) => {
-                          return (
-                            <Select.Item key={index.toString()} label={address.address} value={address.address} />
-                          )
-                        })}
-                      </Select>
-                      <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                          Por favor escoge una dirección.
-                        </FormControl.ErrorMessage>
-                    </FormControl>
-                  </Box>
-                  </>
-                    ) } 
+                      <>
+                        <Text
+                          color="#6E6E7A"
+                          fontSize="18"
+                          bold
+                        >
+                          Dirección para Delivery:
+                        </Text>
+                        <Box w="3/4" maxW="300" >
+                          <FormControl isRequired isInvalid>
+                            <Select
+                              borderColor="#DB7F50"
+                              borderRadius="20"
+                              selectedValue={selection1}
+                              fontSize="14"
+                              minWidth="200"
+                              accessibilityLabel="Escoge tu direccion"
+                              placeholder="Escoge tu direccion"
+                              _selectedItem={{
+                                bg: "#DB7F50",
+                                textColor: "white",
+                                endIcon: <CheckIcon size="5" />
+                              }} mt={1} onValueChange={itemValue => setSelection1(itemValue)}>
+                              {addresses.map((address, index) => {
+                                return (
+                                  <Select.Item key={index.toString()} label={address.address} value={address.address} />
+                                )
+                              })}
+                            </Select>
+                            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                              Por favor escoge una dirección.
+                            </FormControl.ErrorMessage>
+                          </FormControl>
+                        </Box>
+                      </>
+                    )}
                 </VStack>
               )
             }
@@ -284,7 +292,6 @@ const onChange = (value) => {
 
                 </Text>
                 <Divider
-
                   my="2"
                   _light={{
                     bg: "#41634A",
@@ -303,12 +310,12 @@ const onChange = (value) => {
                 <Button
                   mt="2"
                   mb="4"
-                  width="80%"
+                  width="60%"
                   bgColor="#DB7F50"
                   borderRadius="20"
                   onPress={() => { onSubmit() }}
                 >
-                  <Text color="white" fontSize="16" >PROCESAR PEDIDO</Text>
+                  <Text color="white" fontSize="16" textAlign="center" bgColor="white">PROCESAR PEDIDO</Text>
                 </Button>
               </VStack>
             </Box>

@@ -35,6 +35,7 @@ import { ICONS_PROPS } from "../../../themes/iconStyles";
 import { INPUT_PROPS } from "../../../themes/inputStyles";
 import { useEffect } from "react";
 import { interestAPI } from "../../../api/interestAPI";
+import { NavigationHelpersContext, useNavigation } from "@react-navigation/native";
 
 const RegisterForm = () => {
   const { showErrorToast, showSuccesToast } = useCustomToast();
@@ -55,6 +56,7 @@ const RegisterForm = () => {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [interestsToSelect, setInterestsToSelect] = useState([]);
+  const Navigation = useNavigation();
  ;
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const RegisterForm = () => {
 
         setInterestsToSelect(data?.items || []);
       } catch (error) {
-        showErrorToast(error);
+        showErrorToast("error al obtener los intereses");
       }
     };
 
@@ -87,10 +89,12 @@ const RegisterForm = () => {
         address: values.address,
       });
 
-      showSuccesToast("Registro exitoso");
+      showSuccesToast("Te has registrado exitosamente");
       reset(registerDefaultValues);
       setValue("acceptTermsAndConditions", false);
       setValue("userInterests", []);
+      Navigation.goBack();
+
     } catch (error) {
       showErrorToast(error);
     }
@@ -347,8 +351,9 @@ const RegisterForm = () => {
                     selectedValue={value}
                     onValueChange={(itemValue) => onChange(itemValue)}
                   >
-                    <Select.Item label="Femenino" value="F" />
-                    <Select.Item label="Masculino" value="M" />
+                    <Select.Item label="Femenino" value="f" />
+                    <Select.Item label="Masculino" value="m" />
+                    <Select.Item label="Otro" value="o"/>
                   </Select>
                 </View>
               </View>

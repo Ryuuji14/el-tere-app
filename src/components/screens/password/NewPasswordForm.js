@@ -60,7 +60,7 @@ const NewPasswordForm = ({ navigation }) => {
       navigation?.goBack();
     } catch (error) {
       console.log(error?.response?.data);
-      showErrorToast("Error al registrar");
+      showErrorToast("Error al cambiar contraseña");
     }
     stopLoading();
   };
