@@ -233,7 +233,7 @@ const Cart = (props) => {
       ) : (
         <Box style={styles.emptyContainer}>
           <Text fontSize="16">Tu carrito esta vacío</Text>
-          <Text fontSize="16">Agrega Productos dentro de un Comercio</Text>
+          <Text fontSize="16">Agrega productos dentro de un comercio</Text>
         </Box>
       )}
     </>

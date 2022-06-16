@@ -1,4 +1,3 @@
-import ChangePassword from "../screens/ChangePassword";
 import { http } from "./http";
 
 const BASE_URL = "user";
@@ -34,5 +33,10 @@ export const userAPI = {
     const { data } = await http.put(`${BASE_URL}/password/${userId}`); 
     return data;
   },
+
+  changeOldPassword: async (id, values) => {
+    const { data } = await http.patch(`${BASE_URL}/password/${id}`, values); 
+    return data;
+  }
 }
 
