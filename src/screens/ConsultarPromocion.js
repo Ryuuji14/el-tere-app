@@ -87,10 +87,10 @@ const Promocion = ({ route, cartItems, addMultipleProducts, navigation }) => {
   };
 
   return (
-    <View backgroundColor="white" width={width} alignContent="center">
+    <View backgroundColor="white" width={width} h='100%' alignContent="center">
       <View backgroundColor="white" width="100%">
         <HStack justifyContent="flex-start" alignItems="flex-start">
-          <Image source={ Logo } alt="logo" size='xs' />
+          <Image source={ Logo } alt="logo" size='xs' mt={2} ml={2} />
           <Text mt="2" bold fontSize="16">
             Promoción
           </Text>

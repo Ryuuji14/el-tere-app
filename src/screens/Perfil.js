@@ -208,7 +208,7 @@ const Perfil = ({ navigation }) => {
           >
             <HStack justifyContent="center" w="49%">
               <Stack alignItems="center">
-                <Text fontSize={45} fontWeight="medium" color="#5A7E64" mb={-3}>
+                <Text fontSize={45} fontWeight="medium" color="#5A7E64" mb={-3} textAlign='center'>
                   {sales.length || 0}
                 </Text>
                 <Text color="#9393AA" fontSize={16}>
@@ -222,7 +222,7 @@ const Perfil = ({ navigation }) => {
                 <TouchableOpacity 
                 onPress={() => navigation?.navigate("Comentarios")}
                 > 
-                <Text fontSize={45} fontWeight="medium" color="#5A7E64" mb={-3}>
+                <Text fontSize={45} fontWeight="medium" color="#5A7E64" mb={-3} textAlign='center'>
                   {comments.totalItems || 0}
                 </Text>
                 <Text color="#9393AA" fontSize={16}>

@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../screens/Home";
 import Notifications from "../screens/Notifications";
 import Perfil from "../screens/Perfil";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
@@ -125,5 +124,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BottomNavigation);
-
-// export default BottomNavigation;

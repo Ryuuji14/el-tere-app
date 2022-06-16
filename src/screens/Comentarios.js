@@ -78,44 +78,46 @@ const Comentarios = () => {
           borderRadius={10}
           alignItems="center"
           paddingBottom="30%"
+          justifyContent={comentarios?.items?.length > 0 ? 'flex-start' : 'center'}
         >
-            
-          <VStack space={2} py={2} bgcolor="black" ml="4" width="80%" >
+
+          <VStack space={2} py={2} ml="4" width="80%" >
             <FlatList
-            showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-              }}
+              showsVerticalScrollIndicator={false}
               data={comentarios.items || []}
               renderItem={({ item: comment, index }) => (
                 <>
-                <Text 
-                textAlign="center"
-                color="#6E6E7A"
-                fontSize="14"
-                >
-                  <Text bold>Comercio: </Text>
-                  {comment.company.name} 
+                  <Text
+                    textAlign="center"
+                    color="#6E6E7A"
+                    fontSize="14"
+                  >
+                    <Text bold>Comercio: </Text>
+                    {comment.company.name}
                   </Text>
-                <Comment
-                  key={index.toString()}
-                  firstName={userInfo?.first_name}
-                  lastName={userInfo?.last_name}
-                  rating={comment?.rating}
-                  date={comment?.createdAt}
-                  description={comment?.description}
-                />
+                  <Comment
+                    key={index.toString()}
+                    firstName={userInfo?.first_name}
+                    lastName={userInfo?.last_name}
+                    rating={comment?.rating}
+                    date={comment?.createdAt}
+                    description={comment?.description}
+                  />
                 </>
               )}
               keyExtractor={(comment) => comment?.id}
               ListEmptyComponent={() => (
-                <Text
-                  fontSize="16"
-                  alignContent="center"
-                  alignSelf="center"
-                  textAlign="center"
-                >
-                  No hay comentarios {"\n"}en ningún comercio
-                </Text>
+                <View justifyContent='center' >
+                  <Text
+                    fontSize="16"
+                    alignContent="center"
+                    alignSelf="center"
+                    textAlign="center"
+                    justifyContent="center"
+                  >
+                    No tienes comentarios {"\n"}en ningún comercio
+                  </Text>
+                </View>
               )}
               refreshControl={
                 <RefreshControl

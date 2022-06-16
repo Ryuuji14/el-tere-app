@@ -38,7 +38,7 @@ const Login = ({ navigation }) => {
       >
 
           <Text color="#8898AA" fontSize={16} mb={4} alignSelf="center">
-            Inicia Sesión con tus datos:
+            Inicia sesión con tus datos:
           </Text>
           <LoginForm navigation={navigation} />
         

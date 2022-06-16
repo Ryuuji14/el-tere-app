@@ -1,4 +1,3 @@
-import ChangePassword from "../screens/ChangePassword";
 import { http } from "./http";
 
 const BASE_URL = "user";
