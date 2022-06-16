@@ -36,6 +36,7 @@ import { INPUT_PROPS } from "../../../themes/inputStyles";
 import { useEffect } from "react";
 import { interestAPI } from "../../../api/interestAPI";
 import { NavigationHelpersContext, useNavigation } from "@react-navigation/native";
+import { userAddressAPI } from "../../../api/userAddress";
 
 const RegisterForm = () => {
   const { showErrorToast, showSuccesToast } = useCustomToast();
@@ -67,9 +68,9 @@ const RegisterForm = () => {
         setInterestsToSelect(data?.items || []);
       } catch (error) {
         showErrorToast("error al obtener los intereses");
+        console.log("error interes", error);
       }
     };
-
     getInterests();
   }, []);
 
@@ -83,20 +84,20 @@ const RegisterForm = () => {
     startLoading();
     try {
       const { data } = await authAPI.register(values);
-
+      console.log("data", data)
       await addressAPI.registerUserAddress({
         user_id: data.id,
         address: values.address,
       });
-
+      
       showSuccesToast("Te has registrado exitosamente");
-      reset(registerDefaultValues);
       setValue("acceptTermsAndConditions", false);
       setValue("userInterests", []);
       Navigation.goBack();
-
+      reset(registerDefaultValues);
     } catch (error) {
       showErrorToast(error);
+      console.log(error);
     }
     stopLoading();
   };

@@ -35,7 +35,7 @@ const ProductScreen = ({
 }) => {
   return (
     <ScrollView refreshControl={refreshControl}>
-      <View bgColor="white" px={7} pb={5} minH={height}>
+      <View bgColor="white" px={7} pb={5} minH={height} paddingBottom="20%">
         <KeyboardAvoidingView>
           <Stack>
             <VStack>

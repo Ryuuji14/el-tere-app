@@ -56,11 +56,11 @@ const Notifications = ({ setReadNotifications }) => {
             .catch((err) => null)
         )
       );
-
       setReadNotifications();
-      console.log(notifications)
+
     } catch (error) {
-      showErrorToast(error);
+      showErrorToast("error obteniendo notificaciones");
+      console.log(error)
     } finally {
       stopLoading();
     }
@@ -127,15 +127,16 @@ const Notifications = ({ setReadNotifications }) => {
               height="100%"
               bgColor="white"
               borderRadius={10}
-              alignItems="center"
               paddingBottom="30%"
               justifyContent="center"
+              alignItems="center"
+              
             >
               <Text
                 fontSize="18"
-                alignContent="center"
-                alignSelf="center"
                 textAlign="center"
+                alignSelf="center"
+                justifyContent="center"
               >
                 No tienes ninguna notificación
               </Text>

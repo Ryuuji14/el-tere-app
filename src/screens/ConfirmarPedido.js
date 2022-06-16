@@ -146,7 +146,7 @@ const ConfirmarPedido = (props) => {
 
   return (
     <>
-      <View backgroundColor="#DB7F50" width={width} h="100%">
+      <View backgroundColor="#DB7F50" width={width} h={height}>
         <Text style={{ alignSelf: "center" }} fontSize='30' color="white" my="2"> Confirma tu Pedido </Text>
         <View
           backgroundColor="white"
@@ -308,16 +308,18 @@ const ConfirmarPedido = (props) => {
                 >
                   TOTAL a pagar: ${Number(Number(total) + Number(delivery))}
                 </Text>
+               <View> 
                 <Button
                   mt="2"
                   mb="4"
-                  width="60%"
+                  width="100%"
                   bgColor="#DB7F50"
                   borderRadius="20"
                   onPress={() => setVisible(true)}
                 >
-                  <Text color="white" fontSize="16" textAlign="center" bgColor="white">PROCESAR PEDIDO</Text>
+                   <Text color="white" textAlign="center">PROCESAR PEDIDO</Text>
                 </Button>
+                </View>
               </VStack>
             </Box>
           </VStack>

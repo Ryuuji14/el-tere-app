@@ -16,7 +16,8 @@ export const useNotifications = (loadNotifications) => {
           const { data } = await notificationAPI.getUserNotifications(user.id);
           loadNotifications?.(data?.items || []);
         } catch (error) {
-          showErrorToast(error);
+          showErrorToast("error obteniendo notificaciones");
+          console.log(error);
         }
       };
       getNotifications();

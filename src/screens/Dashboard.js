@@ -105,7 +105,7 @@ const Dashboard = ({ navigation }) => {
         )
       );
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
     stopLoading();
   };
@@ -150,7 +150,8 @@ const Dashboard = ({ navigation }) => {
       //   setAreas(data || []);
       // }
     } catch (error) {
-      showErrorToast(error);
+      showErrorToast("error filtro");
+      console.log(error);
     }
     stopLoading();
   };

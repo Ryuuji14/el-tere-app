@@ -119,7 +119,7 @@ const ReporteIncidencias = (props) => {
         </View>
         ) : (
           <View width="100%" height="80%" bgColor='white' borderRadius={10} style={styles.emptyContainer}  >
-            <Text fontSize="18" color="#6E6E7A"> No hay incidencias</Text>
+            <Text fontSize="18" color="#6E6E7A"> No has reportado Incidencias</Text>
           </View>  
         )}
 

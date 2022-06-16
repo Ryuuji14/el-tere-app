@@ -23,7 +23,7 @@ const FilterRubros = ({ navigation }) => {
           setCategories([{ id: -1, name: "Todos los rubros" }, ...data?.items]);
         }
       } catch (error) {
-        showErrorToast(error);
+        showErrorToast("error filtro rubro");
       }
     };
 
@@ -31,6 +31,7 @@ const FilterRubros = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    console.log(categories)
     if (selectedCategory) {
       setCategory(selectedCategory.id);
     }
