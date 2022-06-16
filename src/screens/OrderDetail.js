@@ -23,7 +23,7 @@ export const OrderDetail = (props) => {
   const getDeliveryPrice = async () => {
     try {
       startLoading();
-      const { data } = await companyAPI.getCompanyProduct(item.sales.company.id);
+      const { data } = await companyAPI.getCompanyProduct(item?.sales?.company.id);
       setCompany(data);
     } catch (error) {
       console.log(error)
@@ -33,7 +33,7 @@ export const OrderDetail = (props) => {
   const getIncidencia = async () => {
     startLoading();
     try {
-      const { data } = await incindentAPI.getIncidents(item.sales.id);
+      const { data } = await incindentAPI.getIncidents(item?.sales?.id);
       setIncidencia(data);
     } catch (error) {
       showErrorToast(error.message);
@@ -45,7 +45,7 @@ export const OrderDetail = (props) => {
   const getSaleById = async () => {
     startLoading();
     try {
-      const { data } = await saleAPI.getSaleById(item.sales.id);
+      const { data } = await saleAPI.getSaleById(item?.sales?.id);
       setSale(data);
       console.log(sale)
     } catch (error) {
@@ -62,8 +62,8 @@ export const OrderDetail = (props) => {
     getSaleById();
   }, [])
 
-  const delivery = item.sales.delivery_type === "delivery" ? company.delivery_price : 0;
-  const subTotal = item.sales.total_amount - delivery;
+  const delivery = item?.sales?.delivery_type === "delivery" ? company?.delivery_price : 0;
+  const subTotal = item?.sales?.total_amount - delivery;
   return (
     <>
       <ImageBackground
@@ -71,60 +71,66 @@ export const OrderDetail = (props) => {
         style={{ width, height, zIndex: 1, paddingHorizontal: 30, flex: 1 }}
       >
         <Heading color="white" fontSize={36} fontWeight="bold" >
-          Pedido nro: {'\n'} {item.sales?.id}
+          Pedido nro: {'\n'} {item?.sales?.id}
         </Heading>
         <ScrollView flex="1" width="full" px={4} backgroundColor='white' borderTopRadius={20} showsVerticalScrollIndicator={false}
-        refreshControl= {<RefreshControl
-        refreshing={isLoading}
-        onRefresh={getSaleById}
-      />
-        }
+          refreshControl={<RefreshControl
+            refreshing={isLoading}
+            onRefresh={getSaleById}
+          />
+          }
         >
           <Text
             mt='4'
             fontSize={18}
-            color="gray.700"
-          > <Text bold>Comercio:</Text> {item.sales.company.name}</Text>
+            color="#6E6E7A"
+          > <Text bold>Comercio:</Text> {item?.sales?.company?.name}</Text>
 
-          <Text fontSize={18} bold> Modalidad: </Text>
-           
-         
-          {item.sales.delivery_type === "delivery" ? (
+          <Text fontSize={18} bold color="#6E6E7A"> Modalidad: </Text>
+
+
+          {item?.sales?.delivery_type === "delivery" ? (
             <>
-              <Text fontSize={18} bold> Delivery </Text>
-              <Text fontSize={18} bold mt="2"> Estatus: </Text>
+              <Text fontSize={18} bold  color="#6E6E7A"> Delivery </Text>
+              <Text fontSize={18} bold mt="2"  color="#6E6E7A"> Estatus: </Text>
               <View mb={4}>
-                <Text fontSize={16} bold color="gray.700">
+                <Text fontSize={16} bold  color="#6E6E7A">
                   Dirección de envío:
                 </Text>
-                <Text fontSize={16} color="gray.500">
-                  {item.sales?.address}
+                <Text fontSize={16}  color="#6E6E7A">
+                  {item?.sales?.address}
                 </Text>
-                <Text fontSize={14} color="gray.500">
+                <Text fontSize={14}  color="#6E6E7A">
                 </Text>
               </View>
               <TimeLineBlock text="Orden ingresada" />
               <TimeLineBlock
-                isActive={sale.status === "pending"}
+                isActive={sale?.status === "pending"}
                 text="Orden está siendo procesada"
               />
-              <TimeLineBlock isActive={sale.status=== "to_deliver"} text="Orden en camino" />
-              <TimeLineBlock isActive={sale.status==="complete"} text="Orden entregada " />
+              <TimeLineBlock isActive={sale?.status === "to_deliver"} text="Orden en camino" />
+              <TimeLineBlock isActive={sale?.status === "complete"} text="Orden entregada " />
+
+              <Text fontSize="16" bold color="#6E6E7A"> Ultima Actualización: {"\n"} {sale?.updatedAt.split("", 5)} </Text>
+
+
             </>)
             : (
               <>
-              
-                <Text fontSize={18}> Retiro en el Comercio </Text>
-                <Text fontSize={18} bold mt="2"> Estatus: </Text>
+
+                <Text fontSize={18} color="#6E6E7A"> Retiro en el Comercio </Text>
+                <Text fontSize={18} bold mt="2" color="#6E6E7A"> Estatus: </Text>
                 <TimeLineBlock text="Orden ingresada" />
                 <TimeLineBlock
-                  isActive={sale.status === "pending"}
+                  isActive={sale?.status === "pending"}
                   text="Orden está siendo procesada"
 
                 />
-                <TimeLineBlock 
-                isActive={sale.status==="complete"}
-                text="Orden entregada " />
+                <TimeLineBlock
+                  isActive={sale?.status === "complete"}
+                  text="Orden entregada " />
+
+                <Text fontSize="16" bold color="#6E6E7A"> Ultima Actualización: {"\n"} {sale?.updatedAt}</Text>
               </>
             )}
           <View mt={3}>
@@ -144,7 +150,7 @@ export const OrderDetail = (props) => {
             </Stack>
 
             <TotalAmounts
-              total={item.sales.total_amount}
+              total={item?.sales?.total_amount}
               subTotal={subTotal}
               delivery={delivery}
             />
@@ -159,7 +165,7 @@ export const OrderDetail = (props) => {
               backgroundColor="#41634A"
               onPress={() => {
                 props.navigation.navigate("Incidencias", {
-                  sales: item.sales,
+                  sales: item?.sales,
                 });
               }
               }

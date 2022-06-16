@@ -6,6 +6,7 @@ import { saleAPI } from "../../../api/salesAPI";
 import useCustomToast from "../../../hooks/useCustomToast";
 import useLoading from "../../../hooks/useLoading";
 import { useNavigation } from "@react-navigation/native";
+import useAuthContext from "../../../hooks/useAuthContext";
 
 const formatDate = (date) => {
   const d = new Date(date);
@@ -17,33 +18,42 @@ export const PendingSales = (props) => {
   const item = {
     sales: props.sales,
   }
+  const {
+    dispatch,
+    state: { user },
+  } = useAuthContext();
+
   const { isLoading, startLoading, stopLoading } = useLoading()
   const [pedidos, setPedidos] = useState([]);
   const [_sale, setSale] = useState([])
+  const [userSales, setUserSales] = useState([])
 
-  const getProducts = async () => {
+  const getUserSales = async () => {
+    startLoading()
     try {
-      startLoading();
-      if (item.sales.length > 0) {
-        const salesIds = item.sales.map((sale) => sale.id);
+      const [ {data: salesInfo }] = await Promise.all([
+        saleAPI.getUserSales(user.id)
+      ])
+      const activeSales = salesInfo?.items.filter(sale => sale.active)
+      const pendingSales = activeSales?.filter(sale => sale.status === "pending" || sale.status === "to_deliver")
+      setUserSales(pendingSales)
+      
+      if(userSales?.length > 0) {
+        const salesIds = userSales?.map((sale) => sale.id);
+        
         const pedidosResponses = await Promise.all(
           salesIds.map((id) => saleAPI.getSaleProductBySaleId(id))
-        )
-         const sales = await Promise.all(
-          salesIds.map((id) => saleAPI.getSaleById(id))
-        )
-        setPedidos(pedidosResponses.map((pedido) => pedido.data));
-        setSale(sales.map((sale) => sale.data));
+        );
+     setPedidos(pedidosResponses.map((pedido) => pedido.data))
       }
     } catch (error) {
       console.log(error)
     }
-    stopLoading();
+    stopLoading()
   }
 
-
   useEffect(() => {
-    getProducts();
+    getUserSales();
   }, [])
 
   const Navigation = useNavigation();
@@ -52,7 +62,7 @@ export const PendingSales = (props) => {
 
   return (
     <ScrollView refreshControl={
-      <RefreshControl refreshing={isLoading} onRefresh={getProducts} />
+      <RefreshControl refreshing={isLoading} onRefresh={getUserSales} />
     }
       showsVerticalScrollIndicator={false}
     >
@@ -61,13 +71,13 @@ export const PendingSales = (props) => {
             Estos son tus pedidos {"\n"} pendientes por pagar para ser {"\n"}{" "}
             validados:
           </Text> 
-      {pedidos.length > 0 ? (pedidos.map((sale, index) => (
+      {userSales?.length > 0 ? (userSales?.map((sale, index) => (
         <>
             <TouchableOpacity
               ctiveOpacity={0.8}
               key={index.toString()}
               onPress={() => Navigation.navigate("OrderDetail", {
-                sales: item.sales[index],
+                sales: sale,
               })}
             >
               <View
@@ -93,11 +103,11 @@ export const PendingSales = (props) => {
                   </Stack>
                   <Stack mr={4}>
                     <Text color="#41634A" fontSize={14} fontWeight="bold">
-                      Pedido nro: {item.sales[index].id}
+                      Pedido nro: {sale?.id}
                     </Text>
-                    <Text color="#9393AA">N° de artículos: {sale.length} </Text>
-                    <Text color="#9393AA">Fecha: {formatDate(item.sales[index].createdAt)}</Text>
-                    <Text color="#6E6E7A">Total: ${item.sales[index].total_amount}</Text>
+                    <Text color="#9393AA">N° de artículos: {pedidos[index]?.length} </Text>
+                    <Text color="#9393AA">Fecha: {formatDate(sale?.createdAt)} </Text>
+                    <Text color="#6E6E7A">Total: ${sale?.total_amount} </Text>
                   </Stack>
                   <Stack alignItems="center" justifyContent="center">
                     <IconButton
@@ -113,8 +123,8 @@ export const PendingSales = (props) => {
                       rounded="full"
                       onPress={() => {
                         Navigation.navigate("ReporteIncidencias", {
-                          idPedido: item.sales[index].id,
-                          companyName: item.sales[index].company.name,
+                          idPedido: userSales[index]?.id,
+                          companyName: userSales[index]?.company.name,
                         })
                       }}
                     />

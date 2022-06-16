@@ -101,6 +101,7 @@ export const AuthProvider = ({ children }) => {
         });
       } catch (error) {
         setSession(null);
+        console.log(error)
         dispatch({
           type: "INITIALIZE",
           payload: {

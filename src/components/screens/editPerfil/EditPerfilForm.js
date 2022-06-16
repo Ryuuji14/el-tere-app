@@ -121,9 +121,9 @@ export const EditPerfilForm = ({ navigation }) => {
     try {
       await userAPI.updateUser(user?.id, values);
 
-      showSuccesToast("Edicion exitosa");
+      showSuccesToast("Edición exitosa");
     } catch (error) {
-      showErrorToast("Error al actualizar");
+      showErrorToast("Error al actualiza tus datos");
     }
     stopLoading();
   };

@@ -9,7 +9,6 @@ export const addressAPI = {
   },
   registerUserAddress: async (form = {}) => {
     let { user_id, address } = form;
-
     const { data } = await http.post(BASE_URL, {
       user_id,
       address,

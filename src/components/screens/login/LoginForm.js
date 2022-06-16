@@ -50,8 +50,6 @@ const LoginForm = ({ navigation }) => {
       const data = await authAPI.login(values);
 
       const token = data?.data?.token;
-
-
       if (token) {
         await AsyncStorage.setItem("@token", token);
         dispatch({
@@ -65,10 +63,10 @@ const LoginForm = ({ navigation }) => {
           },
         });
       }
-
       reset(loginDefaultValues);
     } catch (error) {
       showErrorToast("Datos Incorrectos");
+      console.log(error);
     }
     stopLoading();
   };
