@@ -152,6 +152,7 @@ const stackRoutes = [
     name: "ChangePassword",
     component: ChangePassword,
     requireAuth: true,
+    showHeader: true,
   },
   {
     name: "OrderFinished",

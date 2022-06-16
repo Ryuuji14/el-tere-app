@@ -47,10 +47,4 @@ const NotificationCard = (props) => {
   )
 };
 
-const styles = StyleSheet.create({
-  item: {
-
-  }
-})
-
 export default NotificationCard;

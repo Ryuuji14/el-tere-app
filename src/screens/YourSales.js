@@ -101,7 +101,7 @@ export const YourSales = (props) => {
         </HStack>
 
         <View px={5} py={4}>
-          {activeTabIndex === 0 ? <PendingSales sales={pending}/> : <SaleHistory sales={complete}/>}
+          {activeTabIndex === 0 ? <PendingSales sales={pending.reverse()}/> : <SaleHistory sales={complete.reverse()}/>}
         </View>
       </View>
     </ImageBackground>

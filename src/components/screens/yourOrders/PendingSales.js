@@ -19,6 +19,7 @@ export const PendingSales = (props) => {
   }
   const { isLoading, startLoading, stopLoading } = useLoading()
   const [pedidos, setPedidos] = useState([]);
+  const [_sale, setSale] = useState([])
 
   const getProducts = async () => {
     try {
@@ -28,7 +29,11 @@ export const PendingSales = (props) => {
         const pedidosResponses = await Promise.all(
           salesIds.map((id) => saleAPI.getSaleProductBySaleId(id))
         )
+         const sales = await Promise.all(
+          salesIds.map((id) => saleAPI.getSaleById(id))
+        )
         setPedidos(pedidosResponses.map((pedido) => pedido.data));
+        setSale(sales.map((sale) => sale.data));
       }
     } catch (error) {
       console.log(error)

@@ -10,6 +10,7 @@ import {
   CheckIcon,
   FormControl,
   WarningOutlineIcon,
+  AlertDialog,
 } from "native-base";
 import {
   StyleSheet,
@@ -68,8 +69,7 @@ const ConfirmarPedido = (props) => {
   props.cartItems.forEach(cart => {
     return (total += (cart.product.price * cart.product.quantity))
   });
-  var totalcd = 0;
-  totalcd = total + delivery;
+
 
 
 
@@ -78,6 +78,7 @@ const ConfirmarPedido = (props) => {
   const [selection1, setSelection1] = useState(false)
   const company = props.cartItems[0].product.company_id
   const [delivery, setDelivery] = useState([0])
+  const [visible, setVisible] = useState(false)
 
   useFocusEffect(
     useCallback(() => {
@@ -103,7 +104,7 @@ const ConfirmarPedido = (props) => {
         address: selection1 ? selection1 : null,
         delivery_price: delivery,
         subtotal: total,
-        total_amount: total + delivery,
+        total_amount: Number(Number(total) + Number(delivery)),
         sale_products: props.cartItems.map(cart => {
           return {
             product_id: cart.product.id,
@@ -228,7 +229,7 @@ const ConfirmarPedido = (props) => {
                           Dirección para Delivery:
                         </Text>
                         <Box w="3/4" maxW="300" >
-                          <FormControl isRequired isInvalid>
+                          <FormControl isRequired isInvalid={!selection1}>
                             <Select
                               borderColor="#DB7F50"
                               borderRadius="20"
@@ -305,7 +306,7 @@ const ConfirmarPedido = (props) => {
                   fontSize='18'
                   color='#6E6E7A'
                 >
-                  TOTAL a pagar: ${total + delivery}
+                  TOTAL a pagar: ${Number(Number(total) + Number(delivery))}
                 </Text>
                 <Button
                   mt="2"
@@ -313,7 +314,7 @@ const ConfirmarPedido = (props) => {
                   width="60%"
                   bgColor="#DB7F50"
                   borderRadius="20"
-                  onPress={() => { onSubmit() }}
+                  onPress={() => setVisible(true)}
                 >
                   <Text color="white" fontSize="16" textAlign="center" bgColor="white">PROCESAR PEDIDO</Text>
                 </Button>
@@ -322,6 +323,51 @@ const ConfirmarPedido = (props) => {
           </VStack>
         </View>
       </View>
+      <AlertDialog
+        isOpen={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+      >
+        <AlertDialog.Content>
+          <AlertDialog.Body>
+            <Text textAlign="center" color="#252020" fontSize="18" bold>
+              ¿Estas seguro que deseas procesar el pedido?
+            </Text>
+          </AlertDialog.Body>
+          <AlertDialog.Footer justifyContent="center" borderTopColor="white">
+            <Button.Group space={8} >
+              <Button
+                bgColor="#41634A"
+                width="40%"
+                borderRadius={20}
+                onPress={() => {
+                  setVisible(false);
+                }}
+              >
+                No
+              </Button>
+              <Button
+                bgColor="#DB7F50"
+                width="40%"
+                borderRadius={20}
+                onPress={() => {
+                  try {
+                    onSubmit();
+                    setVisible(false);
+                  } catch {
+                    showErrorToast(
+                      "Error al procesar el pedido"
+                    );
+                  }
+                }}
+              >
+                SI
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
     </>
   );
 };

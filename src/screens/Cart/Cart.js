@@ -1,9 +1,6 @@
 import {
-  Container,
-  Image,
-  FlatList,
+  AlertDialog,
   Box,
-  List,
   Pressable,
   Text,
   HStack,
@@ -17,17 +14,19 @@ import {
 import {
   StyleSheet,
   TouchableOpacity,
-  TouchableHighlight,
+
   Dimensions,
 } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-
+import Icon from "react-native-vector-icons/FontAwesome";;
 import { SwipeListView } from "react-native-swipe-list-view";
 
 import { connect } from "react-redux";
 import * as actions from "../../Redux/Actions/cartActions";
 import { FontAwesome } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import useCustomToast from "../../hooks/useCustomToast";
+import { set } from "react-hook-form";
+
 
 var { height, width } = Dimensions.get("window");
 
@@ -37,13 +36,58 @@ const Cart = (props) => {
   props.cartItems.forEach(cart => {
     return (total += cart.product.price * cart.product.quantity)
   });
-useEffect (() => {
-  console.log(props.cartItems)
-}
-, [])
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const { showErrorToast, showSuccesToast } = useCustomToast();
 
   return (
     <>
+      <AlertDialog
+        isOpen={deleteVisible}
+        onClose={() => {
+          setDeleteVisible(false);
+        }}
+      >
+        <AlertDialog.Content>
+          <AlertDialog.Body>
+            <Text textAlign="center" color="#252020" fontSize="18" bold>
+              ¿Deseas vaciar el carrito {"\n"} y eliminar todos los {"\n"} productos?
+            </Text>
+          </AlertDialog.Body>
+          <AlertDialog.Footer justifyContent="center" borderTopColor="white">
+            <Button.Group space={8} >
+              <Button
+                bgColor="#41634A"
+                width="40%"
+                borderRadius={20}
+                onPress={() => {
+                  setDeleteVisible(false);
+                }}
+              >
+                No
+              </Button>
+              <Button
+                bgColor="#DB7F50"
+                width="40%"
+                borderRadius={20}
+                onPress={() => {
+                  try {
+                    props.clearCart();
+                    setDeleteVisible(false);
+                  } catch {
+                    showErrorToast(
+                      "Error eliminando los productos"
+                    );
+                  }
+                }}
+              >
+                SI
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
+
       {props.cartItems.length ? (
         <View backgroundColor="#DB7F50" width={width} h="100%" >
           <Text style={{ alignSelf: "center" }} fontSize='30' color="white" my="2"> Tu Carrito </Text>
@@ -80,7 +124,7 @@ useEffect (() => {
                   bgColor="#41634A"
                   variant={"solid"}
                   icon={<Icon as={FontAwesome} name="trash" size={30} color="white" />}
-                  onPress={() => props.clearCart()} />
+                  onPress={() => setDeleteVisible(true)} />
               </HStack>
 
               <HStack justifyContent='center'>
@@ -105,6 +149,51 @@ useEffect (() => {
                         uri: data.item.product?.photo,
                       }}
                     />
+                    <AlertDialog
+                      isOpen={visible}
+                      onClose={() => {
+                        setVisible(false);
+                      }}
+                    >
+                      <AlertDialog.Content>
+                        <AlertDialog.Body>
+                          <Text textAlign="center" color="#252020" fontSize="18" bold>
+                            ¿Deseas eliminar este producto del carrito?
+                          </Text>
+                        </AlertDialog.Body>
+                        <AlertDialog.Footer justifyContent="center" borderTopColor="white">
+                          <Button.Group space={8} >
+                            <Button
+                              bgColor="#41634A"
+                              width="40%"
+                              borderRadius={20}
+                              onPress={() => {
+                                setVisible(false);
+                              }}
+                            >
+                              No
+                            </Button>
+                            <Button
+                              bgColor="#DB7F50"
+                              width="40%"
+                              borderRadius={20}
+                              onPress={() => {
+                                try {
+                                  props.removeFromCart(data?.item);
+                                  setVisible(false);
+                                } catch {
+                                  showErrorToast(
+                                    "Error eliminando el producto"
+                                  );
+                                }
+                              }}
+                            >
+                              SI
+                            </Button>
+                          </Button.Group>
+                        </AlertDialog.Footer>
+                      </AlertDialog.Content>
+                    </AlertDialog>
                     <Text ml="4" fontSize="18" mt="4">
                       <Text fontSize="16" color='gray.400' >{data?.item?.product?.quantity}x </Text>
                       {data?.item?.product?.name}</Text>
@@ -123,7 +212,7 @@ useEffect (() => {
                 <View style={styles.hiddenContainer}>
                   <TouchableOpacity
                     style={styles.hiddenButton}
-                    onPress={() => props.removeFromCart(data?.item)}
+                    onPress={() => setVisible(true)}
                   >
                     <Icon name="trash" color={"white"} size={20} />
                   </TouchableOpacity>
@@ -149,6 +238,7 @@ useEffect (() => {
       )}
     </>
   );
+
 };
 
 const mapStateToProps = (state) => {

@@ -58,6 +58,7 @@ const Notifications = ({ setReadNotifications }) => {
       );
 
       setReadNotifications();
+      console.log(notifications)
     } catch (error) {
       showErrorToast(error);
     } finally {
@@ -80,35 +81,67 @@ const Notifications = ({ setReadNotifications }) => {
         <Heading color="white" fontSize={36} fontWeight="bold">
           Tus {"\n"} Notificaciones
         </Heading>
-        <View
-          width="100%"
-          height="100%"
-          bgColor="white"
-          borderRadius={10}
-          alignItems="center"
-          paddingBottom="30%"
+        <ScrollView
+          indicatorStyle={{ backgroundColor: "transparent" }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={getNotifications}
+            />
+          }
         >
-          <VStack space={2} py={2} bgcolor="black" ml="4">
-            <ScrollView
-            indicatorStyle={{ backgroundColor: "transparent" }} 
-              refreshControl={
-                <RefreshControl
-                  refreshing={isLoading}
-                  onRefresh={getNotifications}
-                />
-              }
+          {notifications.items?.length > 0 ? (
+            <View
+              width="100%"
+              height="100%"
+              bgColor="white"
+              borderRadius={10}
+              alignItems="center"
+              paddingBottom="30%"
             >
-              {notifications?.items?.map((notification) => (
-                <NotificationCard
-                  key={notification.id}
-                  id={notification.id}
-                  message={notification.message}
-                  title={notification.title}
-                />
-              ))}
-            </ScrollView>
-          </VStack>
-        </View>
+              <VStack
+                space={2} py={2}
+                width="100%"
+                alignContent="center"
+                justifyContent="center"
+                alignItems="center"
+              >
+
+                {notifications?.items?.map((notification) => (
+
+                  <NotificationCard
+                    key={notification.id}
+                    id={notification.id}
+                    message={notification.message}
+                    title={notification.title}
+                  />
+
+                ))}
+
+              </VStack>
+            </View>
+
+          ) : (
+            <View
+              width="100%"
+              height="100%"
+              bgColor="white"
+              borderRadius={10}
+              alignItems="center"
+              paddingBottom="30%"
+              justifyContent="center"
+            >
+              <Text
+                fontSize="18"
+                alignContent="center"
+                alignSelf="center"
+                textAlign="center"
+              >
+                No tienes ninguna notificación
+              </Text>
+            </View>
+          )}
+        </ScrollView>
       </ImageBackground>
     </>
   );

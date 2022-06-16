@@ -14,5 +14,9 @@ export const saleAPI = {
   addSale: async (sale) => {
     const { data } = await http.post(`${"sale"}`, sale);
     return data;
-  }
+  },
+  getSaleById : async (saleId) => {
+    const { data } = await http.get(`sale/${saleId}`);
+    return data;
+  },
 };

@@ -362,8 +362,9 @@ export const EditPerfilForm = ({ navigation }) => {
                     selectedValue={value}
                     onValueChange={(itemValue) => onChange(itemValue)}
                   >
-                    <Select.Item label="Femenino" value="F" />
-                    <Select.Item label="Masculino" value="M" />
+                    <Select.Item label="Femenino" value="f" />
+                    <Select.Item label="Masculino" value="m" />
+                    <Select.Item label="Otro" value="o" />
                   </Select>
                 </View>
               </View>

@@ -168,22 +168,6 @@ const LoginForm = ({ navigation }) => {
           >
             ¿Olvidaste tu contraseña?
           </Link>
-
-          <Divider backgroundColor="rgba(219,127,80,0.5)" />
-          <Text color="#8898AA" fontSize={16} alignSelf="center">
-            ¿Primera vez usando la App?
-          </Text>
-          <Button
-            width={240}
-            rounded="full"
-            _text={{
-              fontSize: 14,
-              color: "#DB7F50",
-            }}
-            backgroundColor="#FFFFFF"
-          >
-            ENTRA COMO INVITADO/A
-          </Button>
         </VStack>
       </ScrollView>
     </KeyboardAvoidingView>
