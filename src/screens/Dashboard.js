@@ -123,11 +123,13 @@ const Dashboard = ({ navigation }) => {
             const { data } = await companyAPI.getCompaniesByCategory(
               selectedCategory.id
             );
-            setAreas({
-              id: selectedCategory.id,
-              name: selectedCategory.name || "",
-              companies: data,
-            });
+            setAreas([
+              {
+                id: selectedCategory.id,
+                name: selectedCategory.name || "",
+                companies: data,
+              },
+            ]);
           }
           break;
         case 1:
