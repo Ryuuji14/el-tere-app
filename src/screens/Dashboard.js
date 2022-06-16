@@ -116,8 +116,19 @@ const Dashboard = ({ navigation }) => {
       // if (selectedCategory?.id === -1) {
       switch (categoriaSeleccionada) {
         case 0:
-          const { data } = await companyAPI.getAreasWithProducts();
-          setAreas(data);
+          if (selectedCategory?.id === -1) {
+            const { data } = await companyAPI.getAreasWithProducts();
+            setAreas(data);
+          } else {
+            const { data } = await companyAPI.getCompaniesByCategory(
+              selectedCategory.id
+            );
+            setAreas({
+              id: selectedCategory.id,
+              name: selectedCategory.name || "",
+              companies: data,
+            });
+          }
           break;
         case 1:
           const { data: data1 } = await companyAPI.getAreasWithPopularProducts(
