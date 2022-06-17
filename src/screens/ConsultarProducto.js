@@ -58,8 +58,7 @@ const SingleProduct = ({
   const productInCart = cartItems.find(
     (item) => item.product.id === route?.params?.id
   );
-const subtotal=0;
-subtotal=(item.price * productInCart?.product?.quantity)
+
 
   return (
     <View backgroundColor="#DB7F50" width={width} alignContent="center">
@@ -112,9 +111,6 @@ subtotal=(item.price * productInCart?.product?.quantity)
               </HStack>
             )}
 
-            <Text mt="4" ml="16" fontSize="md" color="#6E6E7A">
-              Subtotal: {subtotal} $
-            </Text>
             <View ml="8">
               <Button
                 width="80%"
