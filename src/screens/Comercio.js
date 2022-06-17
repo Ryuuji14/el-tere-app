@@ -49,7 +49,7 @@ const Comercio = ({ route, cartItems }) => {
     horaApertura: route.params.horaApertura,
     horaCierre: route.params.horaCierre,
     delivery: route.params.delivery,
-    local: route.params.local,
+    
   });
   const { isLoading, startLoading, stopLoading } = useLoading();
   const [index, setIndex] = useState(0);
@@ -100,9 +100,7 @@ const Comercio = ({ route, cartItems }) => {
     }, [])
   );
 
-const array = JSON.parse(market.local?.location)
-const lat = array[0];
-const lng = array[1];
+
 const lat1 = 10.072624;
 const lng1 = -69.326766; 
 
@@ -271,53 +269,7 @@ const lng1 = -69.326766;
           </SafeAreaView>
         </TabView.Item>
       </TabView>
-      <Modal
-        isOpen={deleteVisible}
-        onClose={() => setDeleteVisible(false)}
-        justifyContent="center"
-        bottom="4"
-        size="lg"
-        
-      >
-        <Modal.Content >
-          <Modal.Header borderBottomWidth={0}>
-            <Text textAlign="center"> Ubicacion: {market.name}</Text>
-          </Modal.Header>
-          <Modal.Body>
-            <Text textAlign="center"></Text>
-            <Text textAlign="center" mb={4}>
-              Local: {market?.local.area}
-            </Text>
-            <WebView
-              style={{
-                width: "100%",
-                height: 200,
-                borderColor:"#5A7E64",
-              }}
-              source={{
-                uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v11.html?title=false&zoomwheel=false&access_token=pk.eyJ1IjoicnViZW5nMTgiLCJhIjoiY2tka3dsNDRiMHQwMTJxczhzZmZlNWU0eSJ9.LE-lD72fmdlehYenHepNNg#4/${lat1}/${lng1}/0/0`,
-              }}
-            />
-          </Modal.Body>
-          <Modal.Footer borderTopWidth={0} justifyContent="center">
-            <Button
-              onPress={() => {
-                setDeleteVisible(false);
-              }}
-              rounded="full"
-              padding={2}
-              w={100}
-              _text={{
-                fontSize: 19,
-                color: "#FFFFFF",
-              }}
-              backgroundColor="#DB7F50"
-            >
-              OK
-            </Button>
-          </Modal.Footer>
-        </Modal.Content>
-      </Modal>
+     
     </View>
   );
 };

@@ -341,7 +341,7 @@ const Dashboard = ({ navigation }) => {
                       horaApertura={item.opening_time}
                       horaCierre={item.closing_time}
                       delivery={item.closing_time}
-                      local={item.local}
+                      
                     />
                   )}
                 />
