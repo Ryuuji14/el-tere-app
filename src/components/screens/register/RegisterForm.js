@@ -46,7 +46,6 @@ const RegisterForm = () => {
     control,
     handleSubmit,
     setValue,
-
     formState: { isValid, errors },
     reset,
   } = useForm({
@@ -114,7 +113,7 @@ const RegisterForm = () => {
               fieldState: { error },
             }) => (
               <Stack w="45%">
-                <FormControl isInvalid={Boolean(error?.message)}>
+                <FormControl isRequired isInvalid={Boolean(error?.message)}>
                   <Input
                     {...field}
                     onChangeText={onChange}
@@ -144,7 +143,7 @@ const RegisterForm = () => {
               fieldState: { error },
             }) => (
               <Stack w="45%">
-                <FormControl isInvalid={Boolean(error?.message)}>
+                <FormControl isRequired isInvalid={Boolean(error?.message)}>
                   <Input
                     {...field}
                     onChangeText={onChange}
@@ -174,7 +173,7 @@ const RegisterForm = () => {
             field: { onChange, ...field },
             fieldState: { error },
           }) => (
-            <FormControl isInvalid={Boolean(error?.message)}>
+            <FormControl isRequiered isInvalid={Boolean(error?.message)}>
               <Input
                 {...field}
                 onChangeText={onChange}
@@ -202,7 +201,7 @@ const RegisterForm = () => {
             field: { onChange, ...field },
             fieldState: { error },
           }) => (
-            <FormControl isInvalid={Boolean(error?.message)}>
+            <FormControl isRequired isInvalid={Boolean(error?.message)}>
               <Input
                 secureTextEntry
                 {...field}
@@ -235,7 +234,7 @@ const RegisterForm = () => {
             field: { onChange, ...field },
             fieldState: { error },
           }) => (
-            <FormControl isInvalid={Boolean(error?.message)}>
+            <FormControl isRequired isInvalid={Boolean(error?.message)}>
               <Input
                 secureTextEntry
                 {...field}
@@ -261,13 +260,17 @@ const RegisterForm = () => {
           name="cellphone"
           control={control}
           render={({
-            field: { onChange, ...field },
+            field: { onChange, value, onBlur, ...field },
             fieldState: { error },
           }) => (
-            <FormControl isInvalid={Boolean(error?.message)}>
+            <FormControl
+            isRequired
+            isInvalid={errors?.cellphone && value !==''}>
               <Input
                 {...field}
                 onChangeText={onChange}
+                value={value}
+                onBlur={onBlur}
                 placeholder="Teléfono ( Ej: 0426-5555555)"
                 {...INPUT_PROPS}
                 InputLeftElement={
@@ -278,9 +281,11 @@ const RegisterForm = () => {
                   />
                 }
               />
+              {errors?.cellphone &&(
               <FormControl.ErrorMessage>
-                {error?.message}
+                {errors?.cellphone?.message}
               </FormControl.ErrorMessage>
+               )}
             </FormControl>
           )}
         />
@@ -308,6 +313,8 @@ const RegisterForm = () => {
                   }
                 />
               </TouchableOpacity>
+             
+              
               {showDatePicker && (
                 <DateTimePicker
                   value={value}

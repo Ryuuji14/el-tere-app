@@ -4,11 +4,15 @@ export const registerSchema = object({
   first_name: string().required("requerido"),
   last_name: string().required("requerido"),
   email: string().email("correo inválido").required("requerido"),
-  password: string().required("requerido"),
+  password: string().required("requerido")
+  .min(8, "mínimo 8 caracteres en la contraseña"),
   password_confirmation: string()
     .oneOf([ref("password")], "Las contraseñas no coinciden")
     .required("requerido"),
-  cellphone: string().required("requerido"),
+  cellphone: string()
+  .required("requerido")
+  .min(10, "El número debe tener 11 dígitos")
+  .max(11, "El número debe tener 11 dígitos"),
   birthday: string().required("requerido"),
   gender: string().required("requerido"),
   userInterests: array().min(1).required("requerido"),

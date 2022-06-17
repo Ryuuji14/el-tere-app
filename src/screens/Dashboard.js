@@ -125,9 +125,11 @@ const Dashboard = ({ navigation }) => {
             );
             setAreas([
               {
-                id: selectedCategory.id,
-                name: selectedCategory.name || "",
-                companies: data,
+                area: {
+                  id: selectedCategory.id,
+                  name: selectedCategory.name || "",
+                  companies: data,
+                },
               },
             ]);
           }
