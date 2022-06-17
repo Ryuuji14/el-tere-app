@@ -58,8 +58,8 @@ const SingleProduct = ({
   const productInCart = cartItems.find(
     (item) => item.product.id === route?.params?.id
   );
-
-  const subtotal=(item.price * productInCart?.product?.quantity)
+const subtotal=0;
+subtotal=(item.price * productInCart?.product?.quantity)
 
   return (
     <View backgroundColor="#DB7F50" width={width} alignContent="center">

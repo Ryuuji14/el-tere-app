@@ -137,7 +137,7 @@ export const PendingSales = (props) => {
             </>
       ))) : (
             <Text textAlign="center" fontSize={18} color="#9393AA" mb={3} mt="20">
-              No tienes pedidos pendientes por pagar.
+              No tienes pedidos pendientes.
             </Text>
           )} 
       </Stack>

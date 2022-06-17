@@ -94,7 +94,6 @@ const Comercio = ({ route, cartItems }) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(lat,lng)
       getPromotions();
       getProducts();
       getComments();
@@ -104,7 +103,8 @@ const Comercio = ({ route, cartItems }) => {
 const array = JSON.parse(market.local?.location)
 const lat = array[0];
 const lng = array[1];
-
+const lat1 = 10.072624;
+const lng1 = -69.326766; 
 
   return (
 
@@ -295,7 +295,7 @@ const lng = array[1];
                 borderColor:"#5A7E64",
               }}
               source={{
-                uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v11.html?title=false&zoomwheel=false&access_token=pk.eyJ1IjoicnViZW5nMTgiLCJhIjoiY2tka3dsNDRiMHQwMTJxczhzZmZlNWU0eSJ9.LE-lD72fmdlehYenHepNNg#4/${lat}/${lng}/0/0`,
+                uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v11.html?title=false&zoomwheel=false&access_token=pk.eyJ1IjoicnViZW5nMTgiLCJhIjoiY2tka3dsNDRiMHQwMTJxczhzZmZlNWU0eSJ9.LE-lD72fmdlehYenHepNNg#4/${lat1}/${lng1}/0/0`,
               }}
             />
           </Modal.Body>

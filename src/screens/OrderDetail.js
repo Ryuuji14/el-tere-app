@@ -104,7 +104,7 @@ export const OrderDetail = (props) => {
               <Text fontSize={18} bold mt="2" color="#6E6E7A"> Estatus: </Text>
               <View mb={4}>
                 <Text fontSize={16} bold color="#6E6E7A">
-                  Dirección de envío: {sale?.address}
+                  Dirección de envío: 
                 </Text>
                 <Text fontSize={16} color="#6E6E7A">
                   {sale?.address}
