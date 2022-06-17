@@ -284,7 +284,7 @@ const lng = array[1];
             <Text textAlign="center"> Ubicacion: {market.name}</Text>
           </Modal.Header>
           <Modal.Body>
-            <Text textAlign="center">Area: </Text>
+            <Text textAlign="center"></Text>
             <Text textAlign="center" mb={4}>
               Local: {market?.local.area}
             </Text>
