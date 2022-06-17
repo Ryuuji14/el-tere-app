@@ -13,13 +13,20 @@ const { width, height } = Dimensions.get("screen");
 
 export const OrderDetail = (props) => {
   const item = {
-    sales: props.route.params.sales,
+    sales: props.route.params?.sales,
   }
   const [company, setCompany] = useState({});
   const { isLoading, startLoading, stopLoading } = useLoading()
   const [incidencia, setIncidencia] = useState([]);
   const [sale, setSale] = useState([]);
   const { showErrorToast, showSuccesToast } = useCustomToast();
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const [month, day, year] = d?.toLocaleDateString("en-US").split("/");
+
+    return `${day}/${month}/${year}` || "";
+  };
+
   const getDeliveryPrice = async () => {
     try {
       startLoading();
@@ -45,7 +52,7 @@ export const OrderDetail = (props) => {
   const getSaleById = async () => {
     startLoading();
     try {
-      const { data } = await saleAPI.getSaleById(item?.sales?.id);
+      const { data } = await saleAPI.getSaleById(item.sales?.id);
       setSale(data);
       console.log(sale)
     } catch (error) {
@@ -62,8 +69,8 @@ export const OrderDetail = (props) => {
     getSaleById();
   }, [])
 
-  const delivery = item?.sales?.delivery_type === "delivery" ? company?.delivery_price : 0;
-  const subTotal = item?.sales?.total_amount - delivery;
+  const delivery = sale?.delivery_type === "delivery" ? company?.delivery_price : 0;
+  const subTotal = sale?.total_amount - delivery;
   return (
     <>
       <ImageBackground
@@ -71,12 +78,14 @@ export const OrderDetail = (props) => {
         style={{ width, height, zIndex: 1, paddingHorizontal: 30, flex: 1 }}
       >
         <Heading color="white" fontSize={36} fontWeight="bold" >
-          Pedido nro: {'\n'} {item?.sales?.id}
+          Pedido nro: {'\n'} {sale?.id}
         </Heading>
         <ScrollView flex="1" width="full" px={4} backgroundColor='white' borderTopRadius={20} showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl
             refreshing={isLoading}
-            onRefresh={getSaleById}
+            onRefresh={async () => {
+              await Promise.all([getDeliveryPrice(), getIncidencia(), getSaleById()]);
+            }}
           />
           }
         >
@@ -89,18 +98,18 @@ export const OrderDetail = (props) => {
           <Text fontSize={18} bold color="#6E6E7A"> Modalidad: </Text>
 
 
-          {item?.sales?.delivery_type === "delivery" ? (
+          {sale?.delivery_type === "delivery" ? (
             <>
-              <Text fontSize={18} bold  color="#6E6E7A"> Delivery </Text>
-              <Text fontSize={18} bold mt="2"  color="#6E6E7A"> Estatus: </Text>
+              <Text fontSize={18} bold color="#6E6E7A"> Delivery </Text>
+              <Text fontSize={18} bold mt="2" color="#6E6E7A"> Estatus: </Text>
               <View mb={4}>
-                <Text fontSize={16} bold  color="#6E6E7A">
-                  Dirección de envío:
+                <Text fontSize={16} bold color="#6E6E7A">
+                  Dirección de envío: {sale?.address}
                 </Text>
-                <Text fontSize={16}  color="#6E6E7A">
-                  {item?.sales?.address}
+                <Text fontSize={16} color="#6E6E7A">
+                  {sale?.address}
                 </Text>
-                <Text fontSize={14}  color="#6E6E7A">
+                <Text fontSize={14} color="#6E6E7A">
                 </Text>
               </View>
               <TimeLineBlock text="Orden ingresada" />
@@ -110,10 +119,13 @@ export const OrderDetail = (props) => {
               />
               <TimeLineBlock isActive={sale?.status === "to_deliver"} text="Orden en camino" />
               <TimeLineBlock isActive={sale?.status === "complete"} text="Orden entregada " />
-
-              <Text fontSize="16" bold color="#6E6E7A"> Ultima Actualización: {"\n"} {sale?.updatedAt.split("", 5)} </Text>
-
-
+              <HStack space={2} justifyContent="center" alignContent="center">
+                  <Text fontSize="16" bold color="#6E6E7A" textAlign="center"> 
+                  Ultima Actualización: {"\n"}
+                  {formatDate(sale?.updatedAt)} {"\n"} 
+                  {sale?.time}
+                  </Text>
+                </HStack>
             </>)
             : (
               <>
@@ -129,8 +141,14 @@ export const OrderDetail = (props) => {
                 <TimeLineBlock
                   isActive={sale?.status === "complete"}
                   text="Orden entregada " />
-
-                <Text fontSize="16" bold color="#6E6E7A"> Ultima Actualización: {"\n"} {sale?.updatedAt}</Text>
+                <HStack space={2} justifyContent="center" alignContent="center">
+                  <Text fontSize="16" bold color="#6E6E7A" textAlign="center"> 
+                  Ultima Actualización: {"\n"}
+                  {formatDate(sale?.updatedAt)} {"\n"} 
+                  {sale?.time}
+                  </Text>
+                  
+                </HStack>
               </>
             )}
           <View mt={3}>
@@ -150,7 +168,7 @@ export const OrderDetail = (props) => {
             </Stack>
 
             <TotalAmounts
-              total={item?.sales?.total_amount}
+              total={sale?.total_amount}
               subTotal={subTotal}
               delivery={delivery}
             />
@@ -165,7 +183,7 @@ export const OrderDetail = (props) => {
               backgroundColor="#41634A"
               onPress={() => {
                 props.navigation.navigate("Incidencias", {
-                  sales: item?.sales,
+                  sales: sale,
                 });
               }
               }

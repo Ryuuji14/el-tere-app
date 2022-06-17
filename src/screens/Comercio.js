@@ -14,7 +14,10 @@ import {
   IconButton,
   Divider,
   StatusBar,
+  Modal,
+  Button,
 } from "native-base";
+
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Dimensions, StyleSheet, RefreshControl } from "react-native";
 import { Entypo } from "@expo/vector-icons";
@@ -32,6 +35,7 @@ import { SafeAreaView } from "react-native";
 import { companyAPI } from "../api/companyAPI";
 import useLoading from "../hooks/useLoading";
 import { Stop } from "react-native-svg";
+import { WebView } from "react-native-webview";
 
 const { width, height } = Dimensions.get("window");
 
@@ -45,6 +49,7 @@ const Comercio = ({ route, cartItems }) => {
     horaApertura: route.params.horaApertura,
     horaCierre: route.params.horaCierre,
     delivery: route.params.delivery,
+    local: route.params.local,
   });
   const { isLoading, startLoading, stopLoading } = useLoading();
   const [index, setIndex] = useState(0);
@@ -53,13 +58,14 @@ const Comercio = ({ route, cartItems }) => {
   const { showErrorToast } = useCustomToast();
   const [comments, setComments] = useState([]);
   const regex = /(\d{4}-\d{2}-\d{2})/;
+  const [deleteVisible, setDeleteVisible] = useState(false);
+
 
   const getProducts = async () => {
     startLoading();
     try {
       const { data } = await productsAPI.getProducts(market?.id);
       setProducts(data || []);
-      console.log(products);
     } catch (error) {
       showErrorToast(error);
     }
@@ -88,13 +94,20 @@ const Comercio = ({ route, cartItems }) => {
 
   useFocusEffect(
     useCallback(() => {
+      console.log(lat,lng)
       getPromotions();
       getProducts();
       getComments();
     }, [])
   );
 
+const array = JSON.parse(market.local?.location)
+const lat = array[0];
+const lng = array[1];
+
+
   return (
+
     <View minH={height} width={width}>
       <View>
         <Image
@@ -120,6 +133,7 @@ const Comercio = ({ route, cartItems }) => {
                 borderRadius="full"
                 variant="solid"
                 bgColor="#DB7F50"
+                onPress={() => setDeleteVisible(true)}
               />
             </HStack>
           </HStack>
@@ -257,6 +271,53 @@ const Comercio = ({ route, cartItems }) => {
           </SafeAreaView>
         </TabView.Item>
       </TabView>
+      <Modal
+        isOpen={deleteVisible}
+        onClose={() => setDeleteVisible(false)}
+        justifyContent="center"
+        bottom="4"
+        size="lg"
+        
+      >
+        <Modal.Content >
+          <Modal.Header borderBottomWidth={0}>
+            <Text textAlign="center"> Ubicacion: {market.name}</Text>
+          </Modal.Header>
+          <Modal.Body>
+            <Text textAlign="center">Area: </Text>
+            <Text textAlign="center" mb={4}>
+              Local: {market?.local.area}
+            </Text>
+            <WebView
+              style={{
+                width: "100%",
+                height: 200,
+                borderColor:"#5A7E64",
+              }}
+              source={{
+                uri: `https://api.mapbox.com/styles/v1/mapbox/streets-v11.html?title=false&zoomwheel=false&access_token=pk.eyJ1IjoicnViZW5nMTgiLCJhIjoiY2tka3dsNDRiMHQwMTJxczhzZmZlNWU0eSJ9.LE-lD72fmdlehYenHepNNg#4/${lat}/${lng}/0/0`,
+              }}
+            />
+          </Modal.Body>
+          <Modal.Footer borderTopWidth={0} justifyContent="center">
+            <Button
+              onPress={() => {
+                setDeleteVisible(false);
+              }}
+              rounded="full"
+              padding={2}
+              w={100}
+              _text={{
+                fontSize: 19,
+                color: "#FFFFFF",
+              }}
+              backgroundColor="#DB7F50"
+            >
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
     </View>
   );
 };

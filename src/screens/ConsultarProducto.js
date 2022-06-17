@@ -59,6 +59,8 @@ const SingleProduct = ({
     (item) => item.product.id === route?.params?.id
   );
 
+  const subtotal=(item.price * productInCart?.product?.quantity)
+
   return (
     <View backgroundColor="#DB7F50" width={width} alignContent="center">
       <View backgroundColor="white" width="100%">
@@ -111,7 +113,7 @@ const SingleProduct = ({
             )}
 
             <Text mt="4" ml="16" fontSize="md" color="#6E6E7A">
-              Subtotal: $
+              Subtotal: {subtotal} $
             </Text>
             <View ml="8">
               <Button

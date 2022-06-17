@@ -31,6 +31,7 @@ const ComercioCard = (props) => {
           horaApertura: props.horaApertura,
           horaCierre: props.horaCierre,
           delivery: props.delivery,
+          local: props.local,
         })
       }
     >

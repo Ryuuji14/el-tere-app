@@ -45,6 +45,8 @@ export const PendingSales = (props) => {
           salesIds.map((id) => saleAPI.getSaleProductBySaleId(id))
         );
      setPedidos(pedidosResponses.map((pedido) => pedido.data))
+
+     console.log(pedidos)
       }
     } catch (error) {
       console.log(error)

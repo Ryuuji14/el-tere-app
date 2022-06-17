@@ -101,7 +101,7 @@ const ConfirmarPedido = (props) => {
         user_id: user.id,
         delivery_type: selection ? "delivery" : "pick_up",
         company_id: company,
-        address: selection1 ? selection1 : null,
+        address: selection1,
         delivery_price: delivery,
         subtotal: total,
         total_amount: Number(Number(total) + Number(delivery)),

@@ -177,6 +177,7 @@ const Dashboard = ({ navigation }) => {
 
   useEffect(() => {
     init();
+    console.log(filtertedAreas)
   }, [categoriaSeleccionada]);
 
   const filtertedAreas = useMemo(() => {
@@ -197,8 +198,9 @@ const Dashboard = ({ navigation }) => {
         },
       }));
     }
-
+    
     return areas;
+    
   }, [areas, searchBy]);
 
   return (
@@ -326,7 +328,7 @@ const Dashboard = ({ navigation }) => {
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={area.companies || []}
+                  data={area?.companies || []}
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
                     <ComercioCard
@@ -339,6 +341,7 @@ const Dashboard = ({ navigation }) => {
                       horaApertura={item.opening_time}
                       horaCierre={item.closing_time}
                       delivery={item.closing_time}
+                      local={item.local}
                     />
                   )}
                 />

@@ -12,6 +12,7 @@ import {
   IconButton,
   Input,
   Image,
+  ScrollView,
 } from "native-base";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
 var { width } = Dimensions.get("window");
@@ -87,6 +88,7 @@ const Promocion = ({ route, cartItems, addMultipleProducts, navigation }) => {
   };
 
   return (
+    <ScrollView bgColor="white">
     <View backgroundColor="white" width={width} h='100%' alignContent="center">
       <View backgroundColor="white" width="100%">
         <HStack justifyContent="flex-start" alignItems="flex-start">
@@ -206,6 +208,7 @@ const Promocion = ({ route, cartItems, addMultipleProducts, navigation }) => {
       </View>
       <AlertDialog />
     </View>
+    </ScrollView>
   );
 };
 

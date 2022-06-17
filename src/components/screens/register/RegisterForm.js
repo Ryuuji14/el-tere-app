@@ -12,6 +12,7 @@ import {
   Stack,
   Text,
   View,
+  WarningOutlineIcon,
 } from "native-base";
 import { Icon } from "native-base";
 import {
@@ -57,7 +58,7 @@ const RegisterForm = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [interestsToSelect, setInterestsToSelect] = useState([]);
   const Navigation = useNavigation();
- ;
+  ;
 
   useEffect(() => {
     const getInterests = async () => {
@@ -88,7 +89,7 @@ const RegisterForm = () => {
         user_id: data.id,
         address: values.address,
       });
-      
+
       showSuccesToast("Te has registrado exitosamente");
       setValue("acceptTermsAndConditions", false);
       setValue("userInterests", []);
@@ -198,15 +199,19 @@ const RegisterForm = () => {
           name="password"
           control={control}
           render={({
-            field: { onChange, ...field },
+            field: { onChange, onBlur, value, ...field },
             fieldState: { error },
           }) => (
-            <FormControl isRequired isInvalid={Boolean(error?.message)}>
+            <FormControl
+              isRequired
+              isInvalid={errors?.password && value !== ''}>
               <Input
                 secureTextEntry
                 {...field}
                 onChangeText={onChange}
                 placeholder="Contraseña"
+                onBlur={onBlur}
+                value={value}
                 {...INPUT_PROPS}
                 InputLeftElement={
                   <Icon
@@ -220,9 +225,18 @@ const RegisterForm = () => {
                 La contraseña debe contener: mayúscula, minúscula, mínimo 8
                 dígitos, números y un símbolo especial.
               </FormControl.HelperText>
-              <FormControl.ErrorMessage>
-                {error?.message}
-              </FormControl.ErrorMessage>
+              {errors?.password && (
+                <FormControl.ErrorMessage
+                  maxWidth={280}
+                  leftIcon={
+                    <WarningOutlineIcon
+                      size='xs'
+                    />
+                  }
+                >
+                  {errors?.password?.message}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
           )}
         />
@@ -231,11 +245,13 @@ const RegisterForm = () => {
           name="password_confirmation"
           control={control}
           render={({
-            field: { onChange, ...field },
+            field: { onChange, value, onBlur, ...field },
             fieldState: { error },
           }) => (
-            <FormControl isRequired isInvalid={Boolean(error?.message)}>
+            <FormControl isRequired isInvalid={errors?.password_confirmation && value !== ''}>
               <Input
+                onBlur={onBlur}
+                value={value}
                 secureTextEntry
                 {...field}
                 onChangeText={onChange}
@@ -249,9 +265,18 @@ const RegisterForm = () => {
                   />
                 }
               />
-              <FormControl.ErrorMessage>
-                {error?.message}
-              </FormControl.ErrorMessage>
+              {errors?.confirmPassword && (
+                <FormControl.ErrorMessage
+                  maxWidth={280}
+                  leftIcon={
+                    <WarningOutlineIcon
+                      size='xs'
+                    />
+                  }
+                >
+                  {errors?.confirmPassword?.message}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
           )}
         />
@@ -264,8 +289,8 @@ const RegisterForm = () => {
             fieldState: { error },
           }) => (
             <FormControl
-            isRequired
-            isInvalid={errors?.cellphone && value !==''}>
+              isRequired
+              isInvalid={errors?.cellphone && value !== ''}>
               <Input
                 {...field}
                 onChangeText={onChange}
@@ -281,11 +306,11 @@ const RegisterForm = () => {
                   />
                 }
               />
-              {errors?.cellphone &&(
-              <FormControl.ErrorMessage>
-                {errors?.cellphone?.message}
-              </FormControl.ErrorMessage>
-               )}
+              {errors?.cellphone && (
+                <FormControl.ErrorMessage>
+                  {errors?.cellphone?.message}
+                </FormControl.ErrorMessage>
+              )}
             </FormControl>
           )}
         />
@@ -293,7 +318,7 @@ const RegisterForm = () => {
         <Controller
           name="birthday"
           control={control}
-          render={({ field: { value}, fieldState: { error } }) => (
+          render={({ field: { value }, fieldState: { error } }) => (
             <>
               <TouchableOpacity
                 activeOpacity={1}
@@ -313,8 +338,8 @@ const RegisterForm = () => {
                   }
                 />
               </TouchableOpacity>
-             
-              
+
+
               {showDatePicker && (
                 <DateTimePicker
                   value={value}
@@ -361,7 +386,7 @@ const RegisterForm = () => {
                   >
                     <Select.Item label="Femenino" value="f" />
                     <Select.Item label="Masculino" value="m" />
-                    <Select.Item label="Otro" value="o"/>
+                    <Select.Item label="Otro" value="o" />
                   </Select>
                 </View>
               </View>
