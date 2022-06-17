@@ -131,7 +131,7 @@ const lng1 = -69.326766;
                 borderRadius="full"
                 variant="solid"
                 bgColor="#DB7F50"
-                onPress={() => setDeleteVisible(true)}
+              //  onPress={() => setDeleteVisible(true)}
               />
             </HStack>
           </HStack>
